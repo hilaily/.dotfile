@@ -2,7 +2,7 @@
 ```shell
 # 切换到 home 目录
 cd ~
-git clone git@github.com:Laily123/.dotfile.git
+git clone https://github.com/Laily123/.dotfile.git ~/.dotfile
 ```
 
 ### zsh 安装
