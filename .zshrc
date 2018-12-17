@@ -95,6 +95,9 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# Ctrl+b/f 向后/前移动一个词
+bindkey "^b" backward-word
+bindkey "^f" forward-word
 
 [ -f ~/.zprofile ] && source ~/.zprofile
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
