@@ -62,6 +62,9 @@ name = "lang#html"
 name = "lang#typescript"
 
 [[layers]]
+name = "lang/vim"
+
+[[layers]]
 name = "fzf"
 
 [[layers]]
@@ -69,5 +72,6 @@ name = "VersionControl"
 
 [[layers]]
 name = "tmux"
+
 
 
