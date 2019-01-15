@@ -1,16 +1,17 @@
 ### 使用
 ```shell
-# 切换到 home 目录
-cd ~
 git clone https://github.com/Laily123/.dotfile.git ~/.dotfile
 ```
-
 ### zsh 安装
 安装 zsh  
-`https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH`  
-macOS
 ```shell
+https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH
+# macOS
 brew install zsh zsh-completions
+# CentOS
+sudo yum -y install zsh
+# Ubuntu
+apt install zsh
 ```
 
 安装 oh-my-zsh  
@@ -22,6 +23,7 @@ sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/to
 ln -sf ~/.dotfile/.zshrc ~/  
 ln -sf ~/.dotfile/laily.zsh-theme ~/.oh-my-zsh/themes/
 ln -sf ~/.dotfile/.tmux.conf ~/
+ln -sf ~/.dotfile/.gitconfig ~/.gitconfig
 ```
 
 ### spacevim 安装
@@ -29,9 +31,4 @@ ln -sf ~/.dotfile/.tmux.conf ~/
 `curl -sLf https://spacevim.org/install.sh | bash`  
 初始化配置  
 `ln -sf ~/.dotfile/.SpaceVim.d ~/` 
-
-### git config
-```shell
-ln -sf ~/.dotfile/.gitconfig ~/.gitconfig
-```
 
