@@ -61,8 +61,9 @@ ZSH_THEME="laily"
 plugins=(
   git
   z
-  jsontools
   extract
+  docker
+  docker-compose
 )
 
 source $ZSH/oh-my-zsh.sh
