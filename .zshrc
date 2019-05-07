@@ -100,5 +100,8 @@ source $ZSH/oh-my-zsh.sh
 bindkey "^b" backward-word
 bindkey "^f" forward-word
 
+# 禁止 brew 每次安装软件都 upate 
+export HOMEBREW_NO_AUTO_UPDATE=true
+
 [ -f ~/.zprofile ] && source ~/.zprofile
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
