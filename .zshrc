@@ -60,7 +60,6 @@ ZSH_THEME="laily"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-  z
   extract
   docker
   docker-compose
@@ -104,5 +103,8 @@ bindkey "^f" forward-word
 # 禁止 brew 每次安装软件都 upate 
 export HOMEBREW_NO_AUTO_UPDATE=true
 
+export GO111MODULE=on
+
 [ -f ~/.zprofile ] && source ~/.zprofile
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+eval "$(lua /usr/local/z.lua/z.lua --init zsh)"
