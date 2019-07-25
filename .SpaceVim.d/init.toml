@@ -39,6 +39,12 @@ auto-completion-tab-key-behavior = "smart"
 name="colorscheme"
 
 [[layers]]
+name = "lsp"
+filetypes = [
+    "go",
+]
+
+[[layers]]
 name = 'shell'
 default_position = 'bottom'
 default_height = 30
