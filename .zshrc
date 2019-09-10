@@ -104,6 +104,8 @@ bindkey "^f" forward-word
 export HOMEBREW_NO_AUTO_UPDATE=true
 
 export GO111MODULE=on
+export GOPROXY=gopxroy.cn
+export GOSUMDB="sum.golang.google.cn"
 
 [ -f ~/.zprofile ] && source ~/.zprofile
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
