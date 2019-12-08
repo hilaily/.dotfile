@@ -6,5 +6,5 @@ sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/to
 ln -sf ~/.dotfile/.zshrc ~/
 ln -sf ~/.dotfile/laily.zsh-theme ~/.oh-my-zsh/themes/
 ln -sf ~/.dotfile/.tmux.conf ~/
-ln -sf ~/.dotfile/.gitconfig ~/.gitconfig
+ln -sf ~/.dotfile/git/.gitconfig ~/.gitconfig
 
