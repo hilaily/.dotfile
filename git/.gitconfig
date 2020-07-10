@@ -7,13 +7,23 @@
     editor = /usr/local/bin/nvim
     excludesfile = ~/.dotfile/git/.gitignore
 [alias]
-    merge2 = "!f() { git checkout $1 && git merge $2 && git checkout -; }; f"
     au = add -u
     co = checkout
     cm = commit -m 
     st = status
     br = branch
+    pl = pull
+    merge2 = "!f() { git checkout $1 && git merge $2 && git checkout -; }; f"
+    bg = "!f() { git branch | grep $1; }; f"
+    delbr = "!f(){ git branch -D `git branch | grep \"\b$1\"`; };f"
+    cin = commit --amend --no-edit 
+
 [push]
 	default = current
 [merge]
     tool = vimdiff
+[init]
+	templatedir = $HOME/.dotfile/git/gittemplates
+
+
+
