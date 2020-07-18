@@ -1,0 +1,17 @@
+run:
+  tests: false
+linters:
+  enable:
+    - govet
+    - staticcheck
+    - unused
+    - structcheck
+    - varcheck
+    - ineffassign
+    - deadcode
+    - typecheck
+    - bodyclose
+    - gofmt
+    - scopelint
+    - stylecheck
+  disable-all: true
