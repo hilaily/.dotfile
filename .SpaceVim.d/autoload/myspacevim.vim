@@ -4,6 +4,7 @@ func! myspacevim#before() abort
     set foldmethod=indent
     " 打开文件默认不折叠
     set foldlevelstart=99
+    let g:go_metalinter_autosave=0
 
     "大括号回车
     "inoremap { {<CR>}<up><end><CR>

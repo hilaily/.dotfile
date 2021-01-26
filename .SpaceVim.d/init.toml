@@ -28,7 +28,6 @@
     default_indent = 4
     bootstrap_before = "myspacevim#before"
 
-
 # Enable autocomplete layer
 [[layers]]
 name = 'autocomplete'
@@ -37,12 +36,6 @@ auto-completion-tab-key-behavior = "smart"
 
 [[layers]]
 name="colorscheme"
-
-[[layers]]
-name = "lsp"
-filetypes = [
-    "go",
-]
 
 [[layers]]
 name = 'shell'
