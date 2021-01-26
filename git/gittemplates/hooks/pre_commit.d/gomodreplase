@@ -1,9 +1,0 @@
-#!/bin/bash
-# 检查是否有 go mod 替换了本地文件
-res=$(grep '/Users/' ./go.mod)
-if [ "x$res" != "x" ]; then
-  echo "use local file replace"
-  echo $res
-  exit 1
-fi
-exit 0
