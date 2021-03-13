@@ -29,10 +29,10 @@
     bootstrap_before = "myspacevim#before"
 
 # Enable autocomplete layer
-[[layers]]
-name = 'autocomplete'
-auto-completion-return-key-behavior = "smart"
-auto-completion-tab-key-behavior = "smart"
+#[[layers]]
+#name = 'autocomplete'
+#auto-completion-return-key-behavior = "smart"
+#auto-completion-tab-key-behavior = "smart"
 
 [[layers]]
 name="colorscheme"
@@ -42,11 +42,11 @@ name = 'shell'
 default_position = 'bottom'
 default_height = 30
 
-[[layers]]
-name = "lang#go"
+#[[layers]]
+#name = "lang#go"
 
-[[layers]]
-name = "lang#rust"
+#[[layers]]
+#name = "lang#rust"
 
 [[layers]]
 name = "lang#python"
@@ -63,8 +63,8 @@ name = "lang#html"
 [[layers]]
 name = "lang#typescript"
 
-[[layers]]
-name = "lang/vim"
+#[[layers]]
+#name = "lang/vim"
 
 [[layers]]
 name = "fzf"
@@ -82,3 +82,9 @@ name = "terryma/vim-multiple-cursors"
 repo="https://github.com/lyokha/vim-xkbswitch"
 merged=false
 
+[[custom_plugins]]
+name = "zivyangll/git-blame.vim"
+merged=false
+
+[[custom_plugins]]
+name='neovim/nvim-lspconfig'
