@@ -30,6 +30,7 @@
     bootstrap_before= "myspacevim#before"
     bootstrap_after= "myspacevim#after"
     disabled_plugins = ["auto_complete"]
+    enable_neomake = false
 
 # Enable autocomplete layer
 #[[layers]]

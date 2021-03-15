@@ -1,6 +1,6 @@
 lcustom = {}
 local cmd = vim.cmd  -- to execute Vim commands e.g. cmd('pwd')
-local fn = vim.fn    -- to call Vim functions e.g. fn.bufnr()
+local fn = vim.api    -- to call Vim functions e.g. fn.bufnr()
 local g = vim.g      -- a table to access global variables
 
 function lcustom.echo()
@@ -83,11 +83,11 @@ custom_attach = function(client, bufnr)
 	map('n','<leader>ao','<cmd>lua vim.lsp.buf.outgoing_calls()<CR>')
 end
 
-local map = function(type, key, value)
+map = function(type, key, value)
     -- autocmd VimEnter * nnoremap <Leader>[ :tabprev<CR> 
 	-- local cmd = [[vim.fn.nvim_buf_set_keymap(0,type,key,value,{noremap = true, silent = true})]]
     -- vim.api.nvim_command('autocmd VimEnter * nnoremap '..key..' '..value)
-	vim.fn.nvim_buf_set_keymap(0,type,key,value,{noremap = true, silent = true});
+	vim.api.nvim_buf_set_keymap(0,type,key,value,{noremap = true, silent = true});
 end
 
 function _G.dump(...)
