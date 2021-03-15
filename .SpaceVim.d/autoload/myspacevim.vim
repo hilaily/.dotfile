@@ -1,9 +1,13 @@
+function! myspacevim#before() abort
+    autocmd VimEnter * nnoremap gd :lua vim.lsp.buf.definition()<CR>
+endfunction
+
 lua << EOF
     local c = require('custom')
     lcustom.init()
 EOF
 
-function! myspacevim#before() abort
+function! myspacevim#after() abort
     set wrap
     "设置折叠方式
     set foldmethod=indent
@@ -21,3 +25,5 @@ function! myspacevim#before() abort
     "等号左右空格
     "inoremap = <Space>=<Space>
 endfunction
+
+
