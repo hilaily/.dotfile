@@ -13,6 +13,7 @@ function add_plugin()
    paq{'savq/paq-nvim', opt = true}
    paq{'neovim/nvim-lspconfig'}
    paq{'nvim-treesitter/nvim-treesitter'}
+   paq{'nvim-lua/completion-nvim'}
 end
 
 function llsp()
@@ -29,9 +30,13 @@ function lcustom.init()
     vim.api.nvim_set_keymap('n','<Space>kl','<Cmd> lua llsp()<CR>',{ noremap = true, silent = true })
     add_plugin()
     llsp()
-    g['deoplete#enable_at_startup'] = 1  -- enable deoplete at startup
+    -- g['deoplete#enable_at_startup'] = 1  -- enable deoplete at startup
     -- spc_key_bind('nore',{'g','d'}, 'test key bind', ':lua custom.echo()<CR>',1)
     -- vim.api.nvim_command('autocmd VimEnter * nnoremap gd :lua vim.lsp.buf.definition()<CR>')
+    print('init llsp')
+    -- vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    --
+    vim.o['completeopt']='menuone,noinsert,noselect'
 
     treesitter()
     print('init finished')
@@ -55,9 +60,9 @@ function simple_key_map(keys, cmd)
     vim.api.nvim_set_keymap('n',keys,cmd,{ noremap = true, silent = true })
 end
 
-local custom_attach = function(client)
+custom_attach = function(client, bufnr)
 	print("LSP started.");
-	-- require'completion'.on_attach(client)
+	require'completion'.on_attach(client, bufnr)
 	-- require'diagnostic'.on_attach(client)
 
 	map('n','gD','<cmd>lua vim.lsp.buf.declaration()<CR>')

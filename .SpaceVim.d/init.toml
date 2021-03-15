@@ -11,6 +11,7 @@
     # set spacevim theme. by default colorscheme layer is not loaded,
     # if you want to use more colorscheme, please load the colorscheme
     # layer
+    auto_complete = false
     colorscheme = "NeoSolarized"
     background = "dark"
     # Disable guicolors in basic mode, many terminal do not support 24bit
@@ -21,13 +22,14 @@
     statusline_separator = "arrow"
     statusline_inactive_separator = "arrow"
     buffer_index_type = 4
-    autocomplete_method = 'deoplete'
+    #autocomplete_method = 'deoplete'
     enable_tabline_filetype_icon = true
     enable_statusline_display_mode = false
     vim_help_language = "cn"
     default_indent = 4
     bootstrap_before= "myspacevim#before"
     bootstrap_after= "myspacevim#after"
+    disabled_plugins = ["auto_complete"]
 
 # Enable autocomplete layer
 #[[layers]]
@@ -75,6 +77,10 @@ name = "VersionControl"
 
 [[layers]]
 name = "tmux"
+
+[[layers]]
+name = 'autocomplete'
+enable = false
 
 [[custom_plugins]]
 name = "terryma/vim-multiple-cursors"

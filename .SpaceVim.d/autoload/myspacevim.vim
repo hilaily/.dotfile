@@ -1,5 +1,6 @@
 function! myspacevim#before() abort
     autocmd VimEnter * nnoremap gd :lua vim.lsp.buf.definition()<CR>
+    call deoplete#custom#option('auto_complete', v:false)
 endfunction
 
 lua << EOF
