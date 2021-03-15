@@ -10,13 +10,15 @@ end
 function add_plugin()
    cmd 'packadd paq-nvim' 
    local paq = require('paq-nvim').paq
-   paq {'savq/paq-nvim', opt = true}
-   paq {'neovim/nvim-lspconfig'}
+   paq{'savq/paq-nvim', opt = true}
+   paq{'neovim/nvim-lspconfig'}
+   paq{'nvim-treesitter/nvim-treesitter'}
 end
 
 function llsp()
     local lspconfig = require('lspconfig')
     lspconfig.gopls.setup{on_attach=custom_attach}
+    -- lspconfig.lua.setup{on_attach=custom_attach}
     vim.lsp.set_log_level("debug")
     lsp_key_map()
     print("init lsp finished")
@@ -28,7 +30,21 @@ function lcustom.init()
     add_plugin()
     llsp()
     g['deoplete#enable_at_startup'] = 1  -- enable deoplete at startup
-    -- spc_key_bind('nore',{'k','k'}, 'test key bind', ':lua custom.echo()<CR>',1)
+    -- spc_key_bind('nore',{'g','d'}, 'test key bind', ':lua custom.echo()<CR>',1)
+    -- vim.api.nvim_command('autocmd VimEnter * nnoremap gd :lua vim.lsp.buf.definition()<CR>')
+
+    treesitter()
+    print('init finished')
+end
+
+function treesitter()
+    require'nvim-treesitter.configs'.setup {
+      ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+      highlight = {
+        enable = true,              -- false will disable the whole extension
+        disable = {},  -- list of language that will be disabled
+      },
+    }
 end
 
 function lsp_key_map()
@@ -63,6 +79,9 @@ local custom_attach = function(client)
 end
 
 local map = function(type, key, value)
+    -- autocmd VimEnter * nnoremap <Leader>[ :tabprev<CR> 
+	-- local cmd = [[vim.fn.nvim_buf_set_keymap(0,type,key,value,{noremap = true, silent = true})]]
+    -- vim.api.nvim_command('autocmd VimEnter * nnoremap '..key..' '..value)
 	vim.fn.nvim_buf_set_keymap(0,type,key,value,{noremap = true, silent = true});
 end
 
