@@ -26,7 +26,7 @@
     enable_statusline_display_mode = false
     vim_help_language = "cn"
     default_indent = 4
-    bootstrap_before = "myspacevim#before"
+    bootstrap_after= "myspacevim#before"
 
 # Enable autocomplete layer
 #[[layers]]
@@ -86,5 +86,3 @@ merged=false
 name = "zivyangll/git-blame.vim"
 merged=false
 
-[[custom_plugins]]
-name='neovim/nvim-lspconfig'
