@@ -12,3 +12,18 @@ map("", "<leader>c", '"+y')
 -- open terminals  
 map("n", "<C-b>" , [[<Cmd> vnew term://bash<CR>]] , opt) -- split term vertically , over the right  
 map("n", "<C-x>" , [[<Cmd> split term://bash | resize 10 <CR>]] , opt) -- split term vertically , over the right  
+-- file
+map("n","<leader>fs",[[<Cmd> w<CR>]])
+
+-- buffer
+map("n", "<leader>bn",[[<Cmd> bnext<CR>]])
+map("n", "<leader>bp",[[<Cmd> bprev<CR>]])
+map("n", "<leader>bd",[[<Cmd> w\|bd<cr><CR>]])
+
+-- search
+map("n","<leader>sc",[[<Cmd> nohlsearch<CR>]])
+
+-- vim self
+map("n","<leader>qq",[[<Cmd> qa<CR>]])
+map("n","<leader>qr",[[<Cmd> luafile $MYVIMRC<CR>]])
+

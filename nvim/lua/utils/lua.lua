@@ -24,8 +24,12 @@ opt("o", "updatetime", 250) -- update interval for gitsigns
 opt("o", "clipboard", "unnamedplus")
 
 -- for indenline
+local indent = 4
 opt("b", "expandtab", true )
-opt("b", "shiftwidth", 2 )
+opt("b", "shiftwidth", indent )
+opt('b', 'tabstop', indent)                           -- Number of spaces tabs count for
+opt('o', 'completeopt', 'menuone,noinsert,noselect')  -- Completion options (for deoplete)
+
 
 
 local M = {}
