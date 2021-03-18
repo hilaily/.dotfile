@@ -20,6 +20,12 @@ map("n", "<leader>bn",[[<Cmd> bnext<CR>]])
 map("n", "<leader>bp",[[<Cmd> bprev<CR>]])
 map("n", "<leader>bd",[[<Cmd> w\|bd<cr><CR>]])
 
+-- window
+map("n", "<C-h>",[[<C-w>h<CR>]])
+map("n", "<C-l>",[[<C-w>l<CR>]])
+map("n", "<C-k>",[[<C-w>k<CR>]])
+map("n", "<C-j>",[[<C-w>j<CR>]])
+
 -- search
 map("n","<leader>sc",[[<Cmd> nohlsearch<CR>]])
 

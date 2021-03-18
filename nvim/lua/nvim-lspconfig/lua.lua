@@ -29,4 +29,4 @@ buf_set_keymap("n", "]d", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
 buf_set_keymap("n", "<space>q", "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>", opts)
 
 --  lsp for html , css and js/ts
-require "lspconfig".gopls.setup {}
+require "lspconfig".gopls.setup{}

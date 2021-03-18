@@ -58,6 +58,7 @@ vim.api.nvim_set_keymap(
 vim.g.nvim_tree_bindings = {
     ["<CR>"] = get_lua_cb("edit"),
     ["l"] = get_lua_cb("edit"),
+    ["h"] = get_lua_cb("close_node"),
     ["o"] = get_lua_cb("edit"),
     ["<2-LeftMouse>"] = get_lua_cb("edit"),
     ["<2-RightMouse>"] = get_lua_cb("cd"),
