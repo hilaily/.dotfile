@@ -19,14 +19,16 @@ require "colorizer".setup()
 local cmd = vim.cmd
 local g = vim.g
 
-cmd "colorscheme base16-onedark"
+cmd "colorscheme darcula"
 cmd "syntax enable"
 cmd "syntax on"
 cmd "set tabstop=4"
+cmd "autocmd BufWritePre * undojoin | Neoformat"
 
-g.auto_save = 1
+g.auto_save = 0
 g.indentLine_enabled = 1
 g.indentLine_char_list = {'▏'}
+g.XkbSwitchEnabled = 1
 
 g.mapleader = " "
 

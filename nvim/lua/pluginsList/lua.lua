@@ -11,7 +11,7 @@ return require("packer").startup(
         use {"glepnir/galaxyline.nvim"}
         use {"akinsho/nvim-bufferline.lua"}
         use {"907th/vim-auto-save"}
-        use {"nvim-treesitter/nvim-treesitter"}
+        use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"}
         use {"chriskempson/base16-vim"}
         use {"norcalli/nvim-colorizer.lua"}
         use {"Yggdroot/indentLine"}
@@ -26,5 +26,11 @@ return require("packer").startup(
         use {"nvim-telescope/telescope.nvim"}
         use {"nvim-telescope/telescope-media-files.nvim"}
         use {"nvim-lua/popup.nvim"}
+        use {"junegunn/fzf"}
+        use {"junegunn/fzf.vim"}
+        use {"lyokha/vim-xkbswitch"}
+        use {"rrethy/vim-hexokinase", run = "make hexokinase"}
+        use {"doums/darcula"}
+        use {"christianchiarulli/nvcode-color-schemes.vim"}
     end
 )

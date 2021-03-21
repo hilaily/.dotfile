@@ -61,17 +61,17 @@ local opt = {noremap = true, silent = true}
 vim.g.mapleader = " "
 
 -- mappings 
-vim.api.nvim_set_keymap("n", "<Leader>ff", [[<Cmd>lua require('telescope.builtin').find_files()<CR>]], opt)
+--vim.api.nvim_set_keymap("n", "<Leader>ff", [[<Cmd>lua require('telescope.builtin').find_files()<CR>]], opt)
 vim.api.nvim_set_keymap("n", "<C-p>", [[<Cmd>lua require('telescope.builtin').find_files()<CR>]], opt)
 vim.api.nvim_set_keymap(
     "n",
-    "<Leader>fp",
+    "<Leader>sp",
     [[<Cmd>lua require('telescope').extensions.media_files.media_files()<CR>]],
     opt
 )
-vim.api.nvim_set_keymap("n", "<Leader>fb", [[<Cmd>lua require('telescope.builtin').buffers()<CR>]], opt)
-vim.api.nvim_set_keymap("n", "<Leader>fh", [[<Cmd>lua require('telescope.builtin').help_tags()<CR>]], opt)
-vim.api.nvim_set_keymap("n", "<Leader>fo", [[<Cmd>lua require('telescope.builtin').oldfiles()<CR>]], opt)
-vim.api.nvim_set_keymap("n", "<Leader>fm", [[<Cmd> Neoformat<CR>]], opt)
+vim.api.nvim_set_keymap("n", "<Leader>sb", [[<Cmd>lua require('telescope.builtin').buffers()<CR>]], opt)
+vim.api.nvim_set_keymap("n", "<Leader>sh", [[<Cmd>lua require('telescope.builtin').help_tags()<CR>]], opt)
+vim.api.nvim_set_keymap("n", "<Leader>so", [[<Cmd>lua require('telescope.builtin').oldfiles()<CR>]], opt)
+vim.api.nvim_set_keymap("n", "<Leader>sm", [[<Cmd> Neoformat<CR>]], opt)
 
 vim.api.nvim_set_keymap("n", "<C-a>", [[ <Cmd> %y+<CR>]], opt)
