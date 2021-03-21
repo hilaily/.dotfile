@@ -1,6 +1,5 @@
 [user]
 	name = Laily
-	email = i@laily.net
 [core]
 	autocrlf = input
 	quotepath = false
@@ -17,13 +16,10 @@
     bg = "!f() { git branch | grep $1; }; f"
     delbr = "!f(){ git branch -D `git branch | grep \"\b$1\"`; };f"
     cin = commit --amend --no-edit 
-
 [push]
 	default = current
 [merge]
     tool = vimdiff
-[init]
-	templatedir = $HOME/.dotfile/git/gittemplates
 
 
 

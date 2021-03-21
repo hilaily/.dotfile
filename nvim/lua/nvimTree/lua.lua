@@ -71,6 +71,7 @@ vim.g.nvim_tree_bindings = {
     ["<Tab>"] = get_lua_cb("preview"),
     ["I"] = get_lua_cb("toggle_ignored"),
     ["H"] = get_lua_cb("toggle_dotfiles"),
+    ["."] = get_lua_cb("toggle_dotfiles"),
     ["R"] = get_lua_cb("refresh"),
     ["n"] = get_lua_cb("create"),
     ["d"] = get_lua_cb("remove"),
