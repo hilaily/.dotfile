@@ -10,7 +10,7 @@ end
 map("", "<leader>c", '"+y')
 
 -- open terminals  
-map("n", "<C-b>" , [[<Cmd> vnew term://bash<CR>]] , opt) -- split term vertically , over the right  
+map("n", "<C-`>" , [[<Cmd> vnew term://bash<CR>]] , opt) -- split term vertically , over the right  
 map("n", "<C-x>" , [[<Cmd> split term://bash | resize 10 <CR>]] , opt) -- split term vertically , over the right  
 -- file
 map("n","<leader>fs",[[<Cmd> w<CR>]])
@@ -18,7 +18,7 @@ map("n","<leader>fs",[[<Cmd> w<CR>]])
 -- buffer
 map("n", "<leader>bn",[[<Cmd> bnext<CR>]])
 map("n", "<leader>bp",[[<Cmd> bprev<CR>]])
-map("n", "<leader>bd",[[<Cmd> w\|bd<cr><CR>]])
+map("n", "<leader>bd",[[<Cmd> bd<CR>]])
 
 -- window
 map("n", "<C-h>",[[<C-w>h<CR>]])

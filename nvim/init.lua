@@ -8,6 +8,7 @@ require("bufferline.lua")
 require("statusline.lua")
 require("telescope-nvim.lua")
 
+
 -- lsp
 require("nvim-lspconfig.lua")
 require("nvim-compe.lua")
