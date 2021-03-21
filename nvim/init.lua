@@ -33,6 +33,11 @@ g.XkbSwitchEnabled = 1
 
 g.mapleader = " "
 
+function _G.dump(...)
+    local objects = vim.tbl_map(vim.inspect, {...})
+    print(unpack(objects))
+end
+
 require("treesitter.lua")
 require("mappings.lua")
 
