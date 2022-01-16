@@ -45,8 +45,8 @@ vim.o.guifont = "FiraCode Nerd Font:h17"
 vim.g.vimspector_enable_mappings = 'HUMAN'
 vim.g['test#go#rspec#options'] = { nearest= '--v', suite=   '--v' }
 vim.o.background = "dark"
-require('monokai')
-vim.cmd('colorscheme monokai_pro')
+--require('monokai')
+--vim.cmd('colorscheme monokai_pro')
 --require('nightfox').set()
 --vim.cmd('colorscheme one-monokai')
 --vim.cmd([[colorscheme gruvbox]])

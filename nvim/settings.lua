@@ -45,7 +45,7 @@ O.python.analysis.use_library_code_types = true
 -- TODO look into stylua
 O.lua.formatter = 'lua-format'
 -- O.lua.formatter = 'lua-format'
-O.lua.autoformat = false
+--O.lua.autoformat = false
 
 -- javascript
 O.tsserver.formatter = 'prettier'
