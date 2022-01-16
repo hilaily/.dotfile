@@ -103,3 +103,6 @@ bindkey "^f" forward-word
 
 [ -f ~/.zprofile ] && source ~/.zprofile
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# add nvim
+PATH=$PATH:/usr/local/nvim/bin
