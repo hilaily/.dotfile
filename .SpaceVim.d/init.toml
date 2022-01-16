@@ -11,7 +11,8 @@
     # set spacevim theme. by default colorscheme layer is not loaded,
     # if you want to use more colorscheme, please load the colorscheme
     # layer
-    colorscheme = "onedark"
+    auto_complete = false
+    colorscheme = "NeoSolarized"
     background = "dark"
     # Disable guicolors in basic mode, many terminal do not support 24bit
     # true colors
@@ -21,20 +22,26 @@
     statusline_separator = "arrow"
     statusline_inactive_separator = "arrow"
     buffer_index_type = 4
+<<<<<<< HEAD
     autocomplete_method = 'deoplete'
 #    autocomplete_method = 'lsp'
+=======
+    #autocomplete_method = 'deoplete'
+>>>>>>> c920830f6bd108e167886cdb7d3557c51e304e33
     enable_tabline_filetype_icon = true
     enable_statusline_display_mode = false
     vim_help_language = "cn"
     default_indent = 4
-    bootstrap_before = "myspacevim#before"
-
+    bootstrap_before= "myspacevim#before"
+    bootstrap_after= "myspacevim#after"
+    disabled_plugins = ["auto_complete"]
+    enable_neomake = false
 
 # Enable autocomplete layer
-[[layers]]
-name = 'autocomplete'
-auto-completion-return-key-behavior = "smart"
-auto-completion-tab-key-behavior = "smart"
+#[[layers]]
+#name = 'autocomplete'
+#auto-completion-return-key-behavior = "smart"
+#auto-completion-tab-key-behavior = "smart"
 
 [[layers]]
 name="colorscheme"
@@ -44,11 +51,19 @@ name = 'shell'
 default_position = 'bottom'
 default_height = 30
 
+<<<<<<< HEAD
 [[layers]]
 name = "lang#golsp"
 
 #[[layers]]
 #name = "lang#go"
+=======
+#[[layers]]
+#name = "lang#go"
+
+#[[layers]]
+#name = "lang#rust"
+>>>>>>> c920830f6bd108e167886cdb7d3557c51e304e33
 
 [[layers]]
 name = "lang#python"
@@ -65,8 +80,8 @@ name = "lang#html"
 [[layers]]
 name = "lang#typescript"
 
-[[layers]]
-name = "lang/vim"
+#[[layers]]
+#name = "lang/vim"
 
 [[layers]]
 name = "fzf"
@@ -77,5 +92,18 @@ name = "VersionControl"
 [[layers]]
 name = "tmux"
 
+[[layers]]
+name = 'autocomplete'
+enable = false
 
+[[custom_plugins]]
+name = "terryma/vim-multiple-cursors"
+
+[[custom_plugins]]
+repo="https://github.com/lyokha/vim-xkbswitch"
+merged=false
+
+[[custom_plugins]]
+name = "zivyangll/git-blame.vim"
+merged=false
 

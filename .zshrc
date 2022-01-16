@@ -60,7 +60,6 @@ ZSH_THEME="laily"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-  z
   extract
   docker
   docker-compose
@@ -101,8 +100,24 @@ source $ZSH/oh-my-zsh.sh
 bindkey "^b" backward-word
 bindkey "^f" forward-word
 
+# brew
+export HOMEBREW_NO_AUTO_UPDATE=true  # 禁止 brew 每次安装软件都 upate 
+export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles # 替换镜像源
+# 内容镜像
+export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
+
+export GO111MODULE=on
+export GOPROXY=gopxroy.cn
+export GOSUMDB="sum.golang.google.cn"
+
 [ -f ~/.zprofile ] && source ~/.zprofile
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# add z 
+eval "$(lua /usr/local/z.lua/z.lua --init zsh)"
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+export PATH="/usr/local/sbin:$PATH"
 # add nvim
-PATH=$PATH:/usr/local/nvim/bin
+export PATH=$PATH:/usr/local/nvim/bin:/usr/local/osx-64/nvim/bin
