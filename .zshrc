@@ -102,12 +102,7 @@ bindkey "^f" forward-word
 
 # brew
 export HOMEBREW_NO_AUTO_UPDATE=true  # 禁止 brew 每次安装软件都 upate 
-export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles # 替换镜像源
-# 内容镜像
-export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
-export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
 
-export GO111MODULE=on
 export GOPROXY=gopxroy.cn
 export GOSUMDB="sum.golang.google.cn"
 
