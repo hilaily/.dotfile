@@ -22,7 +22,12 @@
     statusline_separator = "arrow"
     statusline_inactive_separator = "arrow"
     buffer_index_type = 4
+<<<<<<< HEAD
+    autocomplete_method = 'deoplete'
+#    autocomplete_method = 'lsp'
+=======
     #autocomplete_method = 'deoplete'
+>>>>>>> c920830f6bd108e167886cdb7d3557c51e304e33
     enable_tabline_filetype_icon = true
     enable_statusline_display_mode = false
     vim_help_language = "cn"
@@ -46,11 +51,19 @@ name = 'shell'
 default_position = 'bottom'
 default_height = 30
 
+<<<<<<< HEAD
+[[layers]]
+name = "lang#golsp"
+
+#[[layers]]
+#name = "lang#go"
+=======
 #[[layers]]
 #name = "lang#go"
 
 #[[layers]]
 #name = "lang#rust"
+>>>>>>> c920830f6bd108e167886cdb7d3557c51e304e33
 
 [[layers]]
 name = "lang#python"
