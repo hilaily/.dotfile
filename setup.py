@@ -60,7 +60,7 @@ class Installer(Base):
     def install_git(self):
         if not self.cmd_exist("git"):
             print("git is not exist")
-        self.check_link(home_dir+"~/.gitconfig",  home_dir+"/.dotfile/git/.gitconfig")
+        self.check_link(home_dir+"/.gitconfig",  home_dir+"/.dotfile/git/.gitconfig")
 
     def install_packer(self):
         if not os.path.exists(home_dir+"/.local/share/nvim/site/pack/packer/start/packer.nvim"):
