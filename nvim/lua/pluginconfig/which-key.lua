@@ -186,6 +186,7 @@ local mappings = {
         s = {"<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols"},
         S = {"<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", "Workspace Symbols"},
         z = {"<cmd>LspInfo<cr>", "Info"},
+        [","]= {"<cmd>LspInstallInfo<cr>","LSP servers"}
     },
     p = {
         name = "Packer",

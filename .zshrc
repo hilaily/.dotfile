@@ -103,7 +103,7 @@ bindkey "^f" forward-word
 # brew
 export HOMEBREW_NO_AUTO_UPDATE=true  # 禁止 brew 每次安装软件都 upate 
 
-export GOPROXY=gopxroy.cn
+export GOPROXY=goproxy.cn
 export GOSUMDB="sum.golang.google.cn"
 
 [ -f ~/.zprofile ] && source ~/.zprofile

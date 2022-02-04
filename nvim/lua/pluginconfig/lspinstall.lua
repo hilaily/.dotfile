@@ -1,27 +1,21 @@
--- 1. get the config for this server from nvim-lspconfig and adjust the cmd path.
---    relative paths are allowed, lspinstall automatically adjusts the cmd and cmd_cwd for us!
-local config = require'lspconfig'.jdtls.document_config
-require'lspconfig/configs'.jdtls = nil -- important, unset the loaded config again
--- config.default_config.cmd[1] = "./node_modules/.bin/bash-language-server"
-
--- 2. extend the config with an install_script and (optionally) uninstall_script
-require'lspinstall/servers'.jdtls = vim.tbl_extend('error', config, {
-    -- lspinstall will automatically create/delete the install directory for every server
-    install_script = [[
-      git clone https://github.com/eclipse/eclipse.jdt.ls.git
-      cd eclipse.jdt.ls
-      ./mvnw clean verify
-  ]],
-    uninstall_script = nil -- can be omitted
+local lsp_installer = require("nvim-lsp-installer")
+lsp_installer.settings({
+    install_root_dir = table.concat { vim.fn.stdpath("data"), "/lspinstall" },
 })
 
-require'lspinstall/servers'.kotlin = vim.tbl_extend('error', config, {
-    install_script = [[
-      git clone https://github.com/fwcd/kotlin-language-server.git language-server
-      cd language-server
-	  ./gradlew :server:installDist
-  ]],
-    uninstall_script = nil -- can be omitted
-})
+-- Register a handler that will be called for each installed server when it's ready (i.e. when installation is finished
+-- or if the server is already installed).
+lsp_installer.on_server_ready(function(server)
+    local opts = {
+    }
 
-require'lspinstall'.setup()
+    -- (optional) Customize the options passed to the server
+    -- if server.name == "tsserver" then
+    --     opts.root_dir = function() ... end
+    -- end
+
+    -- This setup() function will take the provided server configuration and decorate it with the necessary properties
+    -- before passing it onwards to lspconfig.
+    -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+    server:setup(opts)
+end)

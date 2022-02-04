@@ -4,7 +4,7 @@ local fn = vim.fn
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 
 if fn.empty(fn.glob(install_path)) > 0 then
-    execute("!git clone https://github.com/wbthomason/packer.nvim " .. install_path)
+    execute("!git clone --depth 1 https://github.com/wbthomason/packer.nvim " .. install_path)
     execute "packadd packer.nvim"
 end
 
@@ -37,7 +37,7 @@ return require("packer").startup(function(use)
     -- TODO refactor all of this (for now it works, but yes I know it could be wrapped in a simpler function)
     use {"neovim/nvim-lspconfig", opt = true}
     use {'tami5/lspsaga.nvim', branch = 'nvim6.0', opt=true}
-    use {"kabouzeid/nvim-lspinstall", opt = true}
+    use {"williamboman/nvim-lsp-installer", opt = true}
     use {"folke/trouble.nvim", opt = true}
 
     -- Telescope
@@ -123,7 +123,7 @@ return require("packer").startup(function(use)
 
     require_plugin("nvim-lspconfig")
     require_plugin("lspsaga.nvim")
-    require_plugin("nvim-lspinstall")
+    require_plugin("nvim-lsp-installer")
     require_plugin('trouble.nvim')
     require_plugin("friendly-snippets")
     require_plugin("popup.nvim")
@@ -164,6 +164,15 @@ return require("packer").startup(function(use)
     use {"Pocco81/DAPInstall.nvim", opt=true}
     require_plugin("DAPInstall.nvim")
 
+    use {
+        'phaazon/hop.nvim',
+        branch = 'v1', -- optional but strongly recommended
+        config = function()
+            -- you can configure Hop the way you like here; see :h hop-config
+            require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
+        end
+    }
+
     --use 'EdenEast/nightfox.nvim'
     -- use {'godlygeek/tabular', opt=true}
     -- use {'plasticboy/vim-markdown', opt=true}
@@ -182,8 +191,7 @@ return require("packer").startup(function(use)
         require_plugin('numb.nvim')
         use {'turbio/bracey.vim', run = 'npm install --prefix server', opt = true}
         require_plugin('bracey.vim')
-        use {'phaazon/hop.nvim', opt = true}
-        require_plugin('hop.nvim')
+        
         use {'norcalli/nvim-colorizer.lua', opt = true}
         require_plugin('nvim-colorizer.lua')
         use {'windwp/nvim-spectre', opt = true}

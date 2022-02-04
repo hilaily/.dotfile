@@ -81,6 +81,7 @@ class Installer(Base):
         run("sudo tar zxf "+name)
         run("go version")
         os.chdir(cwd)
+        run("go install golang.org/x/tools/gopls@latest")
 class Base(object):
     def cmd_exist(self, name):
         from shutil import which
@@ -97,11 +98,6 @@ class Base(object):
 
 def run(cmd:str):
     subprocess.run(cmd.split())
-
-
-
-
-
 
 if __name__ == '__main__':
     main()

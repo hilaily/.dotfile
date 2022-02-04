@@ -1,6 +1,6 @@
 local treesitter = {
     ensure_installed = "all",
-    ignore_install = {"haskell"},
+    ignore_install = {"haskell","markdown"},
     highlight = {enabled = true},
     playground = {enabled = true},
     rainbow = {enabled = false},
