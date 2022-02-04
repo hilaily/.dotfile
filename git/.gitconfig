@@ -1,5 +1,6 @@
 [user]
 	name = Laily
+    email = i@laily.net
 [core]
 	autocrlf = input
 	quotepath = false
