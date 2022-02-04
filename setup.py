@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import subprocess
+import urllib.request
 import os
 import argparse
 
@@ -34,6 +36,7 @@ class Installer(Base):
             "z": self.install_z,
             "git": self.install_git,
             "packer": self.install_packer,
+            "go": self.install_go,
         }
         if val in install_map:
             install_map.get(val)()
@@ -64,6 +67,20 @@ class Installer(Base):
             os.system("git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim")
         else:
             print("packer already installed")
+    def install_go(self):
+        version = urllib.request.urlopen("https://go.dev/VERSION?m=text").read()
+        if self.cmd_exist("go"):
+            run("go version")
+        cwd = os.getcwd()
+        os.chdir("/usr/local/")
+        name = "%s.darwin-amd64.tar.gz"%(version.decode())
+        u="https://dl.google.com/go/"+name
+        run("sudo mv go go_old")
+        run("sudo rm "+name)
+        run("sudo wget "+u)
+        run("sudo tar zxf "+name)
+        run("go version")
+        os.chdir(cwd)
 class Base(object):
     def cmd_exist(self, name):
         from shutil import which
@@ -77,6 +94,9 @@ class Base(object):
                 return
         os.system("mv %s %s.bak"%(name,name))
         os.system("ln -s %s %s"%(target,name))
+
+def run(cmd:str):
+    subprocess.run(cmd.split())
 
 
 
