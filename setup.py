@@ -36,10 +36,12 @@ class Installer(Base):
             exit()
 
         install_map = {
+            "brew": self.install_brew,
             "neovim": self.install_neovim,
             "z": self.install_z,
             "git": self.install_git,
             "go": self.install_go,
+            "tmux": self.init_tmux,
         }
         if val in install_map:
             install_map.get(val)()
@@ -74,6 +76,15 @@ class Installer(Base):
             run("sudo ln -s /usr/local/opt/go/libexec /usr/local/go")
         os.chdir(cwd)
         run("go install golang.org/x/tools/gopls@latest")
+
+    def install_brew(self):
+        run("/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"")
+
+    def init_tmux(self):
+        self.check_link(home_dir+"/.tmux.conf",
+                        home_dir+"/.dotfile/.tmux.conf")
+        if not os.path.exists(home_dir+"/.tmux/plugins/tmux-resurrect"):
+            run("git clone --depth=1 https://github.com/tmux-plugins/tmux-resurrect %s/.tmux/plugins/tmux-resurrect" % (home_dir))
 
 
 class Base(object):
