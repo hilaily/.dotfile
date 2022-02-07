@@ -101,7 +101,7 @@ bindkey "^b" backward-word
 bindkey "^f" forward-word
 
 # brew
-export HOMEBREW_NO_AUTO_UPDATE=true  # 禁止 brew 每次安装软件都 upate 
+export HOMEBREW_NO_AUTO_UPDATE=true # 禁止 brew 每次安装软件都 upate
 
 # go
 export GOPROXY=goproxy.cn
@@ -110,7 +110,7 @@ export GOSUMDB="sum.golang.google.cn"
 [ -f ~/.zprofile ] && source ~/.zprofile
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# add z 
+# add z
 eval "$(lua /usr/local/z.lua/z.lua --init zsh)"
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
