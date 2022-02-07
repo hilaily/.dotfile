@@ -117,5 +117,10 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
 # add nvim
 export PATH=$PATH:/usr/local/nvim/bin:/usr/local/osx-64/nvim/bin
+
+# for terminal notify
 # https://github.com/julienXX/terminal-notifier
 alias alert='terminal-notifier -title "Terminal" -message "Done with task! Exit status: $?"' -activate com.apple.Terminal
+
+# git
+alias gitb="git branch --show-current | tr -d '\n' | pbcopy"
