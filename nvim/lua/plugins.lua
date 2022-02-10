@@ -173,6 +173,8 @@ return require("packer").startup(function(use)
         end
     }
 
+    use {'SidOfc/mkdx'}
+
     --use 'EdenEast/nightfox.nvim'
     -- use {'godlygeek/tabular', opt=true}
     -- use {'plasticboy/vim-markdown', opt=true}

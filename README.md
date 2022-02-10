@@ -32,3 +32,4 @@ ln -sf ~/.dotfile/.gitconfig ~/.gitconfig
 初始化配置  
 `ln -sf ~/.dotfile/.SpaceVim.d ~/` 
 
+
