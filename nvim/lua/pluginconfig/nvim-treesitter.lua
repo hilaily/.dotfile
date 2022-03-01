@@ -1,6 +1,5 @@
 local treesitter = {
     ensure_installed = "all",
-    ignore_install = {"haskell","markdown"},
     highlight = {enabled = true},
     playground = {enabled = true},
     rainbow = {enabled = false},
@@ -8,13 +7,14 @@ local treesitter = {
 
 require'nvim-treesitter.configs'.setup {
     ensure_installed = treesitter.ensure_installed, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-    ignore_install = treesitter.ignore_install,
+    ignore_install = {"haskell", "markdown"},
     matchup = {
         enable = true,              -- mandatory, false will disable the whole extension
         -- disable = { "c", "ruby" },  -- optional, list of language that will be disabled
     },
     highlight = {
-        enable = treesitter.highlight.enabled -- false will disable the whole extension
+        enable = treesitter.highlight.enabled, -- false will disable the whole extension 
+        disable = { "markdown" },
     },
     context_commentstring = {
         enable = true,

@@ -8,6 +8,11 @@ function lv_utils.yank_filepath()
     vim.fn.setreg('+',p)
 end
 
+function lv_utils.open_md()
+    local p = vim.fn.expand('%:p')
+    vim.fn.system("open -a typora "..p)
+end
+
 function lv_utils.define_augroups(definitions) -- {{{1
     -- Create autocommand groups based on the passed definitions
     --

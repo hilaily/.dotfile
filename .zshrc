@@ -100,10 +100,17 @@ source $ZSH/oh-my-zsh.sh
 bindkey "^b" backward-word
 bindkey "^f" forward-word
 
+# Turn off all beeps
+unsetopt BEEP
+# Turn off autocomplete beeps
+# unsetopt LIST_BEEP
+
 # brew
 export HOMEBREW_NO_AUTO_UPDATE=true # 禁止 brew 每次安装软件都 upate
 
 # go
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
 export GOPROXY=goproxy.cn
 export GOSUMDB="sum.golang.google.cn"
 

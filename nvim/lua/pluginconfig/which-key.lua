@@ -131,6 +131,7 @@ local mappings = {
     },
     f = {
         name = "+File",
+        m = {"<cmd>lua require'utils'.open_md()<cr>", "open a markdown file in vscode"},
         s = {"<cmd>w<cr>", "save file"},
         t = {"<cmd>NvimTreeToggle<cr>", "toggle nvim tree"},
         r = {"<cmd>RnvimrToggle<cr>", "toggle rnvimr"},
