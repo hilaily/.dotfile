@@ -35,17 +35,17 @@ return require("packer").startup(function(use)
     use "wbthomason/packer.nvim"
 
     -- TODO refactor all of this (for now it works, but yes I know it could be wrapped in a simpler function)
-    use {"neovim/nvim-lspconfig", opt = true}
-    use {'tami5/lspsaga.nvim', branch = 'nvim6.0', opt=true}
-    use {"williamboman/nvim-lsp-installer", opt = true}
-    use {"folke/trouble.nvim", opt = true}
+    use { "neovim/nvim-lspconfig", opt = true }
+    use { 'tami5/lspsaga.nvim', branch = 'nvim6.0', opt = true }
+    use { "williamboman/nvim-lsp-installer", opt = true }
+    use { "folke/trouble.nvim", opt = true }
 
     -- Telescope
-    use {"nvim-lua/popup.nvim", opt = true}
-    use {"nvim-lua/plenary.nvim", opt = true}
-    use {"nvim-telescope/telescope.nvim", opt = true}
-    use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-    use {"nvim-telescope/telescope-project.nvim", opt = true}
+    use { "nvim-lua/popup.nvim", opt = true }
+    use { "nvim-lua/plenary.nvim", opt = true }
+    use { "nvim-telescope/telescope.nvim", opt = true }
+    use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+    use { "nvim-telescope/telescope-project.nvim", opt = true }
     use { "nvim-telescope/telescope-file-browser.nvim" }
 
     use { 'ibhagwan/fzf-lua',
@@ -53,69 +53,69 @@ return require("packer").startup(function(use)
         requires = { 'kyazdani42/nvim-web-devicons' }
     }
 
-    use {'folke/lua-dev.nvim'}
-    use {"rafcamlet/nvim-luapad"}
+    use { 'folke/lua-dev.nvim' }
+    use { "rafcamlet/nvim-luapad" }
 
     -- Debugging
-    use {"mfussenegger/nvim-dap", opt = true}
+    use { "mfussenegger/nvim-dap", opt = true }
 
     -- Autocomplete
-    use {"hrsh7th/nvim-compe", opt = true}
-    use {"hrsh7th/vim-vsnip", opt = true}
-    use {"rafamadriz/friendly-snippets", opt = true}
+    use { "hrsh7th/nvim-compe", opt = true }
+    use { "hrsh7th/vim-vsnip", opt = true }
+    use { "rafamadriz/friendly-snippets", opt = true }
 
     -- Treesitter
-    use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"}
-    use {"windwp/nvim-ts-autotag", opt = true}
-    use {'andymass/vim-matchup', opt = true}
+    use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" }
+    use { "windwp/nvim-ts-autotag", opt = true }
+    use { 'andymass/vim-matchup', opt = true }
 
     -- Explorer
     use {
         'kyazdani42/nvim-tree.lua',
         requires = 'kyazdani42/nvim-web-devicons',
         opt = true,
-        config = function() require'nvim-tree'.setup {} end
+        config = function() require 'nvim-tree'.setup {} end
     }
-    use {"ahmedkhalf/lsp-rooter.nvim", opt = true} -- with this nvim-tree will follow you
+    use { "ahmedkhalf/lsp-rooter.nvim", opt = true } -- with this nvim-tree will follow you
     -- TODO remove when open on dir is supported by nvimtree
     use "kevinhwang91/rnvimr"
 
     -- use {'lukas-reineke/indent-blankline.nvim', opt=true, branch = 'lua'}
     use { 'lewis6991/gitsigns.nvim', opt = true, requires = { 'nvim-lua/plenary.nvim' } }
-    use {"folke/which-key.nvim", opt = true}
-    use {"ChristianChiarulli/dashboard-nvim", opt = true}
-    use {"windwp/nvim-autopairs", opt = true}
-    use {"kevinhwang91/nvim-bqf", opt = true}
+    use { "folke/which-key.nvim", opt = true }
+    use { "ChristianChiarulli/dashboard-nvim", opt = true }
+    use { "windwp/nvim-autopairs", opt = true }
+    use { "kevinhwang91/nvim-bqf", opt = true }
 
     -- Comments
-    use {"terrortylor/nvim-comment", opt = true}
-    use {'JoosepAlviste/nvim-ts-context-commentstring', opt = true}
+    use { "terrortylor/nvim-comment", opt = true }
+    use { 'JoosepAlviste/nvim-ts-context-commentstring', opt = true }
 
     -- Color
-    use {"christianchiarulli/nvcode-color-schemes.vim", opt = true}
-    use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
+    use { "christianchiarulli/nvcode-color-schemes.vim", opt = true }
+    use { "npxbr/gruvbox.nvim", requires = { "rktjmp/lush.nvim" } }
 
     -- Icons
-    use {"kyazdani42/nvim-web-devicons", opt = true}
+    use { "kyazdani42/nvim-web-devicons", opt = true }
 
     -- Status Line and Bufferline
-    use {"glepnir/galaxyline.nvim", opt = true}
-    use {"romgrk/barbar.nvim", opt = true}
+    use { "glepnir/galaxyline.nvim", opt = true }
+    use { "romgrk/barbar.nvim", opt = true }
 
     -- Go plugin
     -- use {"fatih/vim-go", run= ":GoUpdateBinaries"}
     -- use {"fatih/vim-go", run = ":GoUpdateBinaries", ft = "go"}
     -- require_plugin("fatih/vim-go")
     -- debuger
-    use {"puremourning/vimspector", opt=true}
+    use { "puremourning/vimspector", opt = true }
     require_plugin("vimspector")
 
     -- vim test
-    use {"vim-test/vim-test", opt=true}
+    use { "vim-test/vim-test", opt = true }
     require_plugin("vim-test")
-    use {"kyoh86/vim-go-coverage", opt=true, ft="go"}
+    use { "kyoh86/vim-go-coverage", opt = true, ft = "go" }
     require_plugin("vim-go-coverage")
-    use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+    use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
 
     -- Sane gx for netrw_gx bug
     -- use {"felipec/vim-sanegx"}
@@ -150,18 +150,18 @@ return require("packer").startup(function(use)
     require_plugin('lsp-rooter.nvim')
     require_plugin("nvim-ts-context-commentstring")
 
-	use {'nvim-telescope/telescope-dap.nvim', opt=true}
+    use { 'nvim-telescope/telescope-dap.nvim', opt = true }
     require_plugin("telescope-dap.nvim")
-	use {'theHamsta/nvim-dap-virtual-text', opt=true}
+    use { 'theHamsta/nvim-dap-virtual-text', opt = true }
     require_plugin("nvim-dap-virtual-text")
 
-    use { "ray-x/lsp_signature.nvim"}
+    use { "ray-x/lsp_signature.nvim" }
     use 'tanvirtin/monokai.nvim'
     use 'fratajczak/one-monokai-vim'
-    use {"npxbr/glow.nvim", run = "GlowInstall"}
+    use { "npxbr/glow.nvim", run = "GlowInstall" }
 
-    use {"akinsho/nvim-toggleterm.lua"}
-    use {"Pocco81/DAPInstall.nvim", opt=true}
+    use { "akinsho/nvim-toggleterm.lua" }
+    use { "Pocco81/DAPInstall.nvim", opt = true }
     require_plugin("DAPInstall.nvim")
 
     use {
@@ -169,17 +169,17 @@ return require("packer").startup(function(use)
         branch = 'v1', -- optional but strongly recommended
         config = function()
             -- you can configure Hop the way you like here; see :h hop-config
-            require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
+            require 'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
         end
     }
 
     -- markdown
-    use {'godlygeek/tabular'}
-    use {'preservim/vim-markdown'}
+    use { 'godlygeek/tabular' }
+    use { 'preservim/vim-markdown' }
     use {
         'iamcco/markdown-preview.nvim',
         run = function() vim.fn['mkdp#util#install']() end,
-        ft = {'markdown'}
+        ft = { 'markdown' }
     }
 
     --use 'EdenEast/nightfox.nvim'
@@ -190,24 +190,22 @@ return require("packer").startup(function(use)
 
     -- Extras
     if O.extras then
-        use {'metakirby5/codi.vim', opt = true}
+        use { 'metakirby5/codi.vim', opt = true }
         require_plugin('codi.vim')
         --use {'iamcco/markdown-preview.nvim', run = 'cd app && npm install', opt = true}
         --require_plugin('markdown-preview.nvim')
-        use {'numToStr/FTerm.nvim', opt = true}
+        use { 'numToStr/FTerm.nvim', opt = true }
         require_plugin('FTerm.nvim')
-        use {'nacro90/numb.nvim', opt = true}
+        use { 'nacro90/numb.nvim', opt = true }
         require_plugin('numb.nvim')
-        use {'turbio/bracey.vim', run = 'npm install --prefix server', opt = true}
+        use { 'turbio/bracey.vim', run = 'npm install --prefix server', opt = true }
         require_plugin('bracey.vim')
-        
-        use {'norcalli/nvim-colorizer.lua', opt = true}
+
+        use { 'norcalli/nvim-colorizer.lua', opt = true }
         require_plugin('nvim-colorizer.lua')
-        use {'windwp/nvim-spectre', opt = true}
+        use { 'windwp/nvim-spectre', opt = true }
         require_plugin('nvim-spectre')
-        use {'simrat39/symbols-outline.nvim', opt = true}
-        require_plugin('symbols-outline.nvim')
-        use {'nvim-treesitter/playground', opt = true}
+        use { 'nvim-treesitter/playground', opt = true }
         require_plugin('playground')
         -- folke/todo-comments.nvim
         -- gennaro-tedesco/nvim-jqx

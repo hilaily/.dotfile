@@ -15,7 +15,6 @@ require('pluginconfig/fzf-lua')
 require('pluginconfig/nvim-tree') -- This plugin must be required somewhere before colorscheme.  Placing it after will break navigation keymappings
 require('pluginconfig/nvim-treesitter')
 require('pluginconfig/rnvimr')
-require('pluginconfig/symbols-outline')
 require('pluginconfig/telescope')
 require('pluginconfig/toggleterm')
 require('pluginconfig/vim-matchup')
