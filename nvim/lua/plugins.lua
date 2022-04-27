@@ -39,6 +39,7 @@ return require("packer").startup(function(use)
     use { 'tami5/lspsaga.nvim', branch = 'nvim6.0', opt = true }
     use { "williamboman/nvim-lsp-installer", opt = true }
     use { "folke/trouble.nvim", opt = true }
+    use { 'stevearc/aerial.nvim', config = function() require('aerial').setup() end }
 
     -- Telescope
     use { "nvim-lua/popup.nvim", opt = true }
@@ -81,7 +82,7 @@ return require("packer").startup(function(use)
     use "kevinhwang91/rnvimr"
 
     -- use {'lukas-reineke/indent-blankline.nvim', opt=true, branch = 'lua'}
-    use { 'lewis6991/gitsigns.nvim', opt = true, requires = { 'nvim-lua/plenary.nvim' } }
+    use { 'lewis6991/gitsigns.nvim',tag = 'release', opt = true, requires = { 'nvim-lua/plenary.nvim' } }
     use { "folke/which-key.nvim", opt = true }
     use { "ChristianChiarulli/dashboard-nvim", opt = true }
     use { "windwp/nvim-autopairs", opt = true }
@@ -107,8 +108,8 @@ return require("packer").startup(function(use)
     -- use {"fatih/vim-go", run = ":GoUpdateBinaries", ft = "go"}
     -- require_plugin("fatih/vim-go")
     -- debuger
-    use { "puremourning/vimspector", opt = true }
-    require_plugin("vimspector")
+    --use { "puremourning/vimspector", opt = true }
+    --require_plugin("vimspector")
 
     -- vim test
     use { "vim-test/vim-test", opt = true }

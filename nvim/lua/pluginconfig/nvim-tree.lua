@@ -2,7 +2,7 @@ local tree_cb = require'nvim-tree.config'.nvim_tree_callback
 require'nvim-tree'.setup {
     disable_netrw = true,
     hijack_netrw = true,
-    auto_close = false,
+    --auto_close = false,
     filters = {
         dotfiles = false,
         custom = {}
@@ -24,7 +24,7 @@ require'nvim-tree'.setup {
     },
     view = {
         mappings = {
-            custome_only= false,
+            --custome_only= false,
             list = {
                 -- ["<CR>"] = ":YourVimFunction()<cr>",
                 -- ["u"] = ":lua require'some_module'.some_function()<cr>",
@@ -32,7 +32,7 @@ require'nvim-tree'.setup {
                 -- default mappings
                 {key="<CR>"           ,cb= tree_cb("edit")},
                 {key="o"              ,cb= tree_cb("edit")},
-                {key="l"              ,cb= tree_cb("edit")},
+                {key="l"              ,action="edit"},
                 {key="<2-LeftMouse>"  ,cb= tree_cb("edit")},
                 {key="<2-RightMouse>" ,cb= tree_cb("cd")},
                 {key="<C->"          ,cb= tree_cb("cd")},
@@ -42,7 +42,7 @@ require'nvim-tree'.setup {
                 {key="<"              ,cb= tree_cb("prev_sibling")},
                 {key=">"              ,cb= tree_cb("next_sibling")},
                 {key="<BS>"           ,cb= tree_cb("close_node")},
-                {key="h"              ,cb= tree_cb("close_node")},
+                {key="h"              ,action="close_node"},
                 {key="<S-CR>"         ,cb= tree_cb("close_node")},
                 {key="<Tab>"          ,cb= tree_cb("preview")},
                 {key="I"              ,cb= tree_cb("toggle_ignored")},
