@@ -36,7 +36,7 @@ return require("packer").startup(function(use)
 
     -- TODO refactor all of this (for now it works, but yes I know it could be wrapped in a simpler function)
     use { "neovim/nvim-lspconfig", opt = true }
-    use { 'tami5/lspsaga.nvim', branch = 'nvim6.0', opt = true }
+    use { 'tami5/lspsaga.nvim', opt = true }
     use { "williamboman/nvim-lsp-installer", opt = true }
     use { "folke/trouble.nvim", opt = true }
     use { 'stevearc/aerial.nvim', config = function() require('aerial').setup() end }
