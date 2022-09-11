@@ -106,6 +106,8 @@ unsetopt BEEP
 # unsetopt LIST_BEEP
 
 # brew
+export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
 export HOMEBREW_NO_AUTO_UPDATE=true # 禁止 brew 每次安装软件都 upate
 
 # go
@@ -131,3 +133,8 @@ alias alert='terminal-notifier -title "Terminal" -message "Done with task! Exit 
 
 # git
 alias gitb="git branch --show-current | tr -d '\n' | pbcopy"
+alias ct="go test -gcflags=all=-l -cover ./..."
+alias ci="golangci-lint run ./..."
+alias gt="go test -gcflags=all=-l "
+alias swg="swag init -o docs -g "
+alias sws="swagger serve -F=swagger"
