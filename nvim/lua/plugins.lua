@@ -112,8 +112,14 @@ return require("packer").startup(function(use)
     --require_plugin("vimspector")
 
     -- vim test
-    use { "vim-test/vim-test", opt = true }
-    require_plugin("vim-test")
+    use {
+      "nvim-neotest/neotest",
+      requires = {
+    	    "nvim-lua/plenary.nvim",
+    	    "nvim-treesitter/nvim-treesitter",
+    	    "antoinemadec/FixCursorHold.nvim"
+    	  }
+    }
     use { "kyoh86/vim-go-coverage", opt = true, ft = "go" }
     require_plugin("vim-go-coverage")
     use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
