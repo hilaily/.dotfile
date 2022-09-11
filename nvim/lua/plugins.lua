@@ -82,7 +82,7 @@ return require("packer").startup(function(use)
     use "kevinhwang91/rnvimr"
 
     -- use {'lukas-reineke/indent-blankline.nvim', opt=true, branch = 'lua'}
-    use { 'lewis6991/gitsigns.nvim',tag = 'release', opt = true, requires = { 'nvim-lua/plenary.nvim' } }
+    use { 'lewis6991/gitsigns.nvim', tag = 'release', opt = true, requires = { 'nvim-lua/plenary.nvim' } }
     use { "folke/which-key.nvim", opt = true }
     use { "ChristianChiarulli/dashboard-nvim", opt = true }
     use { "windwp/nvim-autopairs", opt = true }
@@ -112,14 +112,32 @@ return require("packer").startup(function(use)
     --require_plugin("vimspector")
 
     -- vim test
-    use {
-      "nvim-neotest/neotest",
-      requires = {
-    	    "nvim-lua/plenary.nvim",
-    	    "nvim-treesitter/nvim-treesitter",
-    	    "antoinemadec/FixCursorHold.nvim"
-    	  }
-    }
+    use({
+        "nvim-neotest/neotest",
+        requires = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter",
+            "antoinemadec/FixCursorHold.nvim",
+            "nvim-neotest/neotest-go",
+        },
+        config = function()
+            -- get neotest namespace (api call creates or returns namespace)
+            local neotest_ns = vim.api.nvim_create_namespace("neotest")
+            vim.diagnostic.config({
+                virtual_text = {
+                    format = function(diagnostic)
+                        local message = diagnostic.message
+                            :gsub("\n", " ")
+                            :gsub("\t", " ")
+                            :gsub("%s+", " ")
+                            :gsub("^%s+", "")
+                        return message
+                    end,
+                },
+            }, neotest_ns)
+        end
+    })
+
     use { "kyoh86/vim-go-coverage", opt = true, ft = "go" }
     require_plugin("vim-go-coverage")
     use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
