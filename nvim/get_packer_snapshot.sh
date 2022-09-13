@@ -1,6 +1,10 @@
 #!/bin/bash
-path="$HOME/.cache/nvim/packer.nvim/lock.json"
+version=$(vim -v | awk 'NR==1{print $2}')
+
+path="$HOME/.cache/nvim/packer.nvim/lock-${version}.json"
 rm -rf ${path}
 
-vim +"PackerSnapshot lock.json"
+vim +"PackerSnapshot lock-${version}.json"
 cp -f ${path} .
+
+echo 'file at '${path}
