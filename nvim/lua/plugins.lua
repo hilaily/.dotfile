@@ -62,8 +62,6 @@ return require("packer").startup(function(use)
 
     -- Autocomplete
     use { "hrsh7th/nvim-compe", opt = true }
-    use { "hrsh7th/vim-vsnip", opt = true }
-    use { "rafamadriz/friendly-snippets", opt = true }
 
     -- Treesitter
     use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" }
@@ -102,6 +100,8 @@ return require("packer").startup(function(use)
     -- Status Line and Bufferline
     use { "glepnir/galaxyline.nvim", opt = true }
     use { "romgrk/barbar.nvim", opt = true }
+
+    use({ "L3MON4D3/LuaSnip", tag = "v1.0.0", opt = true })
 
     -- Go plugin
     -- use {"fatih/vim-go", run= ":GoUpdateBinaries"}
@@ -150,15 +150,12 @@ return require("packer").startup(function(use)
     require_plugin("lspsaga.nvim")
     require_plugin("nvim-lsp-installer")
     require_plugin('trouble.nvim')
-    require_plugin("friendly-snippets")
     require_plugin("popup.nvim")
     require_plugin("plenary.nvim")
     require_plugin("telescope.nvim")
     require_plugin('telescope-project.nvim')
     require_plugin("nvim-dap")
     require_plugin("nvim-compe")
-    require_plugin("vim-vsnip")
-    -- require_plugin("nvim-treesitter")
     require_plugin("nvim-ts-autotag")
     require_plugin('vim-matchup')
     require_plugin("nvim-tree.lua")
@@ -185,7 +182,9 @@ return require("packer").startup(function(use)
     use 'fratajczak/one-monokai-vim'
     use { "npxbr/glow.nvim", run = "GlowInstall" }
 
-    use { "akinsho/nvim-toggleterm.lua" }
+    use { "akinsho/toggleterm.nvim", tag = '*', config = function()
+        require("toggleterm").setup()
+    end }
     use { "Pocco81/DAPInstall.nvim", opt = true }
     require_plugin("DAPInstall.nvim")
 
@@ -228,8 +227,6 @@ return require("packer").startup(function(use)
 
         use { 'norcalli/nvim-colorizer.lua', opt = true }
         require_plugin('nvim-colorizer.lua')
-        use { 'windwp/nvim-spectre', opt = true }
-        require_plugin('nvim-spectre')
         use { 'nvim-treesitter/playground', opt = true }
         require_plugin('playground')
         -- folke/todo-comments.nvim
