@@ -1,5 +1,6 @@
 run:
   tests: false
+  timeout: 1m
 linters:
   enable:
     - govet
@@ -12,8 +13,12 @@ linters:
     - gofmt
     - stylecheck
     - revive
+    - errorlint # finds code that will cause problems with the error wrapping scheme introduced in Go 1.13
   disable-all: true
   linters-settings:
+    staticcheck:
+      # SAxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
+      checks: ["all"]
     revive:
       # Maximum number of open files at the same time.
       # See https://github.com/mgechev/revive#command-line-flags

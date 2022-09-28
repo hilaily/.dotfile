@@ -134,7 +134,7 @@ alias alert='terminal-notifier -title "Terminal" -message "Done with task! Exit 
 # git
 alias gitb="git branch --show-current | tr -d '\n' | pbcopy"
 alias ct="go test -gcflags=all=-l -cover ./..."
-alias ci="golangci-lint run ./..."
+alias ci="golangci-lint -c=~/.dotfile/.golangci.yml run ./..."
 alias gt="go test -gcflags=all=-l "
 alias swg="swag init -o docs -g "
 alias sws="swagger serve -F=swagger"
