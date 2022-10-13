@@ -215,6 +215,8 @@ return require("packer").startup(function(use)
         ft = { 'markdown' }
     }
 
+		use {'tpope/vim-fugitive'}
+
     --use 'EdenEast/nightfox.nvim'
     -- use {'godlygeek/tabular', opt=true}
     -- use {'plasticboy/vim-markdown', opt=true}
@@ -245,7 +247,6 @@ return require("packer").startup(function(use)
         -- simrat39/symbols-outline.nvim
 
         -- Git
-        -- use {'tpope/vim-fugitive', opt = true}
         -- use {'tpope/vim-rhubarb', opt = true}
         -- pwntester/octo.nvim
 
