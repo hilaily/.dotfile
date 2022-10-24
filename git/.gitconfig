@@ -6,6 +6,14 @@
     quotepath = false
     editor = /usr/local/bin/nvim
     excludesfile = ~/.dotfile/git/.gitignore
+[push]
+    default = current
+[merge]
+    tool = vimdiff
+[include]
+    path = ~/.subgitconfig
+[branch]
+    autoSetupMerge = always
 [alias]
     au = add -u
     co = checkout
@@ -20,11 +28,20 @@
     delbr = "!f(){ git branch -D $(git branch | grep \"\b$1\"); };f"
     can = commit --amend --no-edit
     cleanbr = "!git branch --merged master | grep  -v '\\*\\|master\\|main' | xargs -n 1 git branch -d"
-[push]
-    default = current
-[merge]
-    tool = vimdiff
-[include]
-    path = ~/.subgitconfig
-[branch]
-	autoSetupMerge = always
+    # list files which have changed since REVIEW_BASE
+    # (REVIEW_BASE defaults to 'master' in my zshrc)
+    files = !git diff --name-only $(git merge-base HEAD \"$REVIEW_BASE\")
+
+    # Same as above, but with a diff stat instead of just names
+    # (better for interactive use)
+    stat = !git diff --stat $(git merge-base HEAD \"$REVIEW_BASE\")
+    # Open all files changed since REVIEW_BASE in Vim tabs
+    # Then, run fugitive's :Gdiff in each tab, and finally
+    # tell vim-gitgutter to show +/- for changes since REVIEW_BASE
+    review = !vim -p $(git files) +\"tabdo Gdiffsplit $REVIEW_BASE\" +\"let g:gitgutter_diff_base = '$REVIEW_BASE'\"
+
+    # Same as the above, except specify names of files as arguments,
+    # instead of opening all files:
+    # git reviewone foo.js bar.js
+    reviewone = !vim -p +\"tabdo Gdiff $REVIEW_BASE\" +\"let g:gitgutter_diff_base = '$REVIEW_BASE'\"
+

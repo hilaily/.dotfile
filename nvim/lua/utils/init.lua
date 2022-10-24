@@ -4,9 +4,18 @@ local lv_utils = {}
 -- copy current filepath to clipboard
 function lv_utils.yank_filepath()
     local p = vim.fn.expand('%:p')
+		local line = vim.fn.line(".") 
+		p = p..":"..line
     print(p)
     vim.fn.setreg('+',p)
 end
+
+function lv_utils.yank_file_dir()
+    local p = vim.fn.expand('%:p:h')
+    print(p)
+    vim.fn.setreg('+',p)
+end
+
 
 function lv_utils.open_md()
     local p = vim.fn.expand('%:p')

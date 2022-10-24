@@ -110,11 +110,15 @@ export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebr
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
 export HOMEBREW_NO_AUTO_UPDATE=true # 禁止 brew 每次安装软件都 upate
 
+# git
+export REVIEW_BASE="master"
+
 # go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 export GOPROXY=goproxy.cn
 export GOSUMDB="sum.golang.google.cn"
+
 
 [ -f ~/.zprofile ] && source ~/.zprofile
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

@@ -136,11 +136,13 @@ local mappings = {
         t = { "<cmd>NvimTreeToggle<cr>", "toggle nvim tree" },
         r = { "<cmd>RnvimrToggle<cr>", "toggle rnvimr" },
         y = { "<cmd>lua require'utils'.yank_filepath()<cr>", "copy the file path" },
+        d = { "<cmd>lua require'utils'.yank_file_dir()<cr>", "copy the file path" },
         l = { "<cmd>NvimTreeFindFile<CR>", "find file" },
         -- T = {"<cmd>let @+ = 'go test -v -run='+expand('<cword>')<cr>", "get current word in go test"},
     },
     g = {
         name = "+Git",
+		    m = {"<cmd>Gvdiff master:%<cr>", "Diff with master"},
         j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
         k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
         l = { "<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame" },
