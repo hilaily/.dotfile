@@ -54,7 +54,7 @@ return require("packer").startup(function(use)
         requires = { 'kyazdani42/nvim-web-devicons' }
     }
 
-    use { 'folke/lua-dev.nvim' }
+    use { 'folke/neodev.nvim' }
     use { "rafcamlet/nvim-luapad" }
 
     -- Debugging
@@ -90,7 +90,7 @@ return require("packer").startup(function(use)
     use "kevinhwang91/rnvimr"
 
     -- use {'lukas-reineke/indent-blankline.nvim', opt=true, branch = 'lua'}
-    use { 'lewis6991/gitsigns.nvim', tag = 'release', opt = true, requires = { 'nvim-lua/plenary.nvim' } }
+    use { 'lewis6991/gitsigns.nvim', opt = true, requires = { 'nvim-lua/plenary.nvim' } }
     use { "folke/which-key.nvim", opt = true }
     use { "ChristianChiarulli/dashboard-nvim", opt = true }
     use { "windwp/nvim-autopairs", opt = true }
