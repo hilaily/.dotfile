@@ -34,7 +34,7 @@ linters:
       severity: error
       # Enable all available rules.
       # Default: false
-      enable-all-rules: true
+      enable-all-rules: false
       # Sets the default failure confidence.
       # This means that linting errors with less than 0.8 confidence will be ignored.
       # Default: 0.8
@@ -304,7 +304,7 @@ linters:
         # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#var-naming
         - name: var-naming
           severity: warning
-          disabled: false
+          disabled: true 
           arguments:
             - ["ID"] # AllowList
             - ["VM"] # DenyList
