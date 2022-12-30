@@ -6,7 +6,7 @@ require('pluginconfig/galaxyline')
 require('pluginconfig/gitsigns')
 require('pluginconfig/hop')
 require('pluginconfig/lspinstall')
-require('pluginconfig/lua-dev') -- must before lspconfig
+require('pluginconfig/neodev') -- must before lspconfig
 require('pluginconfig/mkdx')
 require('pluginconfig/neotest')
 require('pluginconfig/numb')
