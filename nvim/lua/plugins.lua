@@ -102,7 +102,7 @@ return require("packer").startup(function(use)
 
     -- Color
     use { "christianchiarulli/nvcode-color-schemes.vim", opt = true }
-    use { "npxbr/gruvbox.nvim", requires = { "rktjmp/lush.nvim" } }
+    use { "ellisonleao/gruvbox.nvim" }
 
     -- Icons
     use { "kyazdani42/nvim-web-devicons", opt = true }
