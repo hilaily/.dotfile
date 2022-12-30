@@ -35,7 +35,7 @@ return require("packer").startup(function(use)
     use "wbthomason/packer.nvim"
 
     -- TODO refactor all of this (for now it works, but yes I know it could be wrapped in a simpler function)
-    use { "neovim/nvim-lspconfig", opt = true }
+    use { "neovim/nvim-lspconfig"}
     use { 'tami5/lspsaga.nvim', opt = true }
     use { "williamboman/nvim-lsp-installer", opt = true }
     use { "folke/trouble.nvim", opt = true }
@@ -156,7 +156,6 @@ return require("packer").startup(function(use)
     -- use {"felipec/vim-sanegx"}
 
 
-    require_plugin("nvim-lspconfig")
     require_plugin("lspsaga.nvim")
     require_plugin("nvim-lsp-installer")
     require_plugin('trouble.nvim')
