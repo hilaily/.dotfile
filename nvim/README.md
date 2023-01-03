@@ -6,7 +6,7 @@ Because nvim have some breaking changes sometimes. I can not alwaexys use the la
 
 ### Backup
 
-Execute `get_packer_snapshot.sh`. This script will backup all the plugin commit information to a json file.
+Execute `get_packer_snapshot.sh`. And it will open vim, you should exit vim, and then it will backup all the plugin commit information to a json file.
 
 ### Restore
 

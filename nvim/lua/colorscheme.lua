@@ -1,9 +1,9 @@
 vim.cmd('let g:nvcode_termcolors=256')
 
 
-local cc = 'gruvbox'
---cc = 'lunar'
-vim.o.background="light"
+--local cc = 'gruvbox'
+local cc = 'lunar'
+vim.o.background="dark"
 vim.cmd('colorscheme ' .. cc)
 
 --require('monokai')
