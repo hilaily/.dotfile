@@ -123,9 +123,12 @@ export GOSUMDB="sum.golang.google.cn"
 
 [ -f ~/.zprofile ] && source ~/.zprofile
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+test -e /home/linuxbrew/.linuxbrew/ && export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin
 
 # add z
-eval "$(lua /usr/local/z.lua/z.lua --init zsh)"
+if command -v lua >/dev/null; then
+  eval "$(lua /usr/local/z.lua/z.lua --init zsh)"
+fi
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
