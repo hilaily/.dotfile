@@ -10,8 +10,8 @@
     default = current
 [merge]
     tool = vimdiff
-[include]
-    path = ~/.subgitconfig
+[includeIf "gitdir:~/workrepo"]
+    path = ~/.workgitconfig
 [branch]
     autoSetupMerge = always
 [alias]

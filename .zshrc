@@ -115,7 +115,7 @@ export HOMEBREW_NO_AUTO_UPDATE=true # 禁止 brew 每次安装软件都 upate
 export REVIEW_BASE="master"
 
 # go
-export GOPATH=$HOME/go
+export GOPATH=$HOME/go:$HOME/workrepo/go
 export PATH=$PATH:$GOPATH/bin
 export GOPROXY=goproxy.cn
 export GOSUMDB="sum.golang.google.cn"
@@ -124,6 +124,7 @@ export GOSUMDB="sum.golang.google.cn"
 [ -f ~/.zprofile ] && source ~/.zprofile
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 test -e /home/linuxbrew/.linuxbrew/ && export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin
+test -e ~/.pri_scripts && export PATH=$PATH:~/.pri_scripts
 
 # add z
 if command -v lua >/dev/null; then
