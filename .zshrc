@@ -116,7 +116,7 @@ export REVIEW_BASE="master"
 
 # go
 export GOPATH=$HOME/go:$HOME/workrepo/go
-export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$HOME/go/bin
 export GOPROXY=goproxy.cn
 export GOSUMDB="sum.golang.google.cn"
 
@@ -144,6 +144,7 @@ alias alert='terminal-notifier -title "Terminal" -message "Done with task! Exit 
 alias gitb="git branch --show-current | tr -d '\n' | pbcopy"
 alias gci="golangci-lint run -c=~/.dotfile/.golangci.yml ./..."
 alias gmt="go mod tidy"
-alias gt="go test -gcflags=all=-l -cover ./..."
+alias gtc="go test -gcflags=all=-l -cover ./..."
+alias gtr="(){go test -gcflags=all=-l -v -run $1. ;}"
 alias swg="swag init -o docs -g "
 alias sws="swagger serve -F=swagger"
