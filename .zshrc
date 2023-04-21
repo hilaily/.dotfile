@@ -145,6 +145,9 @@ alias gitb="git branch --show-current | tr -d '\n' | pbcopy"
 alias gci="golangci-lint run -c=~/.dotfile/.golangci.yml ./..."
 alias gmt="go mod tidy"
 alias gtc="go test -gcflags=all=-l -cover ./..."
-alias gtr="(){go test -gcflags=all=-l -v -run $1. ;}"
 alias swg="swag init -o docs -g "
 alias sws="swagger serve -F=swagger"
+
+function gtr(){
+  go test -gcflags=all=-l -v -run="$1"
+}
