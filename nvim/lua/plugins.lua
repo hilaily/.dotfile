@@ -40,6 +40,7 @@ return require("packer").startup(function(use)
     use { "williamboman/nvim-lsp-installer", opt = true }
     use { "folke/trouble.nvim", opt = true }
     use { 'stevearc/aerial.nvim', config = function() require('aerial').setup() end }
+    use {'mfussenegger/nvim-lint'}
 
     -- Telescope
     use { "nvim-lua/popup.nvim", opt = true }

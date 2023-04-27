@@ -10,6 +10,7 @@ linters:
     - exportloopref
     - bodyclose
     - gofmt
+    - misspell
     - gosimple
     - stylecheck
     - revive
@@ -31,6 +32,12 @@ linters-settings:
         "-ST1021",
         "-ST1022",
       ]
+  misspell:
+    # Correct spellings using locale preferences for US or UK.
+    # Setting locale to US will correct the British spelling of 'colour' to 'color'.
+    # Default is to use a neutral variety of English.
+    locale: US
+    ignore-words: []
   revive:
     # Maximum number of open files at the same time.
     # See https://github.com/mgechev/revive#command-line-flags

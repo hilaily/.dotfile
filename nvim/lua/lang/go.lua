@@ -2,7 +2,17 @@
 require 'lspconfig'.gopls.setup {
   -- cmd = {DATA_PATH .. "/lspinstall/go/gopls"},
   cmd = { "gopls", "serve" }, -- use cmd in path, I can update it easily
-  settings = { gopls = { analyses = { unusedparams = true }, staticcheck = true } },
+  settings = {
+    gopls = {
+      analyses = {
+        nilness = true,
+        unusedparams = true,
+        unusedwrite = true,
+        useany = true,
+      },
+      staticcheck = false
+    }
+  },
   root_dir = require 'lspconfig'.util.root_pattern(".git", "go.mod", "go.work"),
   init_options = { usePlaceholders = true, completeUnimported = true },
   on_attach = require 'lsp'.common_on_attach
