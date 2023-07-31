@@ -4,6 +4,7 @@ run:
 linters:
   enable:
     - govet
+    - errcheck
     - staticcheck
     - ineffassign
     - typecheck
@@ -17,6 +18,12 @@ linters:
     - errorlint # finds code that will cause problems with the error wrapping scheme introduced in Go 1.13
   disable-all: true
 linters-settings:
+  errcheck:
+    exclude-functions:
+      - io/ioutil.ReadFile
+      - io.Copy(*bytes.Buffer)
+      - io.Copy(os.Stdout)
+      - net.(*)
   staticcheck:
     # SAxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
     checks: ["all"]
@@ -63,7 +70,7 @@ linters-settings:
       - name: argument-limit
         severity: warning
         disabled: false
-        arguments: [5]
+        arguments: [6]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#atomic
       - name: atomic
         severity: warning
@@ -72,7 +79,7 @@ linters-settings:
       - name: banned-characters
         severity: warning
         disabled: false
-        arguments: ["Ω", "Σ", "σ", "7"]
+        arguments: ["Ω", "Σ", "σ"]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#bool-literal-in-expr
       - name: bool-literal-in-expr
         severity: warning
@@ -86,14 +93,6 @@ linters-settings:
         severity: warning
         disabled: false
         arguments: [10]
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#confusing-naming
-      - name: confusing-naming
-        severity: warning
-        disabled: false
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#confusing-results
-      - name: confusing-results
-        severity: warning
-        disabled: false
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#constant-logical-expr
       - name: constant-logical-expr
         severity: warning
@@ -156,15 +155,11 @@ linters-settings:
         arguments:
           - "checkPrivateReceivers"
           - "sayRepetitiveInsteadOfStutters"
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#flag-parameter
-      - name: flag-parameter
-        severity: warning
-        disabled: false
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#function-result-limit
       - name: function-result-limit
         severity: warning
         disabled: false
-        arguments: [2]
+        arguments: [4]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#function-length
       - name: function-length
         severity: warning
@@ -292,12 +287,14 @@ linters-settings:
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#unhandled-error
       - name: unhandled-error
         severity: warning
-        disabled: false
+        disabled: true
+        # bytes.Buffer.Write: package name, structure name, function name
         arguments:
           - "fmt.Printf"
           - "os.(Create|WriteFile|Chmod)"
           - "net.*"
-          - "bytes.Buffer.Write"
+          - "bytes.Buffer.WriteString"
+          - "con.WriteString"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#unnecessary-stmt
       - name: unnecessary-stmt
         severity: warning

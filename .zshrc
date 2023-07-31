@@ -109,7 +109,6 @@ unsetopt BEEP
 export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"
 export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.ustc.edu.cn/homebrew-core.git"
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles"
-export HOMEBREW_NO_AUTO_UPDATE=true # 禁止 brew 每次安装软件都 upate
 
 # git
 export REVIEW_BASE="master"
@@ -143,7 +142,6 @@ alias alert='terminal-notifier -title "Terminal" -message "Done with task! Exit 
 # git
 alias gitb="git branch --show-current | tr -d '\n' | pbcopy"
 alias gci="golangci-lint run -c=~/.dotfile/.golangci.yml ./..."
-alias gcis="golangci-lint run -c=~/.dotfile/.golangci_strict.yml ./..."
 alias gmt="go mod tidy"
 alias gtc="go test -gcflags=all=-l -cover ./..."
 alias swg="swag init -o docs -g "
