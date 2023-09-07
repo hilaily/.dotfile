@@ -26,8 +26,12 @@ _testmain.go
 *.sublime-workspace
 .idea/
 .vscode/
+.SpaceVim.d/.netrwhist
+.SpaceVim.d/init.vim
 .DS_Store
 .log
 go.work
 go.work.sum
 init_test.go
+_set_env.sh
+_set_env_*.sh

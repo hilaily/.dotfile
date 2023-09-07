@@ -2,3 +2,5 @@
 .SpaceVim.d/init.vim
 .DS_Store
 nvim/plugin
+_set_env_*.sh
+_set_env.sh
