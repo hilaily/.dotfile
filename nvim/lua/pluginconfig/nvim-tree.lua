@@ -1,5 +1,22 @@
-local tree_cb = require'nvim-tree.config'.nvim_tree_callback
+local function my_on_attach(bufnr)
+    local api = require "nvim-tree.api"
+
+    local function opts(desc)
+      return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+    end
+  
+    -- default mappings
+    api.config.mappings.default_on_attach(bufnr)
+  
+    -- custom mappings
+    vim.keymap.set('n', '<C-t>', api.tree.change_root_to_parent,        opts('Up'))
+    vim.keymap.set('n', '?',     api.tree.toggle_help,                  opts('Help'))
+    vim.keymap.set('n', 'l',     api.node.open.edit,                  opts('Edit'))
+    vim.keymap.set('n', 'h',     api.node.navigate.parent_close,                  opts('Parent Close'))
+end
+
 require'nvim-tree'.setup {
+    on_attach = my_on_attach,
     disable_netrw = true,
     hijack_netrw = true,
     --auto_close = false,
@@ -22,46 +39,6 @@ require'nvim-tree'.setup {
         -- only relevant when `update_focused_file.update_cwd` is true and `update_focused_file.enable` is true
         ignore_list = {}
     },
-    view = {
-        mappings = {
-            --custome_only= false,
-            list = {
-                -- ["<CR>"] = ":YourVimFunction()<cr>",
-                -- ["u"] = ":lua require'some_module'.some_function()<cr>",
-          
-                -- default mappings
-                {key="<CR>"           ,cb= tree_cb("edit")},
-                {key="o"              ,cb= tree_cb("edit")},
-                {key="l"              ,action="edit"},
-                {key="<2-LeftMouse>"  ,cb= tree_cb("edit")},
-                {key="<2-RightMouse>" ,cb= tree_cb("cd")},
-                {key="<C->"          ,cb= tree_cb("cd")},
-                {key="v"              ,cb= tree_cb("vsplit")},
-                {key="s"              ,cb= tree_cb("split")},
-                {key="<C-t>"          ,cb= tree_cb("tabnew")},
-                {key="<"              ,cb= tree_cb("prev_sibling")},
-                {key=">"              ,cb= tree_cb("next_sibling")},
-                {key="<BS>"           ,cb= tree_cb("close_node")},
-                {key="h"              ,action="close_node"},
-                {key="<S-CR>"         ,cb= tree_cb("close_node")},
-                {key="<Tab>"          ,cb= tree_cb("preview")},
-                {key="I"              ,cb= tree_cb("toggle_ignored")},
-                {key="H"              ,cb= tree_cb("toggle_dotfiles")},
-                {key="R"              ,cb= tree_cb("refresh")},
-                {key="a"              ,cb= tree_cb("create")},
-                {key="d"              ,cb= tree_cb("remove")},
-                {key="r"              ,cb= tree_cb("rename")},
-                {key="<C-r>"          ,cb= tree_cb("full_rename")},
-                {key="x"              ,cb= tree_cb("cut")},
-                {key="c"              ,cb= tree_cb("copy")},
-                {key="p"              ,cb= tree_cb("paste")},
-                {key="[c"             ,cb= tree_cb("prev_git_item")},
-                {key="c"             ,cb= tree_cb("next_git_item")},
-                {key="-"              ,cb= tree_cb("dir_up")},
-                {key="q"              ,cb= tree_cb("close")},
-              }
-        }
-    }
 }
 
 vim.g.nvim_tree_indent_markers = 1 -- "0 by default, this option shows indent markers when folders are open
@@ -73,3 +50,4 @@ vim.g.nvim_tree_icons = {
     git = {unstaged = "", staged = "✓", unmerged = "", renamed = "➜", untracked = ""},
     folder = {default = "", open = "", empty = "", empty_open = "", symlink = ""}
 }
+

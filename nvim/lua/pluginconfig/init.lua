@@ -5,7 +5,7 @@ require('pluginconfig/dashboard-nvim')
 require('pluginconfig/galaxyline')
 require('pluginconfig/gitsigns')
 require('pluginconfig/hop')
-require('pluginconfig/lspinstall')
+require('pluginconfig/mason')
 require('pluginconfig/neodev') -- must before lspconfig
 require('pluginconfig/mkdx')
 require('pluginconfig/neotest')

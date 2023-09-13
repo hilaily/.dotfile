@@ -37,7 +37,7 @@ return require("packer").startup(function(use)
     -- TODO refactor all of this (for now it works, but yes I know it could be wrapped in a simpler function)
     use { "neovim/nvim-lspconfig"}
     use { 'tami5/lspsaga.nvim', opt = true }
-    use { "williamboman/nvim-lsp-installer", opt = true }
+    use { "williamboman/mason.nvim" }
     use { "folke/trouble.nvim", opt = true }
     use { 'stevearc/aerial.nvim', config = function() require('aerial').setup() end }
     use {'mfussenegger/nvim-lint'}
@@ -81,10 +81,10 @@ return require("packer").startup(function(use)
 
     -- Explorer
     use {
-        'kyazdani42/nvim-tree.lua',
-        requires = 'kyazdani42/nvim-web-devicons',
-        opt = true,
-        config = function() require 'nvim-tree'.setup {} end
+        'nvim-tree/nvim-tree.lua',
+        requires = {
+          'nvim-tree/nvim-web-devicons', -- optional
+        },
     }
     use { "ahmedkhalf/lsp-rooter.nvim", opt = true } -- with this nvim-tree will follow you
     -- TODO remove when open on dir is supported by nvimtree
@@ -158,7 +158,6 @@ return require("packer").startup(function(use)
 
 
     require_plugin("lspsaga.nvim")
-    require_plugin("nvim-lsp-installer")
     require_plugin('trouble.nvim')
     require_plugin("popup.nvim")
     require_plugin("plenary.nvim")
@@ -167,7 +166,6 @@ return require("packer").startup(function(use)
     require_plugin("nvim-dap")
     require_plugin("nvim-ts-autotag")
     require_plugin('vim-matchup')
-    require_plugin("nvim-tree.lua")
     require_plugin("gitsigns.nvim")
     require_plugin("which-key.nvim")
     require_plugin("dashboard-nvim")
@@ -194,8 +192,6 @@ return require("packer").startup(function(use)
     use { "akinsho/toggleterm.nvim", tag = '*', config = function()
         require("toggleterm").setup()
     end }
-    use { "Pocco81/DAPInstall.nvim", opt = true }
-    require_plugin("DAPInstall.nvim")
 
     use {
         'phaazon/hop.nvim',
