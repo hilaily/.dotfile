@@ -12,7 +12,9 @@ local function my_on_attach(bufnr)
     vim.keymap.set('n', '<C-t>', api.tree.change_root_to_parent,        opts('Up'))
     vim.keymap.set('n', '?',     api.tree.toggle_help,                  opts('Help'))
     vim.keymap.set('n', 'l',     api.node.open.edit,                  opts('Edit'))
-    vim.keymap.set('n', 'h',     api.node.navigate.parent_close,                  opts('Parent Close'))
+    vim.keymap.set('n', 'h',     api.node.navigate.parent_close,              opts('Parent Close'))
+    vim.keymap.set('n', 's',     api.node.open.horizontal,                  opts('Horizontal Split'))
+    vim.keymap.set('n', 'v',     api.node.open.vertical,                  opts('Vertical Split'))
 end
 
 require'nvim-tree'.setup {
@@ -34,7 +36,7 @@ require'nvim-tree'.setup {
         enable      = true,
         -- update the root directory of the tree to the one of the folder containing the file if the file is not under the current root directory
         -- only relevant when `update_focused_file.enable` is true
-        update_cwd  = true,
+        update_cwd  = false,
         -- list of buffer names / filetypes that will not update the cwd if the file isn't found under the current root directory
         -- only relevant when `update_focused_file.update_cwd` is true and `update_focused_file.enable` is true
         ignore_list = {}

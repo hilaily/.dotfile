@@ -203,13 +203,14 @@ return require("packer").startup(function(use)
     }
 
     -- markdown
-    use { 'godlygeek/tabular' }
-    use { 'preservim/vim-markdown' }
-    use {
-        'iamcco/markdown-preview.nvim',
-        run = function() vim.fn['mkdp#util#install']() end,
-        ft = { 'markdown' }
-    }
+    -- use { 'godlygeek/tabular' }
+    -- use { 'preservim/vim-markdown' }
+
+    -- use {
+    --     'iamcco/markdown-preview.nvim',
+    --     run = function() vim.fn['mkdp#util#install']() end,
+    --     ft = { 'markdown' }
+    -- }
 
 		use {'tpope/vim-fugitive'}
 

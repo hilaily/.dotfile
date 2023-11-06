@@ -41,6 +41,7 @@ vim.cmd('filetype plugin on') -- filetype detection
 vim.o.guifont = "FiraCode Nerd Font:h17"
 
 -- vim.o.guifont = "JetBrains\\ Mono\\ Regular\\ Nerd\\ Font\\ Complete"
+vim.g.vim_markdown_folding_disabled = 1
 
 vim.g.vimspector_enable_mappings = 'HUMAN'
 vim.g['test#go#rspec#options'] = { nearest= '--v', suite=   '--v' }
