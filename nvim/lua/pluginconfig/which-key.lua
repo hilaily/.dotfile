@@ -181,6 +181,7 @@ local mappings = {
         L = { "<cmd>Lspsaga show_line_diagnostics<cr>", "Line Diagnostics" },
         k = { "<cmd>: LspRestart<cr>", "restart lsp server" },
         n = { "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>", "next diagnostic" },
+        o = { "<cmd>: SymbolsOutline<cr>", "symbols outline" },
         p = { "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>", "prev diagnostic" },
         P = { "<cmd>Lspsaga preview_definition<cr>", "Preview Definition" },
         q = { "<cmd>Telescope quickfix<cr>", "Quickfix" },

@@ -242,6 +242,7 @@ return require("packer").startup(function(use)
         -- TimUntersberger/neogit
         -- folke/lsp-colors.nvim
         -- simrat39/symbols-outline.nvim
+        use 'simrat39/symbols-outline.nvim'
 
         -- Git
         -- use {'tpope/vim-rhubarb', opt = true}

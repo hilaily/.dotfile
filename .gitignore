@@ -5,3 +5,4 @@ nvim/plugin
 _set_env_*.sh
 _set_env.sh
 log
+cn.sh

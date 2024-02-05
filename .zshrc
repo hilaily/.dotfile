@@ -150,3 +150,4 @@ alias sws="swagger serve -F=swagger"
 function gtr(){
   go test -gcflags=all=-l -v -run="$1"
 }
+fpath+=${ZDOTDIR:-~}/.zsh_functions
