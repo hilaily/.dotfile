@@ -19,12 +19,12 @@ set -gx EDITOR vim
 
 # alias 
 # git
-abbr -a gitb "git branch --show-current | tr -d '\n' | pbcopy"
-abbr -a gci "golangci-lint run -c=~/.dotfile/.golangci.yml ./..."
-abbr -a gmt "go mod tidy"
-abbr -a gtc "go test -gcflags=all=-l -cover ./..."
-abbr -a swg "swag init -o docs -g "
-abbr -a sws "swagger serve -F=swagger"
+alias gitb="git branch --show-current | tr -d '\n' | pbcopy"
+alias gci="golangci-lint run -c=~/.dotfile/.golangci.yml ./..."
+alias gmt="go mod tidy"
+alias gtc="go test -gcflags=all=-l -cover ./..."
+alias swg="swag init -o docs -g "
+alias sws="swagger serve -F=swagger"
 
 function gtr
   go test -gcflags=all=-l -v -run="$1"
