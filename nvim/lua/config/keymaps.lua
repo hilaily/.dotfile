@@ -200,7 +200,7 @@ keymap.set('n', '<Leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent = t
 
 -- telescope
 -- keymap.set('n', '<C-p>', ":lua require'telescope.builtin'.find_files()<CR>", {noremap = true, silent = true})
-keymap.set('n', '<C-p>', ":FzfLua files<CR>", { noremap = true, silent = true })
+keymap.set('n', '<C-p>', ":Telescope find_files<CR>", { noremap = true, silent = true })
 
 -- dashboard
 keymap.set('n', '<Leader>;', ':Dashboard<CR>', { noremap = true, silent = true })

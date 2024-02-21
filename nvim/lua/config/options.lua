@@ -54,3 +54,9 @@ vim.g.gitblame_enabled = 0
 vim.cmd([[
 autocmd BufReadPost *  if line("'\"") >= 1 && line("'\"") <= line("$") | exe "normal! g`\"" |  endif
 ]])
+
+-- vim.cmd('let g:nvcode_termcolors=256')
+-- --local cc = 'gruvbox'
+-- local cc = 'lunar'
+-- vim.o.background="dark"
+-- vim.cmd('colorscheme ' .. cc)
