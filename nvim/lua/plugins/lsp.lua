@@ -20,6 +20,16 @@ return {
 		opts = {},
 		config = function(_, opts) require'lsp_signature'.setup(opts) end
 	},
+	{
+		'nvimdev/lspsaga.nvim',
+		config = function()
+			require('lspsaga').setup({})
+		end,
+		dependencies = {
+			'nvim-treesitter/nvim-treesitter',
+			'nvim-tree/nvim-web-devicons'     -- optional
+		}
+	},
 	-- lsp servers
 	{
 		"neovim/nvim-lspconfig",
