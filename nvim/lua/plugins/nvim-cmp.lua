@@ -60,17 +60,14 @@ local function opts_func (_, opts)
 		  }),
 		snippet = {
 		expand = function(args)
-			-- For `vsnip` users.
+		-- For `vsnip` users.
 			vim.fn["vsnip#anonymous"](args.body)
-	
-			-- For `luasnip` users.
-			-- require('luasnip').lsp_expand(args.body)
-	
-			-- For `ultisnips` users.
-			-- vim.fn["UltiSnips#Anon"](args.body)
-	
-			-- For `snippy` users.
-			-- require'snippy'.expand_snippet(args.body)
+		-- 	-- For `luasnip` users.
+		-- 	-- require('luasnip').lsp_expand(args.body)
+		-- 	-- For `ultisnips` users.
+		-- 	-- vim.fn["UltiSnips#Anon"](args.body)
+		-- 	-- For `snippy` users.
+		-- 	-- require'snippy'.expand_snippet(args.body)
 		end,
 		},
 	}
@@ -79,7 +76,11 @@ end
 return {
 	{
 		"nvim-cmp",
-		dependencies = { "hrsh7th/cmp-emoji" },
+		dependencies = { 
+			"hrsh7th/cmp-emoji",
+			'hrsh7th/vim-vsnip',
+			'hrsh7th/vim-vsnip-integ',
+		 },
 		opts = opts_func,
 	},
 }
