@@ -40,12 +40,12 @@ return {
 				cssls = {},
 				tailwindcss = {
 					root_dir = function(...)
-						return require("lspconfig.util").root_pattern(".git")(...)
+						return require("lspconfig.util").root_pattern('tailwind.config.js', 'tailwind.config.cjs', 'tailwind.config.mjs', 'tailwind.config.ts', 'postcss.config.js', 'postcss.config.cjs', 'postcss.config.mjs', 'postcss.config.ts', 'package.json', 'node_modules', '.git')(...)
 					end,
 				},
 				tsserver = {
 					root_dir = function(...)
-						return require("lspconfig.util").root_pattern(".git")(...)
+						return require("lspconfig.util").root_pattern("tsconfig.json", "package.json", "jsconfig.json", ".git")(...)
 					end,
 					single_file_support = false,
 					settings = {

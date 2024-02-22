@@ -24,8 +24,6 @@ local mappings = {
     },
     b = {
         name = "+Buffer",
-        n = { "<cmd>BufferNext<cr>", "next buffer" },
-        p = { "<cmd>BufferPrevious<cr>", "previous buffer" },
         q = { "<cmd>q<cr>", "quit" },
         s = { "<cmd>w<cr>", "save" },
         r = { "<cmd>e!<cr>", "reload" },
@@ -155,7 +153,7 @@ local mappings = {
         f = { "<cmd>Fzflua files<cr>", "Find File" },
         m = { "<cmd>Telescope marks<cr>", "Marks" },
         M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
-        r = { "<cmd>FzfLua oldfiles<cr>", "Open Recent File" },
+        -- r = { "<cmd>Telescope oldfiles <cr>", "Open Recent File" },
         R = { "<cmd>Telescope registers<cr>", "Registers" },
         t = { "<cmd>FzfLua live_grep<cr>", "Text" },
         ["#"] = { "<cmd>FzfLua grep_cword<cr>", "Search word under cursor" },
@@ -239,8 +237,8 @@ keymap.set('i', 'kj', '<ESC>', { noremap = true, silent = true })
 keymap.set('i', 'jj', '<ESC>', { noremap = true, silent = true })
 
 -- Tab switch buffer
-keymap.set('n', '<TAB>', ':bnext<CR>', { noremap = true, silent = true })
-keymap.set('n', '<S-TAB>', ':bprevious<CR>', { noremap = true, silent = true })
+keymap.set('n', '<TAB>', ':BufferNext<CR>', { noremap = true, silent = true })
+keymap.set('n', '<S-TAB>', ':BufferPrevious<CR>', { noremap = true, silent = true })
 
 -- Move selected line / block of text in visual mode
 keymap.set('x', 'K', ':move \'<-2<CR>gv-gv', { noremap = true, silent = true })
