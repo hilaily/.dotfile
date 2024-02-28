@@ -1,35 +1,4 @@
 return {
-	-- tools
-	{
-		"williamboman/mason.nvim",
-		opts = function(_, opts)
-			vim.list_extend(opts.ensure_installed, {
-				"stylua",
-				"selene",
-				"luacheck",
-				"shellcheck",
-				"shfmt",
-				"tailwindcss-language-server",
-				"typescript-language-server",
-				"css-lsp",
-			})
-		end,
-	},
-	{
-		"ray-x/lsp_signature.nvim",
-		opts = {},
-		config = function(_, opts) require'lsp_signature'.setup(opts) end
-	},
-	{
-		'nvimdev/lspsaga.nvim',
-		config = function()
-			require('lspsaga').setup({})
-		end,
-		dependencies = {
-			'nvim-treesitter/nvim-treesitter',
-			'nvim-tree/nvim-web-devicons'     -- optional
-		}
-	},
 	-- lsp servers
 	{
 		"neovim/nvim-lspconfig",

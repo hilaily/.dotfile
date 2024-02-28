@@ -19,9 +19,9 @@ vim.o.termguicolors = true -- set term gui colors most terminals support this
 vim.o.splitright = true -- Vertical splits will automatically be to the right
 -- vim.o.t_Co = "256" -- Support 256 colors
 vim.o.conceallevel = 0 -- So that I can see `` in markdown files
--- vim.cmd('set ts=4') -- Insert 2 spaces for a tab
--- vim.cmd('set sw=4') -- Change the number of space characters inserted for indentation
--- vim.cmd('set expandtab') -- Converts tabs to spaces
+vim.o.tabstop = 4
+vim.o.shiftwidth = 4
+vim.o.expandtab = true
 vim.bo.smartindent = true -- Makes indenting smart
 vim.wo.number = true -- set numbered lines
 vim.wo.relativenumber = true -- set relative number
