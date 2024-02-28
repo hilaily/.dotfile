@@ -2,6 +2,7 @@ return {
 	-- lsp servers
 	{
 		"neovim/nvim-lspconfig",
+		event = { 'BufReadPre', 'BufReadPost', 'BufNewFile' },
 		opts = {
 			inlay_hints = { enabled = false },
 			---@type lspconfig.options
