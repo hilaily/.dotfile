@@ -245,8 +245,10 @@ keymap.set('n', '<S-TAB>', ':BufferPrevious<CR>', { noremap = true, silent = tru
 keymap.set('x', 'K', ':move \'<-2<CR>gv-gv', { noremap = true, silent = true })
 keymap.set('x', 'J', ':move \'>+1<CR>gv-gv', { noremap = true, silent = true })
 
-keymap.set('', '<C-q>', ':call QuickFixToggle()<CR>', { noremap = true, silent = true })
+keymap.set('n', '<C-q>', ':call QuickFixToggle()<CR>', { noremap = true, silent = true })
 
+-- keymap.set('n','<C-m>',":Lspsaga diagnostic_jump_prev<CR>", opts )
+-- keymap.set('n','<C-n>',":Lspsaga diagnostic_jump_next<CR>", opts )
 
 
 -- vim.cmd("nnoremap gd <cmd>lua vim.lsp.buf.definition()<CR>")
@@ -257,8 +259,6 @@ keymap.set('', '<C-q>', ':call QuickFixToggle()<CR>', { noremap = true, silent =
 -- vim.cmd("nnoremap <silent> K :Lspsaga hover_doc<CR>")
 -- -- vim.cmd('nnoremap <silent> <C-k> <cmd>lua vim.lsp.buf.signature_help()<CR>')
 -- vim.cmd("nnoremap <silent> <C-m> :Lspsaga diagnostic_jump_prev<CR>")
-keymap.set('','<C-m>',":Lspsaga diagnostic_jump_prev<CR>", opts)
-keymap.set('','<C-n>',":Lspsaga diagnostic_jump_next<CR>", opts)
 -- -- scroll down hover doc or scroll in definition preview
 -- vim.cmd("nnoremap <silent> <C-f> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>")
 -- -- scroll up hover doc
