@@ -18,15 +18,15 @@ return {
 				end,
 				desc = "Find Plugin File",
 			},
-			{
-				"<leader>sr",
-				function()
-					require("telescope.builtin").oldfiles({
-						cwd = vim.loop.cwd()
-					})
-				end,
-				desc = "Find Recent File",
-			},
+			-- {
+			-- 	"<leader>sr",
+			-- 	function()
+			-- 		require("telescope.builtin").oldfiles({
+			-- 			cwd = vim.loop.cwd()
+			-- 		})
+			-- 	end,
+			-- 	desc = "Find Recent File",
+			-- },
 			{
 				";f",
 				function()

@@ -1,273 +1,160 @@
 
-local opts = {
-    mode = "n", -- NORMAL mode
-    prefix = "<leader>",
-    buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
-    silent = true, -- use `silent` when creating keymaps
-    noremap = true, -- use `noremap` when creating keymaps
-    nowait = false -- use `nowait` when creating keymaps
-}
-
-
-
-
-
-local mappings = {
-    -- ["/"] = "Comment",
-    -- ["c"] = "Close Buffer",
-    ["e"] = "Explorer",
-    -- ["f"] = "Find File",
-    ["h"] = "No Highlight",
-    a = {
-        name = "+Action",
-        a = { "<cmd>@:<cr>", "execute last command again" }
-    },
-    b = {
-        name = "+Buffer",
-        q = { "<cmd>q<cr>", "quit" },
-        s = { "<cmd>w<cr>", "save" },
-        r = { "<cmd>e!<cr>", "reload" },
-        d = { "<cmd>BufferClose<cr>", "close buffer" },
-        z = { "<cmd>CommentToggle<CR>", "toggle comment" },
-    },
-    D = {
-        name = "+Diagnostics",
-        t = { "<cmd>TroubleToggle<cr>", "trouble" },
-        w = { "<cmd>TroubleToggle lsp_workspace_diagnostics<cr>", "workspace" },
-        d = { "<cmd>TroubleToggle lsp_document_diagnostics<cr>", "document" },
-        q = { "<cmd>TroubleToggle quickfix<cr>", "quickfix" },
-        l = { "<cmd>TroubleToggle loclist<cr>", "loclist" },
-        r = { "<cmd>TroubleToggle lsp_references<cr>", "references" },
-    },
-    d = {
-        name = "+Debug",
-        -- b = {"<cmd>DebugToggleBreakpoint<cr>", "Toggle Breakpoint"},
-        -- c = {"<cmd>DebugContinue<cr>", "Continue"},
-        -- i = {"<cmd>DebugStepInto<cr>", "Step Into"},
-        -- o = {"<cmd>DebugStepOver<cr>", "Step Over"},
-        -- r = {"<cmd>DebugToggleRepl<cr>", "Toggle Repl"},
-        -- s = {"<cmd>DebugStart<cr>", "Start"}
-        d = { "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>", "show diagnostics" },
-
-        c = { "<cmd>lua require'dap'.continue()<cr>", "continue" },
-        b = { ':lua require"dap".toggle_breakpoint()<CR>', "Toggle Breadpoint" },
-        j = { ':lua require"dap".step_over()<CR>', "step over" },
-        k = { ':lua require"dap".step_out()<CR>', "step out" },
-        l = { ':lua require"dap".step_into()<CR>', "step into" },
-        --<c-h>', ':lua require"dap".continue()<CR>')
-        u = { ':lua require"dap".up()<CR>', "up" },
-        -- d = {':lua require"dap".down()<CR>', "down"},
-        _ = { ':lua require"dap".disconnect();require"dap".stop();require"dap".run_last()<CR>', "disconnect" },
-        --r = {':lua require"dap".repl.open({}, "vsplit")<CR><C-w>l', "repl open"},
-        i = { ':lua require"dap.ui.variables".visual_hover()<CR>', "visual_hover" },
-        --? = {':lua require"dap.ui.variables".scopes()<CR>',"scopes"},
-        -- e = {':lua require"dap".set_exception_breakpoints({"all"})<CR>',"esception bp"},
-        -- a = {':lua require"debugHelper".attach()<CR>',"attach"},
-        -- A = {':lua require"debugHelper".attachToRemote()<CR>',"attach to remote"},
-        s = { ':lua local widgets=require"dap.ui.widgets";widgets.centered_float(widgets.scopes)<CR>', "centered_float" },
-    },
-    f = {
-        name = "+File",
-        m = { "<cmd>lua require'utils'.open_md()<cr>", "open a markdown file in vscode" },
-        s = { "<cmd>w<cr>", "save file" },
-        t = { "<cmd>NvimTreeToggle<cr>", "toggle nvim tree" },
-        r = { "<cmd>RnvimrToggle<cr>", "toggle rnvimr" },
-        y = { "<cmd>lua require'utils'.yank_filepath()<cr>", "copy the file path" },
-        d = { "<cmd>lua require'utils'.yank_file_dir()<cr>", "copy the file path" },
-        l = { "<cmd>NvimTreeFindFile<CR>", "find file" },
-        -- T = {"<cmd>let @+ = 'go test -v -run='+expand('<cword>')<cr>", "get current word in go test"},
-    },
-    g = {
-        name = "+Git",
-		    m = {"<cmd>Gvdiff master:%<cr>", "Diff with master"},
-        j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
-        k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
-        l = { "<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame" },
-        p = { "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", "Preview Hunk" },
-        r = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
-        R = { "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
-        s = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
-        S = { "<cmd>lua require 'gitsigns'.stage_buffer()<cr>", "Stage Buffer" },
-        u = {
-            "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
-            "Undo Stage Hunk",
-        },
-        o = { "<cmd>Telescope git_status<cr>", "Open changed file" },
-        b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
-        c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
-        C = {
-            "<cmd>Telescope git_bcommits<cr>",
-            "Checkout commit(for current file)",
-        },
-        d = {
-            "<cmd>Gitsigns diffthis HEAD<cr>",
-            "Git Diff",
-        },
-    },
-    l = {
-        name = "+Language",
-        a = { "<cmd>Lspsaga code_action<cr>", "Code Action" },
-        A = { "<cmd>Lspsaga range_code_action<cr>", "Selected Action" },
-        d = { "<cmd>Telescope lsp_document_diagnostics<cr>", "Document Diagnostics" },
-        D = { "<cmd>Telescope lsp_workspace_diagnostics<cr>", "Workspace Diagnostics" },
-        f = { "<cmd>LspFormatting<cr>", "Format" },
-        F = { "<cmd>Lspsaga lsp_finder<cr>", "LSP Finder" },
-        -- i = {"<cmd>Telescope lsp_implementations<cr>", "implement"},
-        i = { "<cmd>lua vim.lsp.buf.implementation()<cr>", "implement" },
-        l = { "<cmd>lua vim.lsp.buf.hover()<cr>", "hover" },
-        L = { "<cmd>Lspsaga show_line_diagnostics<cr>", "Line Diagnostics" },
-        k = { "<cmd>: LspRestart<cr>", "restart lsp server" },
-        n = { "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>", "next diagnostic" },
-        o = { "<cmd>: SymbolsOutline<cr>", "symbols outline" },
-        p = { "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>", "prev diagnostic" },
-        P = { "<cmd>Lspsaga preview_definition<cr>", "Preview Definition" },
-        q = { "<cmd>Telescope quickfix<cr>", "Quickfix" },
-        r = { "<cmd>lua vim.lsp.buf.references()<cr>", "references" },
-        R = { "<cmd>Lspsaga rename<cr>", "Rename" },
-        t = { "<cmd>LspTypeDefinition<cr>", "Type Definition" },
-        x = { "<cmd>cclose<cr>", "Close Quickfix" },
-        s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
-        S = { "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", "Workspace Symbols" },
-        z = { "<cmd>LspInfo<cr>", "Info" },
-        [","] = { "<cmd>LspInstallInfo<cr>", "LSP servers" }
-    },
-    p = {
-        name = "Packer",
-        c = { "<cmd>PackerCompile<cr>", "Compile" },
-        i = { "<cmd>PackerInstall<cr>", "Install" },
-        s = { "<cmd>PackerSync<cr>", "Sync" },
-        S = { "<cmd>PackerStatus<cr>", "Status" },
-        u = { "<cmd>PackerUpdate<cr>", "Update" },
-    },
-    q = {
-        name = "quit",
-        q = { "<cmd>qall<cr>", "quit" },
-    },
-    s = {
-        name = "+Search",
-        b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
-        -- c = {"<cmd>Telescope colorscheme<cr>", "Colorscheme"},
-        c = { "<cmd>:nohl<cr>", "no highlight" },
-        d = { "<cmd>Telescope lsp_document_diagnostics<cr>", "Document Diagnostics" },
-        D = { "<cmd>Telescope lsp_workspace_diagnostics<cr>", "Workspace Diagnostics" },
-        f = { "<cmd>Telescope find_files<CR><cr>", "Find File" },
-        m = { "<cmd>Telescope marks<cr>", "Marks" },
-        M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
-        -- r = { "<cmd>Telescope oldfiles <cr>", "Open Recent File" },
-        R = { "<cmd>Telescope registers<cr>", "Registers" },
-        t = { "<cmd>Telescope live_grep<cr>", "Text" },
-        T = { "<cmd>Telescope live_grep<cr>", "Text" },
-        ["#"] = { "<cmd>FzfLua grep_cword<cr>", "Search word under cursor" },
-    },
-    S = {
-        name = "+Session",
-        s = { "<cmd>SessionSave<cr>", "Save Session" },
-        l = { "<cmd>SessionLoad<cr>", "Load Session" },
-    },
-    t = {
-        name = "+Test",
-        a = { "<cmd>TestSuite -v -cover<cr>", "TestSuite" },
-        t = { "<cmd>lua require('neotest').run.run() <cr>", "TestNearest" },
-        f = { '<cmd>lua require("neotest").run.run(vim.fn.expand("%"))<cr>', "TestFile" },
-        c = { "<cmd>GoCover<cr>", "go coverage" },
-        C = { "<cmd>GoCoverClear<cr>", "go coverage clear" },
-        b = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", "set break point" },
-        r = { "<cmd>lua require'dap'.continue()<cr>", "continue" },
-    },
-
-    -- extras
-    z = {
-        name = "+Zen",
-        s = { "<cmd>TZBottom<cr>", "toggle status line" },
-        t = { "<cmd>TZTop<cr>", "toggle tab bar" },
-        z = { "<cmd>TZAtaraxis<cr>", "toggle zen" },
-    }
-}
-
-local wk = require("which-key")
-wk.register(mappings, opts)
-
-
 local keymap = vim.keymap
 local opts = { noremap = true, silent = true }
 
--- no hl
-keymap.set('n', '<Leader>h', ':set hlsearch!<CR>', { noremap = true, silent = true })
+-- <Leader>a
+keymap.set('n', "<Leader>aa", "<cmd>@:<cr>", {desc="execute last command again" })
 
--- explorer
-keymap.set('n', '<Leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
+-- <Leader>b for buffer
+keymap.set('n', "<Leader>bq", "<cmd>q<cr>", {desc="quit" })
+keymap.set('n', "<Leader>bs", "<cmd>w<cr>", {desc="save" })
+keymap.set('n', "<Leader>br", "<cmd>e!<cr>", {desc="reload" })
+keymap.set('n', "<Leader>bd", "<cmd>BufferClose<cr>", {desc="close buffer" })
+keymap.set({'n','v'}, "<Leader>b/", "<cmd>CommentToggle<CR>", {desc="toggle comment" })
 
--- telescope
--- keymap.set('n', '<C-p>', ":lua require'telescope.builtin'.find_files()<CR>", {noremap = true, silent = true})
-keymap.set('n', '<C-p>', ":Telescope find_files<CR>", { noremap = true, silent = true })
+-- <Leader>D
+keymap.set('n', "<Leader>Dt", "<cmd>TroubleToggle<cr>", {desc="trouble" })
+keymap.set('n', "<Leader>Dw", "<cmd>TroubleToggle lsp_workspace_diagnostics<cr>", {desc="workspace" })
+keymap.set('n', "<Leader>Dd", "<cmd>TroubleToggle lsp_document_diagnostics<cr>", {desc= "document" })
+keymap.set('n', "<Leader>Dq", "<cmd>TroubleToggle quickfix<cr>", {desc= "quickfix" })
+keymap.set('n', "<Leader>Dl", "<cmd>TroubleToggle loclist<cr>", {desc= "loclist" })
+keymap.set('n', "<Leader>Dr", "<cmd>TroubleToggle lsp_references<cr>", {desc= "references" })
 
--- dashboard
+-- <Leader>d
+keymap.set('n', "<Leader>dd", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>", {desc= "show diagnostics" })
+keymap.set('n', "<Leader>dc", "<cmd>lua require'dap'.continue()<cr>", {desc= "continue" })
+keymap.set('n', "<Leader>db", ':lua require"dap".toggle_breakpoint()<CR>', {desc= "Toggle Breadpoint" })
+keymap.set('n', "<Leader>dj", ':lua require"dap".step_over()<CR>', {desc= "step over" })
+keymap.set('n', "<Leader>dk", ':lua require"dap".step_out()<CR>', {desc= "step out" })
+keymap.set('n', "<Leader>dl", ':lua require"dap".step_into()<CR>', {desc= "step into" })
+keymap.set('n', "<Leader>du", ':lua require"dap".up()<CR>', {desc= "up" })
+keymap.set('n', "<Leader>d_", ':lua require"dap".disconnect();require"dap".stop();require"dap".run_last()<CR>', {desc= "disconnect" })
+keymap.set('n', "<Leader>di", ':lua require"dap.ui.variables".visual_hover()<CR>', {desc= "visual_hover" })
+keymap.set('n', "<Leader>ds", ':lua local widgets=require"dap.ui.widgets";widgets.centered_float(widgets.scopes)<CR>', {desc= "centered_float" })
+
+
+-- <Leader>f
+keymap.set('n', "<Leader>fm", "<cmd>lua require'utils'.open_md()<cr>", {desc= "open a markdown file in vscode" })
+keymap.set('n', "<Leader>fs", "<cmd>w<cr>", {desc= "save file" })
+keymap.set('n', "<Leader>ft", "<cmd>NvimTreeToggle<cr>", {desc= "toggle nvim tree" })
+keymap.set('n', "<Leader>fr", "<cmd>RnvimrToggle<cr>", {desc= "toggle rnvimr" })
+keymap.set('n', "<Leader>fy", "<cmd>lua require'utils'.yank_filepath()<cr>", {desc= "copy the file path" })
+keymap.set('n', "<Leader>fd", "<cmd>lua require'utils'.yank_file_dir()<cr>", {desc= "copy the file path" })
+keymap.set('n', "<Leader>fl", "<cmd>NvimTreeFindFile<CR>", {desc= "find file" })
+
+
+-- <Leader>g
+keymap.set('n', "<Leader>gj", "<cmd>lua require 'gitsigns'.next_hunk()<cr>", {desc= "Next Hunk" })
+keymap.set('n', "<Leader>gk", "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", {desc= "Prev Hunk" })
+keymap.set('n', "<Leader>gl", "<cmd>lua require 'gitsigns'.blame_line()<cr>", {desc= "Blame" })
+keymap.set('n', "<Leader>gp", "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", {desc= "Preview Hunk" })
+keymap.set('n', "<Leader>gr", "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", {desc= "Reset Hunk" })
+keymap.set('n', "<Leader>gR", "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", {desc= "Reset Buffer" })
+keymap.set('n', "<Leader>gs", "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", {desc= "Stage Hunk" })
+keymap.set('n', "<Leader>gS", "<cmd>lua require 'gitsigns'.stage_buffer()<cr>", {desc= "Stage Buffer" })
+keymap.set('n', "<Leader>gu", "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>", {desc= "Undo Stage Hunk", })
+keymap.set('n', "<Leader>go", "<cmd>Telescope git_status<cr>", {desc= "Open changed file" })
+keymap.set('n', "<Leader>gb", "<cmd>Telescope git_branches<cr>", {desc= "Checkout branch" })
+keymap.set('n', "<Leader>gc", "<cmd>Telescope git_commits<cr>", {desc= "Checkout commit" })
+keymap.set('n', "<Leader>gC", "<cmd>Telescope git_bcommits<cr>", {desc= "Checkout commit(for current file)", })
+keymap.set('n', "<Leader>gd", "<cmd>Gitsigns diffthis HEAD<cr>", {desc= "Git Diff", })
+
+-- <Leader>h 
+keymap.set('n', '<Leader>h', ':set hlsearch!<CR>', { noremap = true, silent = true }) -- no hl
+
+-- <Leader>l for lsp
+keymap.set('n', '<Leader>l', "", {desc="+Language"})
+keymap.set('n', '<Leader>la', "<cmd>Lspsaga code_action<cr>", {desc="Code Action" })
+keymap.set('n', '<Leader>lA', "<cmd>Lspsaga range_code_action<cr>", {desc="Selected Action" })
+keymap.set('n', '<Leader>ld', "<cmd>Telescope lsp_document_diagnostics<cr>", {desc="Document Diagnostics" })
+keymap.set('n', '<Leader>lD', "<cmd>Telescope lsp_workspace_diagnostics<cr>", {desc="Workspace Diagnostics" })
+keymap.set('n', '<Leader>lf', "<cmd>LspFormatting<cr>", {desc="Format" })
+keymap.set('n', '<Leader>lF', "<cmd>Lspsaga lsp_finder<cr>", {desc="LSP Finder" })
+keymap.set('n', '<Leader>li', "<cmd>lua vim.lsp.buf.implementation()<cr>", {desc="implement" })
+keymap.set('n', '<Leader>ll', "<cmd>lua vim.lsp.buf.hover()<cr>", {desc="hover" })
+keymap.set('n', '<Leader>lL', "<cmd>Lspsaga show_line_diagnostics<cr>", {desc="Line Diagnostics" })
+keymap.set('n', '<Leader>lk', "<cmd>: LspRestart<cr>", {desc="restart lsp server" })
+keymap.set('n', '<Leader>ln', "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>", {desc="next diagnostic" })
+keymap.set('n', '<Leader>lo', "<cmd>: SymbolsOutline<cr>", {desc="symbols outline" })
+keymap.set('n', '<Leader>lp', "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>", {desc="prev diagnostic" })
+keymap.set('n', '<Leader>lP', "<cmd>Lspsaga preview_definition<cr>", {desc="Preview Definition" })
+keymap.set('n', '<Leader>lq', "<cmd>Telescope quickfix<cr>", {desc="Quickfix" })
+keymap.set('n', '<Leader>lr', "<cmd>lua vim.lsp.buf.references()<cr>", {desc="references" })
+keymap.set('n', '<Leader>lR', "<cmd>Lspsaga rename<cr>", {desc="Rename" })
+keymap.set('n', '<Leader>lt', "<cmd>LspTypeDefinition<cr>", {desc="Type Definition" })
+keymap.set('n', '<Leader>lx', "<cmd>cclose<cr>", {desc="Close Quickfix" })
+keymap.set('n', '<Leader>ls', "<cmd>Telescope lsp_document_symbols<cr>", {desc="Document Symbols" })
+keymap.set('n', '<Leader>lS', "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", {desc="Workspace Symbols" })
+keymap.set('n', '<Leader>lz', "<cmd>LspInfo<cr>", {desc="Info" })
+keymap.set('n', '<Leader>l,', "<cmd>LspInstallInfo<cr>", {desc="LSP servers" })
+
+-- <Leader>q
+keymap.set('n', "<Leader>qq", "<cmd>qall<cr>", {desc= "quit" })
+
+
+-- <Leader>s
+keymap.set('n', "<Leader>sb", "<cmd>Telescope git_branches<cr>", {desc= "Checkout branch" })
+keymap.set('n', "<Leader>sc", "<cmd>:nohl<cr>", {desc= "no highlight" })
+keymap.set('n', "<Leader>sd", "<cmd>Telescope lsp_document_diagnostics<cr>", {desc= "Document Diagnostics" })
+keymap.set('n', "<Leader>sD", "<cmd>Telescope lsp_workspace_diagnostics<cr>", {desc= "Workspace Diagnostics" })
+keymap.set('n', "<Leader>sf", "<cmd>Telescope find_files<CR><cr>", {desc= "Find File" })
+keymap.set('n', "<Leader>sr", function() require("telescope.builtin").oldfiles({ cwd = vim.loop.cwd() }) end, {desc= "Old File" })
+keymap.set('n', "<Leader>sm", "<cmd>Telescope marks<cr>", {desc= "Marks" })
+keymap.set('n', "<Leader>sM", "<cmd>Telescope man_pages<cr>", {desc= "Man Pages" })
+keymap.set('n', "<Leader>sR", "<cmd>Telescope registers<cr>", {desc= "Registers" })
+keymap.set('n', "<Leader>st", "<cmd>Telescope live_grep<cr>", {desc= "Text" })
+keymap.set('n', "<Leader>sT", "<cmd>Telescope live_grep<cr>", {desc= "Text" })
+keymap.set('n', "<Leader>s,", "<cmd>FzfLua grep_cword<cr>", {desc= "Search word under cursor" })
+
+-- <Leader>S
+keymap.set('n', "<Leader>Ss", "<cmd>SessionSave<cr>", {desc= "Save Session" })
+keymap.set('n', "<Leader>Sl", "<cmd>SessionLoad<cr>", {desc= "Load Session" })
+
+-- <Leader>t
+keymap.set('n', "<Leader>ta", "<cmd>TestSuite -v -cover<cr>", {desc= "TestSuite" })
+keymap.set('n', "<Leader>tt", "<cmd>lua require('neotest').run.run() <cr>", {desc= "TestNearest" })
+keymap.set('n', "<Leader>tf", '<cmd>lua require("neotest").run.run(vim.fn.expand("%"))<cr>', {desc= "TestFile" })
+keymap.set('n', "<Leader>tc", "<cmd>GoCover<cr>", {desc="go coverage" })
+keymap.set('n', "<Leader>tC", "<cmd>GoCoverClear<cr>", {desc= "go coverage clear" })
+keymap.set('n', "<Leader>tb", "<cmd>lua require'dap'.toggle_breakpoint()<cr>", {desc= "set break point" })
+keymap.set('n', "<Leader>tr", "<cmd>lua require'dap'.continue()<cr>", {desc= "continue" })
+keymap.set('n', "<Leader>zs", "<cmd>TZBottom<cr>", {desc="toggle status line" })
+keymap.set('n', "<Leader>zt", "<cmd>TZTop<cr>", {desc= "toggle tab bar" })
+keymap.set('n', "<Leader>zz", "<cmd>TZAtaraxis<cr>", {desc= "toggle zen" })
+
+-- <Leader>;
 keymap.set('n', '<Leader>;', ':Dashboard<CR>', { noremap = true, silent = true })
 
--- Comments
-keymap.set("n", "<Leader>b/", ":CommentToggle<CR>", { noremap = true, silent = true })
-keymap.set("v", "<Leader>b/", ":CommentToggle<CR>", { noremap = true, silent = true })
-
--- close buffer
-keymap.set("n", "<leader>c", ":BufferClose<CR>", { noremap = true, silent = true })
-
-keymap.set('n', '-', ':RnvimrToggle<CR>', opts )
-
+-- Ctrl
+keymap.set('n', '<C-p>', ":Telescope find_files<CR>", { noremap = true, silent = true })
 -- better window movement
 keymap.set('n', '<C-h>', '<C-w>h', { silent = true })
 keymap.set('n', '<C-j>', '<C-w>j', { silent = true })
 keymap.set('n', '<C-k>', '<C-w>k', { silent = true })
 keymap.set('n', '<C-l>', '<C-w>l', { silent = true })
-
--- better edit
-keymap.set('n', 'Y', 'y$', {})
-
 -- resize with arrows
 keymap.set('n', '<C-Up>', ':resize -2<CR>', { silent = true })
 keymap.set('n', '<C-Down>', ':resize +2<CR>', { silent = true })
 keymap.set('n', '<C-Left>', ':vertical resize -2<CR>', { silent = true })
 keymap.set('n', '<C-Right>', ':vertical resize +2<CR>', { silent = true })
 
+keymap.set('n', '<C-q>', ':call QuickFixToggle()<CR>', { noremap = true, silent = true })
+
+
+-- Other
+-- better edit
+keymap.set('n', 'Y', 'y$', {})
 -- better indenting
 keymap.set('v', '<', '<gv', { noremap = true, silent = true })
 keymap.set('v', '>', '>gv', { noremap = true, silent = true })
-
 -- I hate escape
 keymap.set('i', 'jk', '<ESC>', { noremap = true, silent = true })
 keymap.set('i', 'kj', '<ESC>', { noremap = true, silent = true })
 keymap.set('i', 'jj', '<ESC>', { noremap = true, silent = true })
-
 -- Tab switch buffer
 keymap.set('n', '<TAB>', ':BufferNext<CR>', { noremap = true, silent = true })
 keymap.set('n', '<S-TAB>', ':BufferPrevious<CR>', { noremap = true, silent = true })
-
 -- Move selected line / block of text in visual mode
 keymap.set('x', 'K', ':move \'<-2<CR>gv-gv', { noremap = true, silent = true })
 keymap.set('x', 'J', ':move \'>+1<CR>gv-gv', { noremap = true, silent = true })
 
-keymap.set('n', '<C-q>', ':call QuickFixToggle()<CR>', { noremap = true, silent = true })
-
--- keymap.set('n','<C-m>',":Lspsaga diagnostic_jump_prev<CR>", opts )
--- keymap.set('n','<C-n>',":Lspsaga diagnostic_jump_next<CR>", opts )
-
-
--- vim.cmd("nnoremap gd <cmd>lua vim.lsp.buf.definition()<CR>")
--- vim.cmd("nnoremap <silent> gD <cmd>lua vim.lsp.buf.declaration()<CR>")
--- vim.cmd("nnoremap <silent> gr <cmd>lua vim.lsp.buf.references()<CR>")
--- vim.cmd("nnoremap <silent> gi <cmd>lua vim.lsp.buf.implementation()<CR>")
--- vim.cmd("nnoremap <silent> ca :Lspsaga code_action<CR>")
--- vim.cmd("nnoremap <silent> K :Lspsaga hover_doc<CR>")
--- -- vim.cmd('nnoremap <silent> <C-k> <cmd>lua vim.lsp.buf.signature_help()<CR>')
--- vim.cmd("nnoremap <silent> <C-m> :Lspsaga diagnostic_jump_prev<CR>")
--- -- scroll down hover doc or scroll in definition preview
--- vim.cmd("nnoremap <silent> <C-f> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>")
--- -- scroll up hover doc
--- vim.cmd("nnoremap <silent> <C-b> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<CR>")
--- vim.cmd('command! -nargs=0 LspVirtualTextToggle lua require("lsp/virtual_text").toggle()')
-
--- -- Better nav for omnicomplete
--- vim.cmd('inoremap <expr> <c-j> (\"\\<C-n>\")')
--- vim.cmd('inoremap <expr> <c-k> (\"\\<C-p>\")')
-
--- vim.cmd('vnoremap p "0p')
--- vim.cmd('vnoremap P "0P')
