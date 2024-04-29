@@ -26,8 +26,9 @@ alias gtc="go test -gcflags=all=-l -cover ./..."
 alias swg="swag init -o docs -g "
 alias sws="swagger serve -F=swagger"
 
+
 function gtr
-    go test -gcflags=all=-l -v -run="$1"
+    go test -gcflags=all=-l -v -run=$argv
 end
 
 

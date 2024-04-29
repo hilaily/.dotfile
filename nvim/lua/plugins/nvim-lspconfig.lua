@@ -134,6 +134,21 @@ return {
 						init_options = { usePlaceholders = true, completeUnimported = true },
 					},
 				},
+				pylsp = {
+					setup = {
+						cmd = { "pylyzer", "--server" },
+						filetypes = { "python" },
+						settings = {
+							python = {
+							  checkOnType = false,
+							  diagnostics = true,
+							  inlayHints = true,
+							  smartCompletion = true
+							}
+						},
+						single_file_support = true,
+					}
+				}
 			},
 			setup = {},
 		},
