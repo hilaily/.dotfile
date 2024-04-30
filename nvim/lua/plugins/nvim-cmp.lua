@@ -76,7 +76,8 @@ end
 return {
 	{
 		"nvim-cmp",
-		dependencies = { 
+		enable = false,
+		dependencies = {
 			"hrsh7th/cmp-emoji",
 			'hrsh7th/vim-vsnip',
 			'hrsh7th/vim-vsnip-integ',
