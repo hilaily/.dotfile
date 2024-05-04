@@ -141,7 +141,7 @@ return {
 						settings = {
 							python = {
 							  checkOnType = false,
-							  diagnostics = true,
+							  diagnostics = false,
 							  inlayHints = true,
 							  smartCompletion = true
 							}
