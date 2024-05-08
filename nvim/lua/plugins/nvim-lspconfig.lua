@@ -117,37 +117,32 @@ return {
 					},
 				},
 				gopls = {
-					setup = {
-						cmd = { "gopls", "serve" }, -- use cmd in path, I can update it easily
-						settings = {
-						  gopls = {
-							analyses = {
-							  nilness = true,
-							  unusedparams = true,
-							  unusedwrite = true,
-							  useany = true,
-							},
-							staticcheck = false
-						  }
+					cmd = { "gopls", "serve" }, -- use cmd in path, I can update it easily
+					settings = {
+						gopls = {
+						analyses = {
+							nilness = true,
+							unusedparams = true,
+							unusedwrite = true,
+							useany = true,
 						},
-						root_dir = require 'lspconfig'.util.root_pattern(".git", "go.mod", "go.work"),
-						init_options = { usePlaceholders = true, completeUnimported = true },
+						staticcheck = false,
+						usePlaceholders = false,
+						}
 					},
 				},
 				pylsp = {
-					setup = {
-						cmd = { "pylyzer", "--server" },
-						filetypes = { "python" },
-						settings = {
-							python = {
-							  checkOnType = false,
-							  diagnostics = false,
-							  inlayHints = true,
-							  smartCompletion = true
-							}
-						},
-						single_file_support = true,
-					}
+					cmd = { "pylyzer", "--server" },
+					filetypes = { "python" },
+					settings = {
+						python = {
+							checkOnType = false,
+							diagnostics = false,
+							inlayHints = true,
+							smartCompletion = true
+						}
+					},
+					single_file_support = true,
 				}
 			},
 			setup = {},
