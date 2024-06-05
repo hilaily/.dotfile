@@ -1,3 +1,6 @@
+
+fish_vi_key_bindings
+
 ## set environment
 
 # brew
@@ -13,9 +16,13 @@ set -gx GOSUMDB "sum.golang.google.cn"
 set -gx PATH $PATH $HOME/go/bin
 set -gx PATH $PATH $HOME/.yarn/bin $HOME/.config/yarn/global/node_modules/.bin
 set -gx PATH $PATH /usr/local/sbin
+
 # add nvim
 set -gx PATH $PATH /usr/local/nvim/bin /usr/local/osx-64/nvim/bin
 set -gx EDITOR vim
+
+# add my script
+set -gx PATH $PATH $HOME/.dotfile/script $HOME/.app00/script
 
 # alias 
 # git
@@ -31,7 +38,9 @@ function gtr
     go test -gcflags=all=-l -v -run=$argv
 end
 
-
+if test -f ~/.config/fish/custom.fish
+    source ~/.config/fish/custom.fish
+end
 
 
 
