@@ -1,7 +1,31 @@
 
 fish_vi_key_bindings
 
+# 定义一个函数来检查并添加路径到 PATH
+function add_to_path
+    # 遍历传递给函数的所有参数
+    for path in $argv
+        # 检查路径是否存在
+        if test -d $path
+            # 如果路径存在且不在 PATH 中，则添加到 PATH
+            if not contains $path $PATH
+                #echo "Adding $path to PATH"
+                set -gx PATH $PATH $path
+            else
+                #echo "$path is already in PATH"
+            end
+        else
+            #echo "$path does not exist"
+        end
+    end
+end
+
 ## set environment
+# default
+set paths_to_check /usr/sbin /usr/local/bin /usr/bin /bin /usr/sbin /sbin /opt/bin /opt/sbin /usr/syno/sbin /usr/syno/bin /usr/local/sbin
+for path in $paths_to_check
+    add_to_path $path
+end
 
 # brew
 set -gx HOMEBREW_BREW_GIT_REMOTE "https://mirrors.ustc.edu.cn/brew.git"
@@ -13,16 +37,15 @@ set -gx GOPATH $HOME/go:$HOME/workrepo/go
 set -gx GOPROXY "goproxy.cn,direct"
 set -gx GOSUMDB "sum.golang.google.cn"
 
-set -gx PATH $PATH $HOME/go/bin
-set -gx PATH $PATH $HOME/.yarn/bin $HOME/.config/yarn/global/node_modules/.bin
-set -gx PATH $PATH /usr/local/sbin
+add_to_path $HOME/go/bin
+add_to_path $HOME/.yarn/bin $HOME/.config/yarn/global/node_modules/.bin
 
 # add nvim
-set -gx PATH $PATH /usr/local/nvim/bin /usr/local/osx-64/nvim/bin
+add_to_path usr/local/nvim/bin /usr/local/osx-64/nvim/bin
 set -gx EDITOR vim
 
 # add my script
-set -gx PATH $PATH $HOME/.dotfile/script $HOME/.app00/script
+add_to_path $HOME/.dotfile/script $HOME/.app00/script
 
 # alias 
 # git
@@ -44,10 +67,8 @@ end
 
 
 
-
-
-
-
 if status is-interactive
     # Commands to run in interactive sessions can go here
 end
+
+
