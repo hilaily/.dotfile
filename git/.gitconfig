@@ -40,6 +40,7 @@
   bn = branch --no-merged
   pl = pull
   pt = push origin --tags
+  ph = push origin HEAD
   merge2 = !sh -c '_CURRENT_BRANCH=$(git symbolic-ref --short HEAD) && git checkout $1 && git merge $_CURRENT_BRANCH && git checkout $_CURRENT_BRANCH' -
   bg = "!f() { git branch | grep $1; }; f"
   delbr = "!f(){ git branch -D $(git branch | grep \"\b$1\"); };f"
