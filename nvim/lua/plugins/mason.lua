@@ -6,12 +6,14 @@ return {
 				"stylua",
 				"selene",
 				"luacheck",
-				"shellcheck",
+				"bashls",
 				"shfmt",
-				"tailwindcss-language-server",
-				"typescript-language-server",
-				"css-lsp",
+				"tailwindcss",
+				"tsserver",
+				"pylyzer",
+				"cssls",
 			})
 		end,
 	},
 }
+
