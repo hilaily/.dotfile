@@ -6,7 +6,7 @@ return {
 				"stylua",
 				"selene",
 				"luacheck",
-				"bashls",
+				--"bashls",
 				"shfmt",
 				"tailwindcss",
 				"tsserver",
@@ -16,4 +16,3 @@ return {
 		end,
 	},
 }
-
