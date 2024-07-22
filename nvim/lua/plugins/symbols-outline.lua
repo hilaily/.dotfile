@@ -5,6 +5,8 @@ return {
 		cmd = "SymbolsOutline",
 		opts = {
 			position = "right",
+			width = 35,
 		},
 	},
 }
+
