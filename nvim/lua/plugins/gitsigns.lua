@@ -4,25 +4,30 @@ return {
 		opts = {
 			signs = {
 				-- TODO add hl to colorscheme
-				add          = {hl = 'GitSignsAdd'   , text = '▎', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
-				change       = {hl = 'GitSignsChange', text = '▎', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
-				delete       = {hl = 'GitSignsDelete', text = '契', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
-				topdelete    = {hl = 'GitSignsDelete', text = '契', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
-				changedelete = {hl = 'GitSignsChange', text = '▎', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
-			  },
-			  numhl = false,
-			  linehl = false,
-			  watch_gitdir = {
-				interval = 1000
-			  },
-			  sign_priority = 6,
-			  update_debounce = 200,
-			  status_formatter = nil, -- Use default
+				add = { hl = "GitSignsAdd", text = "▎", numhl = "GitSignsAddNr", linehl = "GitSignsAddLn" },
+				change = { hl = "GitSignsChange", text = "▎", numhl = "GitSignsChangeNr", linehl = "GitSignsChangeLn" },
+				delete = { hl = "GitSignsDelete", text = "契", numhl = "GitSignsDeleteNr", linehl = "GitSignsDeleteLn" },
+				topdelete = { hl = "GitSignsDelete", text = "契", numhl = "GitSignsDeleteNr", linehl = "GitSignsDeleteLn" },
+				changedelete = {
+					hl = "GitSignsChange",
+					text = "▎",
+					numhl = "GitSignsChangeNr",
+					linehl = "GitSignsChangeLn",
+				},
+			},
+			numhl = false,
+			linehl = false,
+			watch_gitdir = {
+				interval = 1000,
+			},
+			sign_priority = 6,
+			update_debounce = 200,
+			status_formatter = nil, -- Use default
 			on_attach = function(buffer)
 				local gs = package.loaded.gitsigns
-			
+
 				local function map(mode, l, r, desc)
-				  vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
+					vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
 				end
 			
 				-- stylua: ignore start
@@ -38,7 +43,8 @@ return {
 				map("n", "<leader>ghd", gs.diffthis, "Diff This")
 				map("n", "<leader>ghD", function() gs.diffthis("~") end, "Diff This ~")
 				map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
-			  end,
-		}
-	}
+			end,
+		},
+	},
 }
+
