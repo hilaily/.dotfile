@@ -4,7 +4,7 @@
 [core]
   autocrlf = input
   quotepath = false
-  editor = nvim
+  editor = vim
   excludesfile = ~/.dotfile/git/.gitignore
 [push]
   default = current
