@@ -8,10 +8,10 @@ return {
 				"luacheck",
 				--"bashls",
 				"shfmt",
-				"tailwindcss",
-				"tsserver",
+				--"tailwindcss",
+				--"tsserver",
 				"pylyzer",
-				"cssls",
+				--"cssls",
 			})
 		end,
 	},
