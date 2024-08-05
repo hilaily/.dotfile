@@ -55,11 +55,17 @@ alias gmt="go mod tidy"
 alias gtc="go test -gcflags=all=-l -cover ./..."
 alias swg="swag init -o docs -g "
 alias sws="swagger serve -F=swagger"
+alias sourceit="source ~/.config/fish/config.fish"
 
 
 function gtr
     go test -gcflags=all=-l -v -run=$argv
 end
+
+function ctl
+    systemctl $argv
+end
+
 
 if test -f ~/.config/fish/custom.fish
     source ~/.config/fish/custom.fish
