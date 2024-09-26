@@ -78,3 +78,6 @@ if status is-interactive
 end
 
 
+function sudoo
+    eval sudo $history[1]
+end
