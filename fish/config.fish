@@ -36,9 +36,11 @@ set -gx HOMEBREW_BOTTLE_DOMAIN "https://mirrors.ustc.edu.cn/homebrew-bottles"
 set -gx GOPATH $HOME/go:$HOME/workrepo/go
 set -gx GOPROXY "goproxy.cn,direct"
 set -gx GOSUMDB "sum.golang.google.cn"
-
 add_to_path $HOME/go/bin
 add_to_path $HOME/.yarn/bin $HOME/.config/yarn/global/node_modules/.bin
+
+# node
+add_to_path /usr/local/node/bin
 
 # add nvim
 add_to_path usr/local/nvim/bin /usr/local/osx-64/nvim/bin
