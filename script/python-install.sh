@@ -13,6 +13,7 @@ then
     echo -e "${RED}pyenv 未安装. 正在安装 pyenv...${NC}"
     # 安装 pyenv
     curl https://pyenv.run | bash
+    source ~/.config/fish/config.fish
 else
     echo -e "${GREEN}pyenv 已安装${NC}"
 fi
