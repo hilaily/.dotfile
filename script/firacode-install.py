@@ -76,7 +76,7 @@ def refresh_font_cache() -> None:
 
 def main() -> None:
     fonts: Dict[str, str] = {
-        "FiraCodeNerd": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraCode.zip",
+        "SarasaNerd":"https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/releases/download/v1.0.23-0/sarasa-fixed-sc-nerd-font.zip",
         "FiraCode": "https://github.com/tonsky/FiraCode/releases/download/6.2/Fira_Code_v6.2.zip"   
     }
 
@@ -94,7 +94,7 @@ def main() -> None:
         download_file(fonts[font], zip_path)
         unzip_file(zip_path, font)
         install_font(font, font_dir)
-        # os.remove(zip_path)
+        os.remove(zip_path)
 
     refresh_font_cache()
     print("安装完成。请重启您的终端或应用程序以使用新字体。")
