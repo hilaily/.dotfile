@@ -49,6 +49,7 @@
   # list files which have changed since REVIEW_BASE
   # (REVIEW_BASE defaults to 'master' in my zshrc)
   files = !git diff --name-only $(git merge-base HEAD \"$REVIEW_BASE\")
+  rmsubmodule = "!f(){ git submodule deinit -f \"$1\"; git rm -f \"$1\"; git commit -m \"Removed submodule $1\"; };f"
 
   # Same as above, but with a diff stat instead of just names
   # (better for interactive use)
