@@ -1,7 +1,7 @@
-
 #################################################################
 # option
 fish_vi_key_bindings
+
 
 #################################################################
 # basic 
@@ -43,7 +43,6 @@ function sudoo
     eval sudo $history[1]
 end
 
-
 # add my script
 add_to_path $HOME/.dotfile/script $HOME/.app00/script
 
@@ -75,13 +74,14 @@ set -gx HOMEBREW_BOTTLE_DOMAIN "https://mirrors.ustc.edu.cn/homebrew-bottles"
 set -gx GOPATH $HOME/go:$HOME/workrepo/go
 set -gx GOPROXY "goproxy.cn,direct"
 set -gx GOSUMDB "sum.golang.google.cn"
-
 add_to_path $HOME/go/bin
 add_to_path $HOME/.yarn/bin $HOME/.config/yarn/global/node_modules/.bin
 
-function gtr
-    go test -gcflags=all=-l -v -run=$argv
-end
+
+#################################################################
+# node
+add_to_path /usr/local/node/bin
+
 
 #################################################################
 # python
@@ -93,10 +93,14 @@ end
 
 add_to_path $PYENV_ROOT/bin
 
+
 #################################################################
 # nvim
 add_to_path usr/local/nvim/bin /usr/local/osx-64/nvim/bin
 set -gx EDITOR vim
+function gtr
+    go test -gcflags=all=-l -v -run=$argv
+end
 
 
 #################################################################
