@@ -24,11 +24,14 @@ function add_to_path
     end
 end
 
-function refish 
+function refish
     echo "Updating fish configuration..."
     source ~/.config/fish/config.fish
     echo "Fish configuration updated!"
 end
+
+alias vifish="vim ~/.config/fish/custom.fish"
+alias cdfish="cd ~/.config/fish/"
 
 # set environment
 set paths_to_check /usr/sbin /usr/local/bin /usr/bin /bin /usr/sbin /sbin /opt/bin /opt/sbin /usr/syno/sbin /usr/syno/bin /usr/local/sbin
@@ -59,6 +62,7 @@ function reset_proxy
     set -e ALL_PROXY
     echo "Proxy environment variables have been reset."
 end
+
 
 #################################################################
 # brew
@@ -116,4 +120,3 @@ end
 if status is-interactive
     # Commands to run in interactive sessions can go here
 end
-
