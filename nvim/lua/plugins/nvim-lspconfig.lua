@@ -1,8 +1,10 @@
 return {
 	-- lsp servers
 	{
+		"williamboman/mason.nvim",
+		"williamboman/mason-lspconfig.nvim",
 		"neovim/nvim-lspconfig",
-		event = { 'BufReadPre', 'BufReadPost', 'BufNewFile' },
+		event = { "BufReadPre", "BufReadPost", "BufNewFile" },
 		opts = {
 			inlay_hints = { enabled = false },
 			---@type lspconfig.options
@@ -10,12 +12,29 @@ return {
 				cssls = {},
 				tailwindcss = {
 					root_dir = function(...)
-						return require("lspconfig.util").root_pattern('tailwind.config.js', 'tailwind.config.cjs', 'tailwind.config.mjs', 'tailwind.config.ts', 'postcss.config.js', 'postcss.config.cjs', 'postcss.config.mjs', 'postcss.config.ts', 'package.json', 'node_modules', '.git')(...)
+						return require("lspconfig.util").root_pattern(
+							"tailwind.config.js",
+							"tailwind.config.cjs",
+							"tailwind.config.mjs",
+							"tailwind.config.ts",
+							"postcss.config.js",
+							"postcss.config.cjs",
+							"postcss.config.mjs",
+							"postcss.config.ts",
+							"package.json",
+							"node_modules",
+							".git"
+						)(...)
 					end,
 				},
 				tsserver = {
 					root_dir = function(...)
-						return require("lspconfig.util").root_pattern("tsconfig.json", "package.json", "jsconfig.json", ".git")(...)
+						return require("lspconfig.util").root_pattern(
+							"tsconfig.json",
+							"package.json",
+							"jsconfig.json",
+							".git"
+						)(...)
 					end,
 					single_file_support = false,
 					settings = {
@@ -120,15 +139,15 @@ return {
 					cmd = { "gopls", "serve" }, -- use cmd in path, I can update it easily
 					settings = {
 						gopls = {
-						analyses = {
-							nilness = true,
-							unusedparams = true,
-							unusedwrite = true,
-							useany = true,
+							analyses = {
+								nilness = true,
+								unusedparams = true,
+								unusedwrite = true,
+								useany = true,
+							},
+							staticcheck = false,
+							usePlaceholders = false,
 						},
-						staticcheck = false,
-						usePlaceholders = false,
-						}
 					},
 				},
 				pylsp = {
@@ -139,11 +158,11 @@ return {
 							checkOnType = false,
 							diagnostics = false,
 							inlayHints = true,
-							smartCompletion = true
-						}
+							smartCompletion = true,
+						},
 					},
 					single_file_support = true,
-				}
+				},
 			},
 			setup = {},
 		},
