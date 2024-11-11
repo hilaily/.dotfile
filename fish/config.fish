@@ -24,14 +24,14 @@ function add_to_path
     end
 end
 
-function refish 
+function refish
     echo "Updating fish configuration..."
     source ~/.config/fish/config.fish
     echo "Fish configuration updated!"
 end
 
 # set environment
-set paths_to_check /usr/sbin /usr/local/bin /usr/bin /bin /usr/sbin /sbin /opt/bin /opt/sbin /usr/syno/sbin /usr/syno/bin /usr/local/sbin
+set paths_to_check /usr/sbin /usr/local/bin /usr/bin /bin /usr/sbin /sbin /opt/bin /opt/sbin /usr/syno/sbin /usr/syno/bin /usr/local/sbin $HOME/.local/bin
 for path in $paths_to_check
     add_to_path $path
 end
@@ -47,7 +47,7 @@ if test -f ~/.config/fish/custom.fish
     source ~/.config/fish/custom.fish
 end
 
-function reset_proxy
+function resetp
     set -e http_proxy
     set -e https_proxy
     set -e ftp_proxy
@@ -57,6 +57,11 @@ function reset_proxy
     set -e FTP_PROXY
     set -e ALL_PROXY
     echo "Proxy environment variables have been reset."
+    export | grep -i 'proxy'
+end
+
+function showp
+    export | grep -i 'proxy'
 end
 
 
