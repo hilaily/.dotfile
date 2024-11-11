@@ -30,6 +30,9 @@ function refish
     echo "Fish configuration updated!"
 end
 
+alias vifish="vim ~/.config/fish/custom.fish"
+alias cdfish="cd ~/.config/fish/"
+
 # set environment
 set paths_to_check /usr/sbin /usr/local/bin /usr/bin /bin /usr/sbin /sbin /opt/bin /opt/sbin /usr/syno/sbin /usr/syno/bin /usr/local/sbin $HOME/.local/bin
 for path in $paths_to_check
@@ -126,4 +129,3 @@ end
 if status is-interactive
     # Commands to run in interactive sessions can go here
 end
-
