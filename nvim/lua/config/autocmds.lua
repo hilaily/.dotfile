@@ -7,12 +7,12 @@ vim.api.nvim_create_autocmd("InsertLeave", {
 -- Disable the concealing in some file formats
 -- The default conceallevel is 3 in LazyVim
 vim.api.nvim_create_autocmd("FileType", {
-	pattern = {"js","tsx","ts", "json", "jsonc", "markdown","md","css","html" },
+	pattern = { "js", "tsx", "ts", "json", "jsonc", "markdown", "md", "css", "html" },
 	callback = function()
 		vim.opt.conceallevel = 0
 		vim.bo.tabstop = 2
 		vim.bo.softtabstop = 2
 		vim.bo.shiftwidth = 2
-		vim.bo.expand = true
+		-- vim.bo.expand = true
 	end,
 })
