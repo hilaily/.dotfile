@@ -5,7 +5,7 @@
 	<key>AllowClipboardAccess</key>
 	<true/>
 	<key>AlternateMouseScroll</key>
-	<true/>
+	<false/>
 	<key>Default Bookmark Guid</key>
 	<string>DC379BB9-FF36-4714-A6B6-F8733C90E251</string>
 	<key>HapticFeedbackForEsc</key>
