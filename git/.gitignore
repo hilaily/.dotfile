@@ -32,6 +32,6 @@ _testmain.go
 .log
 go.work
 go.work.sum
-init_test.go
-_set_env.sh
-_set_env_*.sh
+_set_env*.sh
+.env*
+!.env.example

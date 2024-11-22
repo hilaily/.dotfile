@@ -1,5 +1,5 @@
 [user]
-  name = Laily
+  name = laily
   email = i@laily.net
 [core]
   autocrlf = input
@@ -49,6 +49,7 @@
   # list files which have changed since REVIEW_BASE
   # (REVIEW_BASE defaults to 'master' in my zshrc)
   files = !git diff --name-only $(git merge-base HEAD \"$REVIEW_BASE\")
+  rmsubmodule = "!f(){ git submodule deinit -f \"$1\"; git rm -f \"$1\"; git commit -m \"Removed submodule $1\"; };f"
 
   # Same as above, but with a diff stat instead of just names
   # (better for interactive use)
@@ -65,3 +66,7 @@
   #git filter-branch -f --env-filter "GIT_AUTHOR_NAME='Laily'; GIT_AUTHOR_EMAIL='i@laily.net'; GIT_COMMITTER_NAME='Laily'; GIT_COMMITTER_EMAIL='i@laily.net';" HEAD
 [protocol "file"]
   allow = always
+
+# https://hyperzsb.io/posts/git-ssl-error/
+[url "git@github.com:"]
+    insteadOf = https://github.com/
