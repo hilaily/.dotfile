@@ -131,7 +131,7 @@ function punset
     set -e FTP_PROXY
     set -e ALL_PROXY
     echo "Proxy environment variables have been reset."
-    export | grep -i proxy
+    pshow
 end
 
 function pshow
@@ -139,7 +139,9 @@ function pshow
 end
 
 function pset
-    set -e https_proxy http://127.0.0.1:7890
-    set -e http_proxy http://127.0.0.1:7890
-    set -e all_proxy socks5://127.0.0.1:7890
+    set -gx https_proxy http://127.0.0.1:7890
+    set -gx http_proxy http://127.0.0.1:7890
+    set -gx all_proxy socks5://127.0.0.1:7890
+    echo "Proxy environment variables have been set."
+    pshow
 end
