@@ -24,15 +24,6 @@ function add_to_path
     end
 end
 
-function refish
-    echo "Updating fish configuration..."
-    source ~/.config/fish/config.fish
-    echo "Fish configuration updated!"
-end
-
-alias vifish="vim ~/.config/fish/custom.fish"
-alias cdfish="cd ~/.config/fish/"
-
 # set environment
 set paths_to_check /usr/sbin /usr/local/bin /usr/bin /bin /usr/sbin /sbin /opt/bin /opt/sbin /usr/syno/sbin /usr/syno/bin /usr/local/sbin $HOME/.local/bin
 for path in $paths_to_check
@@ -49,24 +40,6 @@ add_to_path $HOME/.dotfile/script $HOME/.app00/script
 if test -f ~/.config/fish/custom.fish
     source ~/.config/fish/custom.fish
 end
-
-function resetp
-    set -e http_proxy
-    set -e https_proxy
-    set -e ftp_proxy
-    set -e all_proxy
-    set -e HTTP_PROXY
-    set -e HTTPS_PROXY
-    set -e FTP_PROXY
-    set -e ALL_PROXY
-    echo "Proxy environment variables have been reset."
-    export | grep -i 'proxy'
-end
-
-function showp
-    export | grep -i 'proxy'
-end
-
 
 #################################################################
 # brew
@@ -128,4 +101,45 @@ end
 
 if status is-interactive
     # Commands to run in interactive sessions can go here
+end
+
+# reload conf
+function fre
+    source ~/.config/fish/config.fish
+    echo "Fish configuration updated!"
+end
+
+function refish
+    source ~/.config/fish/config.fish
+    echo "Fish configuration updated!"
+end
+
+
+
+# vi config
+alias fvi="vim ~/.config/fish/custom.fish"
+# cd config
+alias fcd="cd ~/.config/fish/"
+
+function punset
+    set -e http_proxy
+    set -e https_proxy
+    set -e ftp_proxy
+    set -e all_proxy
+    set -e HTTP_PROXY
+    set -e HTTPS_PROXY
+    set -e FTP_PROXY
+    set -e ALL_PROXY
+    echo "Proxy environment variables have been reset."
+    export | grep -i proxy
+end
+
+function pshow
+    export | grep -i proxy
+end
+
+function pset
+    set -e https_proxy http://127.0.0.1:7890
+    set -e http_proxy http://127.0.0.1:7890
+    set -e all_proxy socks5://127.0.0.1:7890
 end
