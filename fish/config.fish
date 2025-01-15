@@ -130,7 +130,7 @@ function dc
             $compose_cmd unpause $argv[2..-1]
         case 'up'
             $compose_cmd up -d $argv[2..-1] && $compose_cmd logs -f $argv[2..-1]
-        case 'rup'
+        case 'reup'
             $compose_cmd up -d --force-recreate $argv[2..-1] && $compose_cmd logs -f $argv[2..-1]
         case 'down'
             $compose_cmd down $argv[2..-1]
