@@ -35,3 +35,4 @@ go.work.sum
 _set_env*.sh
 .env*
 !.env.example
+Makefile.local
