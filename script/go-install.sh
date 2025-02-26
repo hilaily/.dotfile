@@ -9,7 +9,7 @@ fish -c "fisher install JGAntunes/fish-gvm"
 fish -c "fisher install edc/bass"
 
 # install go
-fish -c "gvm install -B go1.24.0"
+fish -c "gvm install go1.24.0 -B"
 fish -c "gvm use go1.24.0 --default"
 
 # # install neovim
