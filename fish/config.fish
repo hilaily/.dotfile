@@ -26,7 +26,7 @@ end
 
 # set environment
 set paths_to_check /usr/sbin /usr/local/bin /usr/bin /bin /usr/sbin /sbin /opt/bin /opt/sbin /usr/syno/sbin /usr/syno/bin /usr/local/sbin $HOME/.local/bin
-for path in $paths_to_check
+for path in $paths_to_check do
     add_to_path $path
 end
 
@@ -192,3 +192,18 @@ function pset
     echo "Proxy environment variables have been set."
     pshow
 end
+
+# source env
+function source_env
+    for line in (cat $argv | grep -v '^#' | grep -v '^\s*$')
+        set item (string split -m 1 '=' $line)
+        set -gx $item[1] (eval echo $item[2])
+    end
+end
+
+function make2 
+    make -f Makefile.local $argv
+end
+# Added by OrbStack: command-line tools and integration
+# This won't be added again if you remove it.
+source ~/.orbstack/shell/init2.fish 2>/dev/null || :

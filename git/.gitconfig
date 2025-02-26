@@ -68,5 +68,3 @@
   allow = always
 
 # https://hyperzsb.io/posts/git-ssl-error/
-[url "git@github.com:"]
-    insteadOf = https://github.com/
