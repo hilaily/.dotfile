@@ -36,3 +36,4 @@ _set_env*.sh
 .env*
 !.env.example
 Makefile.local
+.netrc

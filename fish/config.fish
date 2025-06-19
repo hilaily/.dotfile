@@ -2,7 +2,6 @@
 # option
 fish_vi_key_bindings
 
-
 #################################################################
 # basic 
 # 定义一个函数来检查并添加路径到 PATH
@@ -55,11 +54,9 @@ set -gx GOSUMDB "sum.golang.google.cn"
 add_to_path $HOME/go/bin
 add_to_path $HOME/.yarn/bin $HOME/.config/yarn/global/node_modules/.bin
 
-
 #################################################################
 # node
 add_to_path /usr/local/node/bin
-
 
 #################################################################
 # python
@@ -71,7 +68,6 @@ end
 
 add_to_path $PYENV_ROOT/bin
 
-
 #################################################################
 # nvim
 add_to_path usr/local/nvim/bin /usr/local/osx-64/nvim/bin
@@ -79,7 +75,6 @@ set -gx EDITOR vim
 function gtr
     go test -gcflags=all=-l -v -run=$argv
 end
-
 
 #################################################################
 # git
@@ -92,53 +87,51 @@ alias swg="swag init -o docs -g "
 alias sws="swagger serve -F=swagger"
 alias sourceit="source ~/.config/fish/config.fish"
 
-
 #################################################################
 # docker
 function dc
     # 检查 docker-compose 是否可用
-    if command -v docker-compose > /dev/null
-        set compose_cmd "docker-compose"
+    if command -v docker-compose >/dev/null
+        set compose_cmd docker-compose
     else
         set compose_cmd "docker compose"
     end
 
     switch $argv[1]
-        case 'build'
+        case build
             $compose_cmd build $argv[2..-1]
-        case 'run'
+        case run
             $compose_cmd run $argv[2..-1]
-        case 'exec'
+        case exec
             $compose_cmd exec $argv[2..-1]
-        case 'l'
+        case l
             $compose_cmd logs $argv[2..-1]
-        case 'lf'
+        case lf
             $compose_cmd logs -f $argv[2..-1]
-        case 'restart'
+        case restart
             $compose_cmd restart $argv[2..-1]
-        case 'rm'
+        case rm
             $compose_cmd rm $argv[2..-1]
-        case 'pull'
+        case pull
             $compose_cmd pull $argv[2..-1]
-        case 'stop'
+        case stop
             $compose_cmd stop $argv[2..-1]
-        case 'kill'
+        case kill
             $compose_cmd kill $argv[2..-1]
-        case 'pause'
+        case pause
             $compose_cmd pause $argv[2..-1]
-        case 'unpause'
+        case unpause
             $compose_cmd unpause $argv[2..-1]
-        case 'up'
+        case up
             $compose_cmd up -d $argv[2..-1] && $compose_cmd logs -f $argv[2..-1]
-        case 'reup'
+        case reup
             $compose_cmd up -d --force-recreate $argv[2..-1] && $compose_cmd logs -f $argv[2..-1]
-        case 'down'
+        case down
             $compose_cmd down $argv[2..-1]
         case '*'
             $compose_cmd $argv
     end
 end
-
 
 #################################################################
 # other
@@ -160,8 +153,6 @@ function refish
     source ~/.config/fish/config.fish
     echo "Fish configuration updated!"
 end
-
-
 
 # vi config
 alias fvi="vim ~/.config/fish/custom.fish"
@@ -201,9 +192,17 @@ function source_env
     end
 end
 
-function make2 
+function make2
     make -f Makefile.local $argv
 end
+
 # Added by OrbStack: command-line tools and integration
 # This won't be added again if you remove it.
 source ~/.orbstack/shell/init2.fish 2>/dev/null || :
+
+# pnpm
+set -gx PNPM_HOME $HOME/.pnpm
+if not string match -q -- $PNPM_HOME $PATH
+    set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end
