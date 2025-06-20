@@ -1,0 +1,263 @@
+{
+  "editor.fontLigatures": true,
+  "editor.fontSize": 16,
+  "editor.renderControlCharacters": true,
+  "workbench.iconTheme": "Monokai Classic Icons",
+  "workbench.welcome.enabled": false,
+  "workbench.colorTheme": "Dracula Theme Soft",
+  "vim.overrideCopy": false,
+  "vim.enableNeovim": true,
+  "vim.neovimPath": "/usr/local/bin/nvim",
+  "vim.disableAnnoyingNeovimMessage": true,
+  // Vim easymotion is required for Jump menu - <SPC> j
+  "vim.easymotion": true,
+  // Use system clipboard for vim
+  "vim.useSystemClipboard": true,
+  // Trigger the main which key menu with in the active editor with vim
+  // This cannot be put into keybindings.json because it will
+  // create conflict with Vim.
+  // https://github.com/stevenguh/spacecode/issues/3
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": ["<space>"],
+      "commands": ["vspacecode.space"]
+    },
+    {
+      "before": [","],
+      "commands": [
+        "vspacecode.space",
+        {
+          "command": "whichkey.triggerKey",
+          "args": "m"
+        }
+      ]
+    }
+  ],
+  "vim.visualModeKeyBindingsNonRecursive": [
+    {
+      "before": ["<space>"],
+      "commands": ["vspacecode.space"]
+    },
+    {
+      "before": [","],
+      "commands": [
+        "vspacecode.space",
+        {
+          "command": "whichkey.triggerKey",
+          "args": "m"
+        }
+      ]
+    },
+    {
+      "before": [">"],
+      "commands": ["editor.action.indentLines"]
+    },
+    {
+      "before": ["<"],
+      "commands": ["editor.action.outdentLines"]
+    }
+  ],
+  "workbench.panel.location": "right",
+  "gitHistory.hideCommitViewExplorer": true,
+  "python.linting.pylintEnabled": false,
+  "python.pythonPath": "/usr/local/bin/python3",
+  "editor.wordWrap": "on",
+  "editor.suggestSelection": "first",
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  "sync.gist": "3c4e02a02a0d110622006b8c8b058fa5",
+  "go.languageServerFlags": ["-rpc.trace"],
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "files.associations": {
+    "*.html": "html",
+    "*.json": "jsonc",
+    "NOTES.txt": "helm"
+  },
+  "[helm]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+    // "editor.formatOnSave": false // alternatively, force it to leave you alone
+  },
+  "gitlens.codeLens.recentChange.enabled": false,
+  "gitlens.codeLens.authors.enabled": false,
+  "sync.forceUpload": true,
+  "gitlens.currentLine.enabled": false,
+  "emmet.triggerExpansionOnTab": true,
+  // "terminal.integrated.shell.osx": "/bin/zsh",
+  "editor.fontFamily": "Fira Code, Sarasa Fixed SC Nerd Font, Menlo, Monaco, 'Courier New', monospace",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "search.followSymlinks": false,
+  "go.autocompleteUnimportedPackages": true,
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "vscode-neovim.mouseSelectionStartVisualMode": true,
+  "go.lintTool": "golangci-lint",
+  "go.lintFlags": ["--fast"],
+  "go.liveErrors": {
+    "enabled": false,
+    "delay": 500
+  },
+  "python.languageServer": "Pylance",
+  "go.overwriteGoplsMiddleware": {},
+  "go.useLanguageServer": true,
+  "[go]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    },
+    "editor.snippetSuggestions": "none",
+    "editor.defaultFormatter": "golang.go"
+  },
+  "[go.mod]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  "gopls": {
+    "usePlaceholders": true,
+    "staticcheck": false
+  },
+  "go.testFlags": ["-v"],
+  "vscode-neovim.neovimExecutablePaths.darwin": "/usr/local/bin/nvim",
+  "go.buildOnSave": "off",
+  "vim.autoSwitchInputMethod.defaultIM": "com.apple.keylayout.ABC",
+  "vim.autoSwitchInputMethod.obtainIMCmd": "/usr/local/bin/im-select",
+  "vim.autoSwitchInputMethod.switchIMCmd": "/usr/local/bin/im-select {im}",
+  "vim.autoSwitchInputMethod.enable": true,
+  "editor.cursorStyle": "line",
+  "editor.insertSpaces": false,
+  "editor.lineNumbers": "on",
+  "editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-",
+  "security.workspace.trust.untrustedFiles": "open",
+  "workbench.tree.indent": 4,
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "python.defaultInterpreterPath": "/usr/local/bin/python3",
+  "[python]": {
+    "editor.formatOnType": true,
+    "editor.defaultFormatter": "ms-python.python"
+  },
+  "[go][go.mod]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  "update.showReleaseNotes": false,
+  "terminal.integrated.defaultProfile.osx": "tmux",
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+  "makefile.configureOnOpen": false,
+  "python.terminal.activateEnvInCurrentTerminal": true,
+  "remote.SSH.enableAgentForwarding": false,
+  "remote.SSH.defaultForwardedPorts": [],
+  "remote.SSH.useLocalServer": false,
+  "remote.SSH.connectTimeout": 30,
+  "remote.SSH.remotePlatform": {
+    "box1": "linux"
+  },
+  "editor.formatOnSave": true,
+  "pylint.enabled": false,
+  "python.analysis.typeCheckingMode": "standard",
+  "python.analysis.packageIndexDepths": [
+    {
+      "name": "sklearn",
+      "depth": 2
+    },
+    {
+      "name": "matplotlib",
+      "depth": 2
+    },
+    {
+      "name": "scipy",
+      "depth": 2
+    },
+    {
+      "name": "django",
+      "depth": 2
+    },
+    {
+      "name": "flask",
+      "depth": 2
+    },
+    {
+      "name": "fastapi",
+      "depth": 2
+    }
+  ],
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[dockerfile]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  },
+  "[ignore]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[properties]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "[proto3]": {
+    "editor.defaultFormatter": "zxh404.vscode-proto3"
+  },
+  "[dotenv]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "typescript.preferences.quoteStyle": "single",
+  "javascript.preferences.quoteStyle": "single",
+  "go.toolsManagement.autoUpdate": true,
+  "pretty-formatter.quoteConvert": "single",
+  "html.completion.attributeDefaultValue": "singlequotes",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "prettier.jsxSingleQuote": true,
+  "go.buildFlags": ["-tags=wireinject"],
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.defaultColorDecorators": "never"
+  },
+  "html.format.unformatted": "",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "notebook.defaultFormatter": "esbenp.prettier-vscode",
+  "workbench.activityBar.orientation": "vertical", // cursor test
+  "vspacecode.bindingOverrides": [
+    {
+      "keys": ["space"],
+      "name": "Space (Global Leader)",
+      "type": "bind",
+      "command": "vspacecode.space",
+      "when": "editorTextFocus || explorerViewletVisible || terminalFocus"
+    },
+    {
+      "keys": "w.t",
+      "name": "Toggle Terminal",
+      "type": "command",
+      "command": "workbench.action.terminal.toggleTerminal"
+    },
+    {
+      "keys": "w.w",
+      "name": "Toggle AI Sidebar",
+      "type": "command",
+      "command": "workbench.action.toggleAuxiliaryBar"
+    },
+    {
+      "keys": "w.e",
+      "name": "Focus First Editor Group",
+      "type": "command",
+      "command": "workbench.action.focusFirstEditorGroup"
+    }
+  ]
+}
