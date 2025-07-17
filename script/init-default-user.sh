@@ -26,7 +26,28 @@ else
     
     # 设置用户密码
     echo "请为用户 $USERNAME 设置密码："
-    passwd "$USERNAME"
+    echo "正在打开密码设置界面..."
+    
+    # 确保在交互式终端中执行 passwd 命令
+    if [ -t 0 ] && [ -t 1 ]; then
+        # 标准输入和输出都是终端
+        echo "请输入新密码（输入时不会显示字符）："
+        if passwd "$USERNAME"; then
+            echo "密码设置成功"
+        else
+            echo "密码设置失败，请稍后手动设置"
+            echo "使用命令: sudo passwd $USERNAME"
+        fi
+    else
+        # 非交互式环境，提供替代方案
+        echo "检测到非交互式环境，无法直接设置密码"
+        echo "请在脚本运行完成后手动设置密码："
+        echo "  sudo passwd $USERNAME"
+        echo ""
+        echo "注意：用户在设置密码之前无法登录"
+        echo ""
+        read -p "按回车键继续..." -r 2>/dev/null || true
+    fi
 fi
 
 # 检查 sudo 组是否存在
