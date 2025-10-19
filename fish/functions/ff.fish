@@ -57,6 +57,10 @@ function ff
                 set -l parts (string split '|' $cmd)
                 printf "  %-10s %s\n" $parts[1] $parts[2]
             end
+        case update
+            cd ~/.dotfile
+            git pull origin main
+            cd -
         case '*'
             if test -z "$argv[1]"
                 echo "Error: No command specified"
