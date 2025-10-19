@@ -17,8 +17,10 @@ function ff
             echo "Fish configuration reloaded!"
         case edit
             vim ~/.config/fish/custom.fish
-        case cd
+        case fish
             cd ~/.config/fish/
+        case dotfile
+            cd ~/.dotfile
         case pon
             set -gx https_proxy http://127.0.0.1:7890
             set -gx http_proxy http://127.0.0.1:7890
