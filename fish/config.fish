@@ -80,7 +80,7 @@ end
 # git
 # alias 
 alias gitb="git branch --show-current | tr -d '\n' | pbcopy"
-alias gci="golangci-lint run -c=~/.dotfile/.golangci.yml ./..."
+alias gci="golangci-lint run -c=~/.dotfile/golang/golangci.yml ./..."
 alias gmt="go mod tidy"
 alias gtc="go test -gcflags=all=-l -cover ./..."
 alias swg="swag init -o docs -g "
@@ -141,47 +141,6 @@ end
 
 if status is-interactive
     # Commands to run in interactive sessions can go here
-end
-
-# reload conf
-function fre
-    source ~/.config/fish/config.fish
-    echo "Fish configuration updated!"
-end
-
-function refish
-    source ~/.config/fish/config.fish
-    echo "Fish configuration updated!"
-end
-
-# vi config
-alias fvi="vim ~/.config/fish/custom.fish"
-# cd config
-alias fcd="cd ~/.config/fish/"
-
-function punset
-    set -e http_proxy
-    set -e https_proxy
-    set -e ftp_proxy
-    set -e all_proxy
-    set -e HTTP_PROXY
-    set -e HTTPS_PROXY
-    set -e FTP_PROXY
-    set -e ALL_PROXY
-    echo "Proxy environment variables have been reset."
-    pshow
-end
-
-function pshow
-    export | grep -i proxy
-end
-
-function pset
-    set -gx https_proxy http://127.0.0.1:7890
-    set -gx http_proxy http://127.0.0.1:7890
-    set -gx all_proxy socks5://127.0.0.1:7891
-    echo "Proxy environment variables have been set."
-    pshow
 end
 
 # source env

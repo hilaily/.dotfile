@@ -6,10 +6,12 @@
   quotepath = false
   editor = vim
   excludesfile = ~/.dotfile/git/.gitignore
-[push]
-  default = current
-[pull]
-  rebase = false
+[init]
+  defaultBranch = main
+[tag]
+  sort = version:refname
+[column]
+  ui = auto
 [color]
   status = auto
   diff = auto
@@ -17,17 +19,45 @@
   interactive = auto
   grep = auto
   ui = auto
-[merge]
-  tool = nvimdiff
+[push]
+  #default = current
+  default = simple
+  autoSetupRemote = true
+  followTags = true
+[fetch]
+  prune = true
+  pruneTags = true
+  all = true
+[pull]
+  rebase = false
+[diff]
+  algorithm = histogram
+  colorMoved = plain
+  mnemonicPrefix = true
+  renames = true
 [difftool "nvimdiff"]
   cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
+[merge]
+  tool = nvimdiff
 [mergetool "nvimdiff"]
   cmd = nvim -d \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
   trustExitCode = true
 [includeIf "gitdir:~/workrepo/"]
   path = ~/.workgitconfig
+[rebase]
+  autoSquash = true
+  autoStash = true
+  updateRefs = true
+[commit]
+  verbose = true
+[rerere]
+  enabled = true
+  autoupdate = true
+[help]
+  autocorrect = prompt
 [branch]
   autoSetupMerge = always
+  sort = -committerdate
 [alias]
   au = add -u
   co = checkout

@@ -89,6 +89,8 @@ if [ -d "$USER_HOME" ]; then
     echo "用户家目录配置完成"
 fi
 
+cp -r $HOME/.dotfile /home/$USERNAME/.dotfile
+
 echo ""
 echo "✅ 用户 $USERNAME 创建完成并已获得 sudo 权限"
 echo "💡 提示："

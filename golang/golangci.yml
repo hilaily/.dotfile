@@ -92,7 +92,7 @@ linters-settings:
       - name: cognitive-complexity
         severity: warning
         disabled: false
-        arguments: [14]
+        arguments: [20]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#constant-logical-expr
       - name: constant-logical-expr
         severity: warning
@@ -109,7 +109,7 @@ linters-settings:
       - name: cyclomatic
         severity: warning
         disabled: false
-        arguments: [10]
+        arguments: [20]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#datarace
       - name: datarace
         severity: warning

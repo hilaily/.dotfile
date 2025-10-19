@@ -264,6 +264,5 @@
   "[java]": {
     "editor.suggest.snippetsPreventQuickSuggestions": false
   },
-  "cursor.general.disableHttp2": true,
-  "cursor.general.disableHttp1SSE": true
+  "git.confirmSync": false
 }

@@ -1,0 +1,46 @@
+.PHONY: help all list
+
+# 脚本目录
+SCRIPT_DIR := script
+
+# 默认目标：显示帮助信息
+help:
+	@echo "Dotfile Management"
+	@echo ""
+	@echo "Usage: make <script-name>"
+	@echo "  Example: make brew-install"
+	@echo "           make fish-init"
+	@echo "           make docker-clean"
+	@echo ""
+	@echo "Available scripts:"
+	@ls -1 $(SCRIPT_DIR)/*.sh $(SCRIPT_DIR)/*.py 2>/dev/null | xargs -n1 basename | sed 's/\.[^.]*$$//' | sort | sed 's/^/  make /'
+	@echo ""
+	@echo "Quick commands:"
+	@echo "  make list           List all available scripts"
+	@echo "  make help           Show this help message"
+
+# 列出所有可用脚本
+list:
+	@echo "Available scripts in $(SCRIPT_DIR)/"
+	@ls -1 $(SCRIPT_DIR)/*.sh $(SCRIPT_DIR)/*.py 2>/dev/null | xargs -n1 basename
+
+#################################################################
+# 通用规则：自动映射命令到脚本文件
+#################################################################
+
+# 匹配所有命令，自动执行对应的脚本文件
+%:
+	@if [ -f "$(SCRIPT_DIR)/$@.sh" ]; then \
+		echo "Running $(SCRIPT_DIR)/$@.sh..."; \
+		bash $(SCRIPT_DIR)/$@.sh; \
+	elif [ -f "$(SCRIPT_DIR)/$@.py" ]; then \
+		echo "Running $(SCRIPT_DIR)/$@.py..."; \
+		python3 $(SCRIPT_DIR)/$@.py; \
+	elif [ "$@" = "init-default-user" ]; then \
+		echo "Running $(SCRIPT_DIR)/init-default-user.sh (requires sudo)..."; \
+		sudo bash $(SCRIPT_DIR)/init-default-user.sh; \
+	else \
+		echo "Error: No script found for '$@'"; \
+		echo "Run 'make list' to see available scripts"; \
+		exit 1; \
+	fi
