@@ -10,7 +10,7 @@ function ff
         "pst|Show proxy status" \
         "make|Run dotfile Makefile commands" \
         "help|Show this help message"
-    
+
     switch $argv[1]
         case reload
             source ~/.config/fish/config.fish
@@ -70,4 +70,3 @@ function ff
             echo "Run 'ff help' for usage information"
     end
 end
-
