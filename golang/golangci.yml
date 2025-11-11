@@ -1,5 +1,7 @@
 version: "2"
 run:
+  allow-parallel-runners: true
+  timeout: 5m # 超时时间
   tests: false
 linters:
   default: none
