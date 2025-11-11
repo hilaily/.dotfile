@@ -96,7 +96,7 @@
   },
   "vscode-neovim.mouseSelectionStartVisualMode": true,
   "go.lintTool": "golangci-lint",
-  "go.lintFlags": ["--fast"],
+  "go.lintFlags": ["--config=~/.dotfile/golang/golangci.yml"],
   "go.liveErrors": {
     "enabled": false,
     "delay": 500
