@@ -94,6 +94,18 @@
   # git reviewone foo.js bar.js
   reviewone = !vim -p +\"tabdo Gdiff $REVIEW_BASE\" +\"let g:gitgutter_diff_base = '$REVIEW_BASE'\"
   #git filter-branch -f --env-filter "GIT_AUTHOR_NAME='Laily'; GIT_AUTHOR_EMAIL='i@laily.net'; GIT_COMMITTER_NAME='Laily'; GIT_COMMITTER_EMAIL='i@laily.net';" HEAD
+  
+  # worktree
+  wt="worktree"
+  wta="worktree add"
+  wtb="worktree add -b"
+  wtr="worktree remove"
+  wtl="worktree list"
+  wtp="worktree prune"
+  # git wtbn feature-login   # 新建分支 + worktree
+  wtbn="!f(){ git worktree add -b "$1" ../"$1"; }; f"
+  # git wtn bugfix-123       # 自动创建 ../bugfix-123 (使用同名分支)
+  wtn="!f(){ git worktree add ../"$1" "$1"; }; f"
 [protocol "file"]
   allow = always
 

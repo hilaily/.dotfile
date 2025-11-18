@@ -33,7 +33,7 @@ linters:
           arguments:
             - 15
           severity: warning
-          disabled: false
+          disabled: true
         - name: atomic
           severity: warning
           disabled: false

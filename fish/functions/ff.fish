@@ -9,6 +9,8 @@ function ff
         "poff|Disable proxy (proxy off)" \
         "pst|Show proxy status" \
         "make|Run dotfile Makefile commands" \
+        "script|Run script from script directory" \
+        "update|Update dotfile" \
         "help|Show this help message"
 
     switch $argv[1]
@@ -48,6 +50,8 @@ function ff
             else
                 echo "Error: Dotfile directory not found at $dotfile_dir"
             end
+        case script
+            execute-script $argv[2..-1]
         case help
             echo "Usage: ff <command>"
             echo ""

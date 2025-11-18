@@ -264,5 +264,7 @@
   "[java]": {
     "editor.suggest.snippetsPreventQuickSuggestions": false
   },
-  "git.confirmSync": false
+  "git.confirmSync": false,
+  "editor.dropIntoEditor.preferences": [],
+  "whichkey.bindingOverrides": []
 }
