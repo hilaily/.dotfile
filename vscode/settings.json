@@ -266,5 +266,6 @@
   },
   "git.confirmSync": false,
   "editor.dropIntoEditor.preferences": [],
-  "whichkey.bindingOverrides": []
+  "whichkey.bindingOverrides": [],
+  "cursor.general.disableHttp2": true
 }

@@ -52,7 +52,7 @@ linters:
           disabled: false
         - name: cognitive-complexity
           arguments:
-            - 20
+            - 25
           severity: warning
           disabled: false
         - name: constant-logical-expr
@@ -66,7 +66,7 @@ linters:
           disabled: false
         - name: cyclomatic
           arguments:
-            - 20
+            - 25
           severity: warning
           disabled: false
         - name: datarace

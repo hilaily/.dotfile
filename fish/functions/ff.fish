@@ -4,7 +4,8 @@ function ff
     set -l commands \
         "reload|Reload fish configuration" \
         "edit|Edit custom fish configuration" \
-        "cd|Change to fish config directory" \
+        "fish|Change to fish config directory" \
+        "dotfile|Change to dotfile directory" \
         "pon|Enable proxy (proxy on)" \
         "poff|Disable proxy (proxy off)" \
         "pst|Show proxy status" \
@@ -12,6 +13,14 @@ function ff
         "script|Run script from script directory" \
         "update|Update dotfile" \
         "help|Show this help message"
+
+    # 确保 execute-script 可用（在 fish 自动加载前手动引入一次）
+    if not functions -q execute-script
+        set -l execute_script_path ~/.dotfile/fish/functions/execute-script.fish
+        if test -f $execute_script_path
+            source $execute_script_path
+        end
+    end
 
     switch $argv[1]
         case reload
@@ -51,6 +60,9 @@ function ff
                 echo "Error: Dotfile directory not found at $dotfile_dir"
             end
         case script
+            if not functions -q execute-script
+                source ~/.dotfile/fish/functions/execute-script.fish
+            end
             execute-script $argv[2..-1]
         case help
             echo "Usage: ff <command>"

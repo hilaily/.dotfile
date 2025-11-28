@@ -23,6 +23,14 @@ function add_to_path
     end
 end
 
+function is_command_exists
+    if command -v $argv[1] >/dev/null 2>&1
+        return 0
+    else
+        return 1
+    end
+end
+
 # set environment
 set paths_to_check /usr/sbin /usr/local/bin /usr/bin /bin /usr/sbin /sbin /opt/bin /opt/sbin /usr/syno/sbin /usr/syno/bin /usr/local/sbin $HOME/.local/bin
 for path in $paths_to_check do
@@ -165,3 +173,10 @@ if not string match -q -- $PNPM_HOME $PATH
     set -gx PATH "$PNPM_HOME" $PATH
 end
 # pnpm end
+
+
+############################################################
+if is_command_exists fnm
+    alias nvm="fnm"
+    fnm env --use-on-cd --shell fish | source
+end
