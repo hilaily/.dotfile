@@ -176,6 +176,13 @@ end
 
 
 ############################################################
+# fnm
+set FNM_PATH "/home/longbin/.local/share/fnm"
+if [ -d "$FNM_PATH" ]
+  set PATH "$FNM_PATH" $PATH
+  fnm env | source
+end
+
 if is_command_exists fnm
     alias nvm="fnm"
     fnm env --use-on-cd --shell fish | source
