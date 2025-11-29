@@ -1,9 +1,10 @@
 # Completions for ff command
 complete -c ff -f
-set -l ff_subcommands reload edit cd pon poff pst make script help
+set -l ff_subcommands reload edit pon poff pst make script help
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "reload" -d "Reload fish configuration"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "edit" -d "Edit custom fish configuration"
-complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "cd" -d "Change to fish config directory"
+complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "fish" -d "Change to fish config directory"
+complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "dotfile" -d "Change to dotfile directory"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "pon" -d "Enable proxy (proxy on)"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "poff" -d "Disable proxy (proxy off)"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "pst" -d "Show proxy status"
