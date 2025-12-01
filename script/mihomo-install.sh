@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./script/common/os-arch.sh
+source $HOME/.dotfile/script/common/os-arch.sh
 
 # 检查并安装 gunzip
 function check_gunzip() {
@@ -22,13 +22,6 @@ function install_mihomo() {
     local os_arch=$(get_os_arch)
     local base_url="https://oss-default.yumee.top/bin/mihomo"
     local url=""
-    
-    # 根据不同平台设置下载 URL
-    # 支持的平台示例:
-    # darwin-amd64: https://oss-default.yumee.top/bin/mihomo/mihomo-darwin-amd64.gz
-    # darwin-arm64: https://oss-default.yumee.top/bin/mihomo/mihomo-darwin-arm64.gz
-    # linux-amd64:  https://oss-default.yumee.top/bin/mihomo/mihomo-linux-amd64.gz
-    # linux-arm64:  https://oss-default.yumee.top/bin/mihomo/mihomo-linux-arm64.gz
     
     case $os_arch in
         "darwin-amd64"|"darwin-arm64"|"linux-amd64"|"linux-arm64")

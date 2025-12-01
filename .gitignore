@@ -7,3 +7,4 @@ _set_env.sh
 log
 cn.sh
 __pycache__
+Makefile

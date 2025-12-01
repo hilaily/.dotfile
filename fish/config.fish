@@ -59,12 +59,12 @@ set -gx HOMEBREW_BOTTLE_DOMAIN "https://mirrors.ustc.edu.cn/homebrew-bottles"
 set -gx GOPATH $HOME/go:$HOME/workrepo/go
 set -gx GOPROXY "goproxy.cn,direct"
 set -gx GOSUMDB "sum.golang.google.cn"
+set -gx EDITOR vim
 add_to_path $HOME/go/bin
 add_to_path $HOME/.yarn/bin $HOME/.config/yarn/global/node_modules/.bin
-
-#################################################################
-# node
-add_to_path /usr/local/node/bin
+function gtr
+    go test -gcflags=all=-l -v -run=$argv
+end
 
 #################################################################
 # python
@@ -77,11 +77,22 @@ end
 add_to_path $PYENV_ROOT/bin
 
 #################################################################
-# nvim
-add_to_path usr/local/nvim/bin /usr/local/osx-64/nvim/bin
-set -gx EDITOR vim
-function gtr
-    go test -gcflags=all=-l -v -run=$argv
+# node
+# add_to_path /usr/local/node/bin
+# add_to_path usr/local/nvim/bin /usr/local/osx-64/nvim/bin
+
+# fnm
+set FNM_PATH "$HOME/.local/share/fnm"
+if [ -d "$FNM_PATH" ]
+    set PATH "$FNM_PATH" $PATH
+    alias nvm="fnm"
+    fnm env --use-on-cd --shell fish | source
+end
+
+# pnpm
+set -gx PNPM_HOME $HOME/.pnpm
+if not string match -q -- $PNPM_HOME $PATH
+    set -gx PATH "$PNPM_HOME" $PATH
 end
 
 #################################################################
@@ -166,17 +177,3 @@ end
 # Added by OrbStack: command-line tools and integration
 # This won't be added again if you remove it.
 source ~/.orbstack/shell/init2.fish 2>/dev/null || :
-
-# pnpm
-set -gx PNPM_HOME $HOME/.pnpm
-if not string match -q -- $PNPM_HOME $PATH
-    set -gx PATH "$PNPM_HOME" $PATH
-end
-# pnpm end
-
-
-############################################################
-if is_command_exists fnm
-    alias nvm="fnm"
-    fnm env --use-on-cd --shell fish | source
-end

@@ -1,13 +1,14 @@
 # Completions for ff command
 complete -c ff -f
-set -l ff_subcommands reload edit cd pon poff pst make script help
+set -l ff_subcommands reload edit pon poff pst make script help
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "reload" -d "Reload fish configuration"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "edit" -d "Edit custom fish configuration"
-complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "cd" -d "Change to fish config directory"
+complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "fish" -d "Change to fish config directory"
+complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "dotfile" -d "Change to dotfile directory"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "pon" -d "Enable proxy (proxy on)"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "poff" -d "Disable proxy (proxy off)"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "pst" -d "Show proxy status"
-complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "make" -d "Run dotfile Makefile commands"
+# complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "make" -d "Run dotfile Makefile commands"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "script" -d "Run script from script directory"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "help" -d "Show this help message"
 
@@ -31,13 +32,6 @@ complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "help" -d
 # complete -c ff -n "__fish_seen_subcommand_from make" -a "tmux-init" -d "Initialize Tmux config"
 # complete -c ff -n "__fish_seen_subcommand_from make" -a "cursor-init" -d "Initialize Cursor config"
 # complete -c ff -n "__fish_seen_subcommand_from make" -a "init-default-user" -d "Initialize default user (sudo)"
-
-# Clean scripts
-complete -c ff -n "__fish_seen_subcommand_from make" -a "brew-clean" -d "Clean Homebrew cache"
-complete -c ff -n "__fish_seen_subcommand_from make" -a "docker-clean" -d "Clean Docker resources"
-
-# Utils
-complete -c ff -n "__fish_seen_subcommand_from make" -a "croncheck" -d "Check cron status"
 
 # script 子命令的补全 - 动态列出 script 目录下的脚本
 function __ff_list_scripts

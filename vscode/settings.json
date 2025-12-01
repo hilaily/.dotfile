@@ -160,7 +160,8 @@
   "remote.SSH.useLocalServer": false,
   "remote.SSH.connectTimeout": 30,
   "remote.SSH.remotePlatform": {
-    "box1": "linux"
+    "box1": "linux",
+    "hx80": "linux"
   },
   "editor.formatOnSave": true,
   "pylint.enabled": false,
@@ -267,5 +268,6 @@
   "git.confirmSync": false,
   "editor.dropIntoEditor.preferences": [],
   "whichkey.bindingOverrides": [],
-  "cursor.general.disableHttp2": true
+  "cursor.general.disableHttp2": true,
+  "remote.SSH.localServerDownload": "always"
 }
