@@ -113,44 +113,25 @@ function dc
     if command -v docker-compose >/dev/null
         set compose_cmd docker-compose
     else
-        set compose_cmd "docker compose"
+        set compose_cmd docker compose
     end
 
     switch $argv[1]
-        case build
-            $compose_cmd build $argv[2..-1]
-        case run
-            $compose_cmd run $argv[2..-1]
-        case exec
-            $compose_cmd exec $argv[2..-1]
-        case l
-            $compose_cmd logs $argv[2..-1]
         case lf
             $compose_cmd logs -f $argv[2..-1]
-        case restart
-            $compose_cmd restart $argv[2..-1]
-        case rm
-            $compose_cmd rm $argv[2..-1]
-        case pull
-            $compose_cmd pull $argv[2..-1]
-        case stop
-            $compose_cmd stop $argv[2..-1]
-        case kill
-            $compose_cmd kill $argv[2..-1]
-        case pause
-            $compose_cmd pause $argv[2..-1]
-        case unpause
-            $compose_cmd unpause $argv[2..-1]
-        case up
+        case upd
             $compose_cmd up -d $argv[2..-1] && $compose_cmd logs -f $argv[2..-1]
-        case reup
+        case reupd
             $compose_cmd up -d --force-recreate $argv[2..-1] && $compose_cmd logs -f $argv[2..-1]
-        case down
-            $compose_cmd down $argv[2..-1]
         case '*'
             $compose_cmd $argv
     end
 end
+
+#################################################################
+# systemctl
+alias sc="systemctl"
+alias jc="journalctl"
 
 #################################################################
 # other
