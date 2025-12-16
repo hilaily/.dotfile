@@ -109,29 +109,70 @@ alias sourceit="source ~/.config/fish/config.fish"
 #################################################################
 # docker
 function dc
+    # 检查第一个参数是否是 is_sudo
+    set use_sudo false
+    set args $argv
+    
+    if test (count $argv) -gt 0; and test "$argv[1]" = "is_sudo"
+        set use_sudo true
+        set args $argv[2..-1]
+    end
+    
     # 检查 docker-compose 是否可用
     if command -v docker-compose >/dev/null
         set compose_cmd docker-compose
     else
         set compose_cmd docker compose
     end
+    
+    # 构建执行命令（如果需要 sudo，添加 sudo 前缀）
+    if test $use_sudo = true
+        set exec_cmd command sudo $compose_cmd
+    else
+        set exec_cmd $compose_cmd
+    end
 
-    switch $argv[1]
+    switch $args[1]
         case lf
-            $compose_cmd logs -f $argv[2..-1]
+            $exec_cmd logs -f $args[2..-1]
         case upd
-            $compose_cmd up -d $argv[2..-1] && $compose_cmd logs -f $argv[2..-1]
+            $exec_cmd up -d $args[2..-1] && $exec_cmd logs -f $args[2..-1]
         case reupd
-            $compose_cmd up -d --force-recreate $argv[2..-1] && $compose_cmd logs -f $argv[2..-1]
+            $exec_cmd up -d --force-recreate $args[2..-1] && $exec_cmd logs -f $args[2..-1]
         case '*'
-            $compose_cmd $argv
+            $exec_cmd $args
     end
 end
 
 #################################################################
 # systemctl
-alias sc="systemctl"
-alias jc="journalctl"
+function sc
+    systemctl $argv
+end
+
+function jc
+    journalctl $argv
+end
+
+# 智能 sudo 包装，支持展开函数别名
+function sudo --wraps sudo
+    if test (count $argv) -gt 0
+        set cmd $argv[1]
+        switch $cmd
+            case sc
+                command sudo systemctl $argv[2..-1]
+            case jc
+                command sudo journalctl $argv[2..-1]
+            case dc
+                # 调用 dc 函数并传递 is_sudo 参数
+                dc is_sudo $argv[2..-1]
+            case '*'
+                command sudo $argv
+        end
+    else
+        command sudo $argv
+    end
+end
 
 #################################################################
 # other

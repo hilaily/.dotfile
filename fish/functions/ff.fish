@@ -64,6 +64,11 @@ function ff
                 source ~/.dotfile/fish/functions/execute-script.fish
             end
             execute-script $argv[2..-1]
+        case s
+            if not functions -q execute-script
+                source ~/.dotfile/fish/functions/execute-script.fish
+            end
+            execute-script $argv[2..-1]
         case help
             echo "Usage: ff <command>"
             echo ""
