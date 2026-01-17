@@ -57,8 +57,9 @@ return {
 				},
 			},
 		},
-		config = function(_, opts)
-			require("nvim-treesitter.configs").setup(opts)
+		config = function()
+			-- LazyVim 已经通过 opts 自动调用了 setup
+			-- 这里只做额外的配置
 
 			-- MDX
 			vim.filetype.add({
