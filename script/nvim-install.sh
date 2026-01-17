@@ -4,7 +4,7 @@ set -e
 
 # install neovim
 os_arch=$(uname -s)-$(uname -m)
-ver=v0.10.2
+ver=v0.11.5
 
 case $os_arch in
 "Darwin-x86_64")
