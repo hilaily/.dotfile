@@ -9,6 +9,7 @@ return {
 			inlay_hints = { enabled = false },
 			---@type lspconfig.options
 			servers = {
+				bufls = {}, -- Protocol Buffers LSP
 				cssls = {},
 				tailwindcss = {
 					root_dir = function(...)

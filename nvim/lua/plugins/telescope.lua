@@ -115,9 +115,11 @@ return {
 			local telescope = require("telescope")
 			local actions = require("telescope.actions")
 			local fb_actions = require("telescope").extensions.file_browser.actions
-			local trouble = require("trouble.providers.telescope")
+			local trouble = require("trouble.sources.telescope")
 
-			opts.defaults = vim.tbl_deep_extend("force", opts.defaults, {
+			-- 确保 opts 和其子表存在
+			opts = opts or {}
+			opts.defaults = vim.tbl_deep_extend("force", opts.defaults or {}, {
 				wrap_results = true,
 				layout_strategy = "horizontal",
 				layout_config = { prompt_position = "top" },
@@ -127,20 +129,20 @@ return {
 					i = {
 						["<C-c>"] = actions.close,
 						["<ESC>"] = actions.close,
-						["<C-j>"] = actions.move_selection_next,
-						["<C-k>"] = actions.move_selection_previous,
-						["<c-t>"] = trouble.open_with_trouble,
-						["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
+					["<C-j>"] = actions.move_selection_next,
+					["<C-k>"] = actions.move_selection_previous,
+					["<c-t>"] = trouble.open,
+					["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
 					},
 					n = {
 						["<C-j>"] = actions.move_selection_next,
 						["<C-k>"] = actions.move_selection_previous,
-						["<c-t>"] = trouble.open_with_trouble,
+						["<c-t>"] = trouble.open,
 						["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist
 					},
 				},
 			})
-			opts.pickers = {
+			opts.pickers = vim.tbl_deep_extend("force", opts.pickers or {}, {
 				diagnostics = {
 					theme = "ivy",
 					initial_mode = "normal",
@@ -148,8 +150,8 @@ return {
 						preview_cutoff = 9999,
 					},
 				},
-			}
-			opts.extensions = {
+			})
+			opts.extensions = vim.tbl_deep_extend("force", opts.extensions or {}, {
 				file_browser = {
 					theme = "dropdown",
 					-- disables netrw and use telescope-file-browser in its place
@@ -178,7 +180,7 @@ return {
 						},
 					},
 				},
-			}
+			})
 			telescope.setup(opts)
 			require("telescope").load_extension("fzf")
 			require("telescope").load_extension("file_browser")

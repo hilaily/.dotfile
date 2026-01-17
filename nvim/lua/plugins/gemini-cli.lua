@@ -1,4 +1,4 @@
-return {
+	return {
 	{
 		"marcinjahn/gemini-cli.nvim",
 		cmd = "Gemini", -- 懒加载，使用 :Gemini 命令时加载
@@ -6,7 +6,8 @@ return {
 			"folke/snacks.nvim", -- 必需的依赖
 		},
 		keys = {
-			{ "<leader>aa", "<cmd>Gemini ask<cr>", desc = "Ask Gemini" },
+			{ "<leader>a", nil, desc = "Gemini CLI" },
+			{ "<leader>aq", "<cmd>Gemini ask<cr>", desc = "Ask Gemini" },
 			{ "<leader>ac", "<cmd>Gemini toggle<cr>", desc = "Toggle Gemini CLI" },
 			{ "<leader>af", "<cmd>Gemini add_file<cr>", desc = "Add File to Gemini" },
 			{ "<leader>ar", "<cmd>Gemini --resume<cr>", desc = "Resume Gemini" },

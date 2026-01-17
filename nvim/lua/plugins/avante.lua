@@ -1,4 +1,4 @@
-return {
+	return {
 	{
 		"yetone/avante.nvim",
 		enabled = false, -- 临时禁用 avante
