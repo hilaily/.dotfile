@@ -67,7 +67,7 @@
   "sync.gist": "3c4e02a02a0d110622006b8c8b058fa5",
   "go.languageServerFlags": ["-rpc.trace"],
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "vscode.json-language-features"
   },
   "files.associations": {
     "*.html": "html",

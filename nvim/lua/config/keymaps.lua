@@ -108,7 +108,15 @@ keymap.set('n', "<Leader>sM", "<cmd>Telescope man_pages<cr>", {desc= "Man Pages"
 keymap.set('n', "<Leader>sR", "<cmd>Telescope registers<cr>", {desc= "Registers" })
 keymap.set('n', "<Leader>st", "<cmd>Telescope live_grep<cr>", {desc= "Text" })
 keymap.set('n', "<Leader>sT", "<cmd>Telescope live_grep<cr>", {desc= "Text" })
-keymap.set('n', "<Leader>s,", "<cmd>FzfLua grep_cword<cr>", {desc= "Search word under cursor" })
+keymap.set('n', "<Leader>s,", function()
+	local ok, fzf_lua = pcall(require, "fzf-lua")
+	if ok then
+		fzf_lua.grep_cword()
+	else
+		vim.notify("fzf-lua not available, falling back to Telescope", vim.log.levels.WARN)
+		require("telescope.builtin").grep_string({ word_match = "-w" })
+	end
+end, {desc= "Search word under cursor" })
 
 -- <Leader>S
 keymap.set('n', "<Leader>Ss", "<cmd>SessionSave<cr>", {desc= "Save Session" })
@@ -131,8 +139,69 @@ keymap.set('n', '<Leader>;', ':Dashboard<CR>', { noremap = true, silent = true }
 
 -- Ctrl
 keymap.set('n', '<C-p>', function()
-	require("telescope.builtin").find_files()
-end, { noremap = true, silent = true, desc = "Find Files" })
+	local builtin = require("telescope.builtin")
+	
+	-- 获取最近编辑的文件，创建路径映射
+	local recent_paths = {}
+	for _, file in ipairs(vim.v.oldfiles) do
+		if vim.fn.filereadable(file) == 1 then
+			local abs_path = vim.fn.fnamemodify(file, ":p")
+			local rel_path = vim.fn.fnamemodify(file, ":.")
+			recent_paths[abs_path] = true
+			recent_paths[rel_path] = true
+			-- 也添加文件名（不含路径）
+			local filename = vim.fn.fnamemodify(file, ":t")
+			if not recent_paths[filename] then
+				recent_paths[filename] = true
+			end
+		end
+	end
+	
+	-- 使用 find_files，fzf 扩展会自动提供基于频率的排序
+	-- 如果没有 fzf，我们使用自定义排序器
+	local ok, fzf_ext = pcall(require, "telescope._extensions.fzf")
+	if ok and fzf_ext then
+		-- 使用 fzf 扩展，它会自动提供基于频率的排序
+		builtin.find_files({
+			hidden = true,
+			no_ignore = false,
+		})
+	else
+		-- 如果没有 fzf 扩展，使用自定义排序
+		local sorters = require("telescope.sorters")
+		builtin.find_files({
+			hidden = true,
+			no_ignore = false,
+			sorter = sorters.Sorter:new({
+				discard = true,
+				scoring_function = function(_, prompt, line, entry)
+					local score = 0
+					local path = entry.path or entry.value or line
+					
+					-- 检查是否在最近编辑的文件列表中
+					local abs_path = vim.fn.fnamemodify(path, ":p")
+					local rel_path = vim.fn.fnamemodify(path, ":.")
+					local filename = vim.fn.fnamemodify(path, ":t")
+					
+					if recent_paths[abs_path] or recent_paths[rel_path] or recent_paths[filename] then
+						score = 1000 -- 提高分数，让最近的文件排在前面
+					end
+					
+					-- 添加基本的模糊匹配分数
+					if prompt and prompt ~= "" then
+						local lower_path = path:lower()
+						local lower_prompt = prompt:lower()
+						if lower_path:find(lower_prompt, 1, true) then
+							score = score + 100
+						end
+					end
+					
+					return score
+				end,
+			}),
+		})
+	end
+end, { noremap = true, silent = true, desc = "Find Files (Recent First)" })
 -- better window movement
 keymap.set('n', '<C-h>', '<C-w>h', { silent = true })
 keymap.set('n', '<C-j>', '<C-w>j', { silent = true })
@@ -151,6 +220,48 @@ keymap.set('n', '<C-q>', ':call QuickFixToggle()<CR>', { noremap = true, silent 
 keymap.set('n', '  ', function()
 	require("telescope.builtin").live_grep()
 end, { noremap = true, silent = true, desc = "Search in Files (two spaces)" })
+
+-- LSP keymaps (gd, gD, K, gi, etc.)
+-- Delete LazyVim's default mappings first to avoid conflicts
+-- Use vim.schedule to ensure this runs after LazyVim loads
+vim.schedule(function()
+	vim.keymap.del('n', 'gd')
+	vim.keymap.del('n', 'gD')
+	vim.keymap.del('n', 'gi')
+	vim.keymap.del('n', 'K')
+	vim.keymap.del('n', 'gt')
+	vim.keymap.del('n', 'gr')
+end)
+
+-- Go to definition
+keymap.set('n', 'gd', function()
+	vim.lsp.buf.definition()
+end, { noremap = true, silent = true, desc = "Goto Definition" })
+
+-- Go to declaration
+keymap.set('n', 'gD', function()
+	vim.lsp.buf.declaration()
+end, { noremap = true, silent = true, desc = "Goto Declaration" })
+
+-- Go to implementation
+keymap.set('n', 'gi', function()
+	vim.lsp.buf.implementation()
+end, { noremap = true, silent = true, desc = "Goto Implementation" })
+
+-- Hover
+keymap.set('n', 'K', function()
+	vim.lsp.buf.hover()
+end, { noremap = true, silent = true, desc = "Hover Documentation" })
+
+-- Go to type definition
+keymap.set('n', 'gt', function()
+	vim.lsp.buf.type_definition()
+end, { noremap = true, silent = true, desc = "Goto Type Definition" })
+
+-- References
+keymap.set('n', 'gr', function()
+	vim.lsp.buf.references()
+end, { noremap = true, silent = true, desc = "References" })
 
 -- Other
 -- better edit
