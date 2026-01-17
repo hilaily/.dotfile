@@ -5,6 +5,10 @@ return {
 			{
 				"nvim-telescope/telescope-fzf-native.nvim",
 				build = "make",
+				-- 确保编译成功，如果 make 失败，尝试 cmake
+				cond = function()
+					return vim.fn.executable("make") == 1 or vim.fn.executable("cmake") == 1
+				end,
 			},
 			"nvim-telescope/telescope-file-browser.nvim",
 		},
@@ -125,6 +129,15 @@ return {
 				layout_config = { prompt_position = "top" },
 				sorting_strategy = "ascending",
 				winblend = 0,
+				-- 确保文件查找器正常工作
+				file_ignore_patterns = {
+					"^.git/",
+					"^node_modules/",
+					"^.DS_Store",
+				},
+				-- 使用 fzf 排序（如果可用）
+				path_display = { "truncate" },
+				dynamic_preview_title = true,
 				mappings = {
 					i = {
 						["<C-c>"] = actions.close,
@@ -151,6 +164,22 @@ return {
 					},
 				},
 			})
+			
+			-- Configure live_grep: use ripgrep if available, otherwise fallback to grep
+			-- Note: Install ripgrep for better performance: brew install ripgrep
+			if vim.fn.executable("rg") == 0 then
+				vim.notify("ripgrep (rg) not found. live_grep will use grep (slower). Install with: brew install ripgrep", vim.log.levels.WARN)
+				opts.defaults = opts.defaults or {}
+				opts.defaults.vimgrep_arguments = {
+					"grep",
+					"--recursive",
+					"--no-heading",
+					"--with-filename",
+					"--line-number",
+					"--column",
+					"--smart-case",
+				}
+			end
 			opts.extensions = vim.tbl_deep_extend("force", opts.extensions or {}, {
 				file_browser = {
 					theme = "dropdown",
@@ -182,8 +211,14 @@ return {
 				},
 			})
 			telescope.setup(opts)
-			require("telescope").load_extension("fzf")
-			require("telescope").load_extension("file_browser")
+			
+			-- 安全地加载扩展
+			pcall(function()
+				require("telescope").load_extension("fzf")
+			end)
+			pcall(function()
+				require("telescope").load_extension("file_browser")
+			end)
 		end,
 	},
 }

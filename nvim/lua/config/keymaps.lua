@@ -101,7 +101,7 @@ keymap.set('n', "<Leader>sb", "<cmd>Telescope git_branches<cr>", {desc= "Checkou
 keymap.set('n', "<Leader>sc", "<cmd>:nohl<cr>", {desc= "no highlight" })
 keymap.set('n', "<Leader>sd", "<cmd>Telescope lsp_document_diagnostics<cr>", {desc= "Document Diagnostics" })
 keymap.set('n', "<Leader>sD", "<cmd>Telescope lsp_workspace_diagnostics<cr>", {desc= "Workspace Diagnostics" })
-keymap.set('n', "<Leader>sf", "<cmd>Telescope find_files<CR><cr>", {desc= "Find File" })
+	keymap.set('n', "<Leader>sf", "<cmd>Telescope find_files<cr>", {desc= "Find File" })
 keymap.set('n', "<Leader>sr", function() require("telescope.builtin").oldfiles({ cwd = vim.loop.cwd() }) end, {desc= "Old File" })
 keymap.set('n', "<Leader>sm", "<cmd>Telescope marks<cr>", {desc= "Marks" })
 keymap.set('n', "<Leader>sM", "<cmd>Telescope man_pages<cr>", {desc= "Man Pages" })
@@ -130,7 +130,9 @@ keymap.set('n', "<Leader>zz", "<cmd>TZAtaraxis<cr>", {desc= "toggle zen" })
 keymap.set('n', '<Leader>;', ':Dashboard<CR>', { noremap = true, silent = true })
 
 -- Ctrl
-keymap.set('n', '<C-p>', ":Telescope find_files<CR>", { noremap = true, silent = true })
+keymap.set('n', '<C-p>', function()
+	require("telescope.builtin").find_files()
+end, { noremap = true, silent = true, desc = "Find Files" })
 -- better window movement
 keymap.set('n', '<C-h>', '<C-w>h', { silent = true })
 keymap.set('n', '<C-j>', '<C-w>j', { silent = true })
@@ -144,6 +146,11 @@ keymap.set('n', '<C-Right>', ':vertical resize +2<CR>', { silent = true })
 
 keymap.set('n', '<C-q>', ':call QuickFixToggle()<CR>', { noremap = true, silent = true })
 
+-- Override two spaces (LazyVim default fzf) with Telescope live_grep
+-- Search for keywords in file contents
+keymap.set('n', '  ', function()
+	require("telescope.builtin").live_grep()
+end, { noremap = true, silent = true, desc = "Search in Files (two spaces)" })
 
 -- Other
 -- better edit
