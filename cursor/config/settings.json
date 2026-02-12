@@ -161,7 +161,8 @@
   "remote.SSH.connectTimeout": 30,
   "remote.SSH.remotePlatform": {
     "box1": "linux",
-    "hx80": "linux"
+    "hx80": "linux",
+    "hx20": "linux"
   },
   "editor.formatOnSave": true,
   "pylint.enabled": false,
@@ -273,5 +274,16 @@
   "remote.SSH.localServerDownload": "always",
   "workbench.colorCustomizations": {},
   "javascript.format.enable": false,
-  "typescript.format.enable": false
+  "typescript.format.enable": false,
+  "terminal.integrated.env.linux": {
+    "ANTHROPIC_AUTH_TOKEN": "sk-cp-QvKTjyX6D0bf5u0f9mB-mpaYcyCwdXq3nubxEzTFFtiGuYmLmC_nyxGOsK3jzmJSCMix2rXJ90iSFb6Xva0R30ZY1ilwMLf44npGnAzTWgtwUIqoGwHmQsc",
+    "ANTHROPIC_BASE_URL": "https://api.minimaxi.com/anthropic",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "MiniMax-M2.1",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "MiniMax-M2.1",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "MiniMax-M2.1",
+    "ANTHROPIC_MODEL": "MiniMax-M2.1",
+    "API_TIMEOUT_MS": "3000000",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": 1
+  },
+  "claudeCode.preferredLocation": "panel"
 }

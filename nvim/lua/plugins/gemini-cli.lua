@@ -1,6 +1,7 @@
 	return {
 	{
 		"marcinjahn/gemini-cli.nvim",
+		enabled = false, -- 临时禁用 gemini-cli 插件
 		cmd = "Gemini", -- 懒加载，使用 :Gemini 命令时加载
 		dependencies = {
 			"folke/snacks.nvim", -- 必需的依赖

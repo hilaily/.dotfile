@@ -201,4 +201,8 @@ end
 source ~/.orbstack/shell/init2.fish 2>/dev/null || :
 
 # mise (formerly rtx)
-mise activate fish | source
+if command -v mise >/dev/null
+    add_to_path $HOME/.local/bin
+    add_to_path $HOME/.local/share/mise/shims
+    mise activate fish | source
+end
