@@ -1,43 +1,95 @@
 return {
-	{
-		"folke/sidekick.nvim",
-		dependencies = {
-			"folke/snacks.nvim", -- sidekick 推荐的 prompt / cli picker 支持
-			"nvim-treesitter/nvim-treesitter", -- 可选，但推荐用于 diff 窗口高亮
-		},
-		opts = {
-			-- 配置 CLI 工具
-			cli = {
-				tools = {
-					gemini = {
-						-- Gemini CLI 命令
-						cmd = { "gemini" },
-						-- 传递给 gemini 命令的参数
-						args = {},
-						-- 环境变量配置
-						-- 不设置 GEMINI_API_KEY，让 Gemini CLI 使用已缓存的 OAuth 凭证
-						env = {
-							-- 代理配置（如果需要通过代理访问）
-							-- 从环境变量读取代理设置，如果没有设置则使用系统默认
-							HTTP_PROXY = os.getenv("HTTP_PROXY") or os.getenv("http_proxy"),
-							HTTPS_PROXY = os.getenv("HTTPS_PROXY") or os.getenv("https_proxy"),
-							ALL_PROXY = os.getenv("ALL_PROXY") or os.getenv("all_proxy"),
-							NO_PROXY = os.getenv("NO_PROXY") or os.getenv("no_proxy"),
-						},
-					},
-				},
-				-- 设置默认工具
-				default = "gemini",
+	"folke/sidekick.nvim",
+	opts = {
+		-- add any options here
+		cli = {
+			mux = {
+				backend = "zellij",
+				enabled = true,
 			},
 		},
-		config = function(_, opts)
-			require("sidekick").setup(opts)
-			-- 在配置加载后设置快捷键
-			vim.keymap.set("n", "<leader>as", function()
-				local sidekick = require("sidekick.cli")
-				sidekick.toggle({ name = "gemini", focus = true })
-			end, { desc = "Sidekick: Toggle Gemini CLI" })
-		end,
+	},
+	keys = {
+		{
+			"<tab>",
+			function()
+				-- if there is a next edit, jump to it, otherwise apply it if any
+				if not require("sidekick").nes_jump_or_apply() then
+					return "<Tab>" -- fallback to normal tab
+				end
+			end,
+			expr = true,
+			desc = "Goto/Apply Next Edit Suggestion",
+		},
+		{
+			"<c-.>",
+			function()
+				require("sidekick.cli").toggle()
+			end,
+			desc = "Sidekick Toggle",
+			mode = { "n", "t", "i", "x" },
+		},
+		{
+			"<leader>aa",
+			function()
+				require("sidekick.cli").toggle()
+			end,
+			desc = "Sidekick Toggle CLI",
+		},
+		{
+			"<leader>as",
+			function()
+				require("sidekick.cli").select()
+			end,
+			-- Or to select only installed tools:
+			-- require("sidekick.cli").select({ filter = { installed = true } })
+			desc = "Select CLI",
+		},
+		{
+			"<leader>ad",
+			function()
+				require("sidekick.cli").close()
+			end,
+			desc = "Detach a CLI Session",
+		},
+		{
+			"<leader>at",
+			function()
+				require("sidekick.cli").send({ msg = "{this}" })
+			end,
+			mode = { "x", "n" },
+			desc = "Send This",
+		},
+		{
+			"<leader>af",
+			function()
+				require("sidekick.cli").send({ msg = "{file}" })
+			end,
+			desc = "Send File",
+		},
+		{
+			"<leader>av",
+			function()
+				require("sidekick.cli").send({ msg = "{selection}" })
+			end,
+			mode = { "x" },
+			desc = "Send Visual Selection",
+		},
+		{
+			"<leader>ap",
+			function()
+				require("sidekick.cli").prompt()
+			end,
+			mode = { "n", "x" },
+			desc = "Sidekick Select Prompt",
+		},
+		-- Example of a keybinding to open Claude directly
+		{
+			"<leader>ac",
+			function()
+				require("sidekick.cli").toggle({ name = "claude", focus = true })
+			end,
+			desc = "Sidekick Toggle Claude",
+		},
 	},
 }
-

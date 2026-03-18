@@ -20,7 +20,7 @@
   "vim.normalModeKeyBindingsNonRecursive": [
     {
       "before": ["<space>"],
-      "commands": ["vspacecode.space"]
+      "commands": ["vspacecode.space"],
     },
     {
       "before": [","],
@@ -28,15 +28,15 @@
         "vspacecode.space",
         {
           "command": "whichkey.triggerKey",
-          "args": "m"
-        }
-      ]
-    }
+          "args": "m",
+        },
+      ],
+    },
   ],
   "vim.visualModeKeyBindingsNonRecursive": [
     {
       "before": ["<space>"],
-      "commands": ["vspacecode.space"]
+      "commands": ["vspacecode.space"],
     },
     {
       "before": [","],
@@ -44,18 +44,18 @@
         "vspacecode.space",
         {
           "command": "whichkey.triggerKey",
-          "args": "m"
-        }
-      ]
+          "args": "m",
+        },
+      ],
     },
     {
       "before": [">"],
-      "commands": ["editor.action.indentLines"]
+      "commands": ["editor.action.indentLines"],
     },
     {
       "before": ["<"],
-      "commands": ["editor.action.outdentLines"]
-    }
+      "commands": ["editor.action.outdentLines"],
+    },
   ],
   "workbench.panel.location": "right",
   "gitHistory.hideCommitViewExplorer": true,
@@ -67,16 +67,16 @@
   "sync.gist": "3c4e02a02a0d110622006b8c8b058fa5",
   "go.languageServerFlags": ["-rpc.trace"],
   "[json]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
+    "editor.defaultFormatter": "vscode.json-language-features",
   },
   "files.associations": {
     "*.html": "html",
     "*.json": "jsonc",
     "NOTES.txt": "helm",
-    "Dockerfile": "dockerfile"
+    "Dockerfile": "dockerfile",
   },
   "[helm]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
+    "editor.defaultFormatter": "redhat.vscode-yaml",
     // "editor.formatOnSave": false // alternatively, force it to leave you alone
   },
   "gitlens.codeLens.recentChange.enabled": false,
@@ -87,19 +87,19 @@
   // "terminal.integrated.shell.osx": "/bin/zsh",
   "editor.fontFamily": "Fira Code, Sarasa Fixed SC Nerd Font, Menlo, Monaco, 'Courier New', monospace",
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "search.followSymlinks": false,
   "go.autocompleteUnimportedPackages": true,
   "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "vscode-neovim.mouseSelectionStartVisualMode": true,
   "go.lintTool": "golangci-lint",
   "go.lintFlags": ["--config=~/.dotfile/golang/golangci.yml"],
   "go.liveErrors": {
     "enabled": false,
-    "delay": 500
+    "delay": 500,
   },
   "python.languageServer": "Pylance",
   "go.overwriteGoplsMiddleware": {},
@@ -107,20 +107,20 @@
   "[go]": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit"
+      "source.organizeImports": "explicit",
     },
     "editor.snippetSuggestions": "none",
-    "editor.defaultFormatter": "golang.go"
+    "editor.defaultFormatter": "golang.go",
   },
   "[go.mod]": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit"
-    }
+      "source.organizeImports": "explicit",
+    },
   },
   "gopls": {
     "usePlaceholders": true,
-    "staticcheck": false
+    "staticcheck": false,
   },
   "go.testFlags": ["-v"],
   "vscode-neovim.neovimExecutablePaths.darwin": "/usr/local/bin/nvim",
@@ -136,22 +136,22 @@
   "security.workspace.trust.untrustedFiles": "open",
   "workbench.tree.indent": 4,
   "[html]": {
-    "editor.defaultFormatter": "vscode.html-language-features"
+    "editor.defaultFormatter": "vscode.html-language-features",
   },
   "python.defaultInterpreterPath": "/usr/local/bin/python3",
   "[python]": {
     "editor.formatOnType": true,
-    "editor.defaultFormatter": "ms-python.python"
+    "editor.defaultFormatter": "ms-python.python",
   },
   "[go][go.mod]": {
     "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit"
-    }
+      "source.organizeImports": "explicit",
+    },
   },
   "update.showReleaseNotes": false,
   "terminal.integrated.defaultProfile.osx": "fish",
   "extensions.experimental.affinity": {
-    "asvetliakov.vscode-neovim": 1
+    "asvetliakov.vscode-neovim": 1,
   },
   "makefile.configureOnOpen": false,
   "python.terminal.activateEnvInCurrentTerminal": true,
@@ -162,7 +162,7 @@
   "remote.SSH.remotePlatform": {
     "box1": "linux",
     "hx80": "linux",
-    "hx20": "linux"
+    "hx20": "linux",
   },
   "editor.formatOnSave": true,
   "pylint.enabled": false,
@@ -170,50 +170,50 @@
   "python.analysis.packageIndexDepths": [
     {
       "name": "sklearn",
-      "depth": 2
+      "depth": 2,
     },
     {
       "name": "matplotlib",
-      "depth": 2
+      "depth": 2,
     },
     {
       "name": "scipy",
-      "depth": 2
+      "depth": 2,
     },
     {
       "name": "django",
-      "depth": 2
+      "depth": 2,
     },
     {
       "name": "flask",
-      "depth": 2
+      "depth": 2,
     },
     {
       "name": "fastapi",
-      "depth": 2
-    }
+      "depth": 2,
+    },
   ],
   "[shellscript]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
+    "editor.defaultFormatter": "foxundermoon.shell-format",
   },
   // "[dockerfile]": {
   //   "editor.defaultFormatter": "foxundermoon.shell-format"
   // },
   "[ignore]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
+    "editor.defaultFormatter": "foxundermoon.shell-format",
   },
   "[properties]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
+    "editor.defaultFormatter": "foxundermoon.shell-format",
   },
   "editor.codeActionsOnSave": {
     // "source.organizeImports": "explicit",
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "explicit",
   },
   "[proto3]": {
-    "editor.defaultFormatter": "zxh404.vscode-proto3"
+    "editor.defaultFormatter": "zxh404.vscode-proto3",
   },
   "[dotenv]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
+    "editor.defaultFormatter": "foxundermoon.shell-format",
   },
   "typescript.preferences.quoteStyle": "single",
   "javascript.preferences.quoteStyle": "single",
@@ -221,7 +221,7 @@
   "pretty-formatter.quoteConvert": "single",
   "html.completion.attributeDefaultValue": "singlequotes",
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "prettier.jsxSingleQuote": true,
   "go.buildFlags": ["-tags=wireinject"],
@@ -231,7 +231,7 @@
     "editor.tabSize": 2,
     "editor.autoIndent": "advanced",
     "diffEditor.ignoreTrimWhitespace": false,
-    "editor.defaultColorDecorators": "never"
+    "editor.defaultColorDecorators": "never",
   },
   "html.format.unformatted": "",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -243,34 +243,33 @@
       "name": "Space (Global Leader)",
       "type": "bind",
       "command": "vspacecode.space",
-      "when": "editorTextFocus || explorerViewletVisible || terminalFocus"
+      "when": "editorTextFocus || explorerViewletVisible || terminalFocus",
     },
     {
       "keys": "w.t",
       "name": "Toggle Terminal",
       "type": "command",
-      "command": "workbench.action.terminal.toggleTerminal"
+      "command": "workbench.action.terminal.toggleTerminal",
     },
     {
       "keys": "w.w",
       "name": "Toggle AI Sidebar",
       "type": "command",
-      "command": "workbench.action.toggleAuxiliaryBar"
+      "command": "workbench.action.toggleAuxiliaryBar",
     },
     {
       "keys": "w.e",
       "name": "Focus First Editor Group",
       "type": "command",
-      "command": "workbench.action.focusFirstEditorGroup"
-    }
+      "command": "workbench.action.focusFirstEditorGroup",
+    },
   ],
   "[java]": {
-    "editor.suggest.snippetsPreventQuickSuggestions": false
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
   },
   "git.confirmSync": false,
   "editor.dropIntoEditor.preferences": [],
   "whichkey.bindingOverrides": [],
-  "cursor.general.disableHttp2": true,
   "remote.SSH.localServerDownload": "always",
   "workbench.colorCustomizations": {},
   "javascript.format.enable": false,
@@ -283,7 +282,7 @@
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "MiniMax-M2.1",
     "ANTHROPIC_MODEL": "MiniMax-M2.1",
     "API_TIMEOUT_MS": "3000000",
-    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": 1
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": 1,
   },
-  "claudeCode.preferredLocation": "panel"
+  "claudeCode.preferredLocation": "panel",
 }
