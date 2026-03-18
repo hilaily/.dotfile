@@ -112,19 +112,19 @@ function dc
     # 检查第一个参数是否是 is_sudo
     set use_sudo false
     set args $argv
-    
-    if test (count $argv) -gt 0; and test "$argv[1]" = "is_sudo"
+
+    if test (count $argv) -gt 0; and test "$argv[1]" = is_sudo
         set use_sudo true
         set args $argv[2..-1]
     end
-    
+
     # 检查 docker-compose 是否可用
     if command -v docker-compose >/dev/null
         set compose_cmd docker-compose
     else
         set compose_cmd docker compose
     end
-    
+
     # 构建执行命令（如果需要 sudo，添加 sudo 前缀）
     if test $use_sudo = true
         set exec_cmd command sudo $compose_cmd
@@ -205,4 +205,14 @@ if command -v mise >/dev/null
     add_to_path $HOME/.local/bin
     add_to_path $HOME/.local/share/mise/shims
     mise activate fish | source
+end
+
+function vim
+    if command -q nvim
+        command nvim $argv
+    else if command -q vim
+        command vim $argv
+    else
+        command vi $argv
+    end
 end
