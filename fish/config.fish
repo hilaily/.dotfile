@@ -158,6 +158,10 @@ function jc
     journalctl $argv
 end
 
+function jcu
+    journalctl --user $argv
+end
+
 # 智能 sudo 包装，支持展开函数别名
 function sudo --wraps sudo
     if test (count $argv) -gt 0
