@@ -150,6 +150,10 @@ function sc
     systemctl $argv
 end
 
+function scu
+    systemctl --user $argv
+end
+
 function jc
     journalctl $argv
 end
@@ -216,3 +220,7 @@ function vim
         command vi $argv
     end
 end
+
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH
