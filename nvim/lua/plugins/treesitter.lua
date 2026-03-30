@@ -17,6 +17,7 @@ return {
 			"java",
 			"json",
 			"lua",
+			"markdown", -- render-markdown.nvim
 			"php",
 			"proto", -- Protocol Buffers
 			"rust",

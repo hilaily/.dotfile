@@ -31,11 +31,16 @@ echo "------------------------------------------------------"
 
 # 3. 遍历 ping 扫描
 # -c 1: 发送 1 个包
-# -W 1: 等待 1 秒超时
+# 超时：Linux (iputils) 的 -W 为秒；macOS 的 -W 为毫秒，需区分
 # >/dev/null 2>&1: 丢弃所有输出
 # &: 在后台运行，以并行加速扫描
+if [ "$(uname -s)" = "Darwin" ]; then
+    PING_WAIT=( -W 1000 )
+else
+    PING_WAIT=( -W 1 )
+fi
 for i in {1..254}; do
-    ping -c 1 -W 1 "${NETWORK_PREFIX}${i}" >/dev/null 2>&1 &
+    ping -c 1 "${PING_WAIT[@]}" "${NETWORK_PREFIX}${i}" >/dev/null 2>&1 &
 done
 
 # 4. 等待所有后台 ping 任务完成
@@ -48,8 +53,8 @@ echo "✅ Ping 扫描完成。正在检查 ARP 表以显示活跃主机..."
 # 5. 检查 ARP 表以获取活跃 IP 和 MAC 地址
 # -a: 显示所有 ARP 条目
 # grep -v "incomplete": 排除未解析成功的条目
-# grep "${NETWORK_PREFIX%.*}": 只显示当前网段的条目
-arp -a | grep -v "incomplete" | grep "${NETWORK_PREFIX%.*}"
+# grep -F "${NETWORK_PREFIX}": 用完整前三段前缀（含末尾点）匹配，避免 192.168.1 误匹配 192.168.10.x
+arp -a | grep -v "incomplete" | grep -F -- "${NETWORK_PREFIX}"
 
 echo "------------------------------------------------------"
 echo "扫描结束。"
