@@ -9,10 +9,10 @@ return {
 			--"bashls",
 			"shfmt",
 			--"tailwindcss",
-			"tsserver", -- TypeScript/JavaScript LSP
+			"typescript-language-server", -- TypeScript/JavaScript LSP
 			"pylyzer",
 			--"cssls",
-			"bufls", -- Protocol Buffers LSP
+			"buf", -- Protocol Buffers LSP
 			"gopls", -- Go LSP
 		})
 		end,

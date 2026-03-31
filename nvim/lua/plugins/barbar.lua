@@ -1,4 +1,5 @@
 return {
+	{ "akinsho/bufferline.nvim", enabled = false },
 	{
 		-- tabline
 		'romgrk/barbar.nvim',

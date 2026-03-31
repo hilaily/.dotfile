@@ -1,15 +1,10 @@
 return {
-	-- lsp servers
 	{
-		"mason-org/mason.nvim",
-		"mason-org/mason-lspconfig.nvim",
 		"neovim/nvim-lspconfig",
-		event = { "BufReadPre", "BufReadPost", "BufNewFile" },
 		opts = {
 			inlay_hints = { enabled = false },
-			---@type lspconfig.options
 			servers = {
-				bufls = {}, -- Protocol Buffers LSP
+				buf_ls = {},
 				cssls = {},
 				tailwindcss = {
 					root_dir = function(...)
@@ -28,7 +23,7 @@ return {
 						)(...)
 					end,
 				},
-				tsserver = {
+				ts_ls = {
 					root_dir = function(...)
 						return require("lspconfig.util").root_pattern(
 							"tsconfig.json",
@@ -72,7 +67,6 @@ return {
 					},
 				},
 				lua_ls = {
-					-- enabled = false,
 					single_file_support = true,
 					settings = {
 						Lua = {
@@ -82,11 +76,6 @@ return {
 							completion = {
 								workspaceWord = true,
 								callSnippet = "Both",
-							},
-							misc = {
-								parameters = {
-									-- "--log-level=trace",
-								},
 							},
 							hint = {
 								enable = true,
@@ -104,7 +93,6 @@ return {
 							},
 							diagnostics = {
 								disable = { "incomplete-signature-doc", "trailing-space" },
-								-- enable = false,
 								groupSeverity = {
 									strong = "Warning",
 									strict = "Warning",
@@ -137,7 +125,7 @@ return {
 					},
 				},
 				gopls = {
-					cmd = { "gopls", "serve" }, -- use cmd in path, I can update it easily
+					cmd = { "gopls", "serve" },
 					settings = {
 						gopls = {
 							analyses = {
@@ -151,9 +139,7 @@ return {
 						},
 					},
 				},
-				pylsp = {
-					cmd = { "pylyzer", "--server" },
-					filetypes = { "python" },
+				pylyzer = {
 					settings = {
 						python = {
 							checkOnType = false,

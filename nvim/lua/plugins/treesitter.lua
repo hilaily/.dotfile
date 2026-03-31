@@ -15,17 +15,24 @@ return {
 			"graphql",
 			"html",
 			"java",
+			"javascript",
 			"json",
-			"lua",
-			"markdown", -- render-markdown.nvim
+			"latex",
+			-- "lua", "vim", "vimdoc", "query", "markdown" 等由 Neovim 内置，
+			-- 不在此安装，避免 nvim-treesitter 装的新版 parser 与内置 query 不兼容。
+			"norg",
 			"php",
 			"proto", -- Protocol Buffers
+			"regex",
 			"rust",
 			"scss",
 			"sql",
 			"svelte",
 			"toml",
 			"tsx",
+			"typescript",
+			"typst",
+			"vue",
 			"yaml",
 		},
 

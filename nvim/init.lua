@@ -2,6 +2,22 @@ if vim.loader then
 	vim.loader.enable()
 end
 
+-- 让 Mason / 健康检查能找到本仓库常用的本地 CLI（fd、lazygit、tree-sitter 等）
+local _local_bin = vim.fn.expand("~/.local/bin")
+if vim.fn.isdirectory(_local_bin) == 1 then
+	vim.env.PATH = _local_bin .. ":" .. vim.env.PATH
+end
+-- 全局 npm 包（如 mermaid-cli 的 `mmdc`）通常在 $(npm prefix -g)/bin
+do
+	local ok, out = pcall(vim.fn.system, { "npm", "prefix", "-g" })
+	if ok and out and out ~= "" then
+		local npm_bin = vim.fn.trim(out) .. "/bin"
+		if vim.fn.isdirectory(npm_bin) == 1 then
+			vim.env.PATH = npm_bin .. ":" .. vim.env.PATH
+		end
+	end
+end
+
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
