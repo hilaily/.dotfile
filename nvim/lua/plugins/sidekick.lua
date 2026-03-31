@@ -1,40 +1,35 @@
 return {
 	"folke/sidekick.nvim",
+	enabled = true,
 	opts = {
-		-- add any options here
 		cli = {
 			mux = {
-				backend = "zellij",
-				enabled = true,
+				backend = vim.env.ZELLIJ and "zellij" or "tmux",
+				enabled = vim.fn.executable("zellij") == 1 or vim.fn.executable("tmux") == 1,
 			},
 		},
 	},
 	keys = {
 		{
-			"<tab>",
+			"<leader>ao",
 			function()
-				-- if there is a next edit, jump to it, otherwise apply it if any
-				if not require("sidekick").nes_jump_or_apply() then
-					return "<Tab>" -- fallback to normal tab
-				end
+				require("sidekick.cli").toggle({ focus = true })
 			end,
-			expr = true,
-			desc = "Goto/Apply Next Edit Suggestion",
+			desc = "Sidekick Open",
 		},
 		{
-			"<c-.>",
+			"<leader>ax",
 			function()
-				require("sidekick.cli").toggle()
+				require("sidekick.cli").hide()
 			end,
-			desc = "Sidekick Toggle",
-			mode = { "n", "t", "i", "x" },
+			desc = "Sidekick Close",
 		},
 		{
 			"<leader>aa",
 			function()
 				require("sidekick.cli").toggle()
 			end,
-			desc = "Sidekick Toggle CLI",
+			desc = "Sidekick Toggle",
 		},
 		{
 			"<leader>as",
@@ -82,14 +77,6 @@ return {
 			end,
 			mode = { "n", "x" },
 			desc = "Sidekick Select Prompt",
-		},
-		-- Example of a keybinding to open Claude directly
-		{
-			"<leader>ac",
-			function()
-				require("sidekick.cli").toggle({ name = "claude", focus = true })
-			end,
-			desc = "Sidekick Toggle Claude",
 		},
 	},
 }
