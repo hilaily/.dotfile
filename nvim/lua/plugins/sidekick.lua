@@ -11,6 +11,14 @@ return {
 	},
 	keys = {
 		{
+			"<C-\\>",
+			function()
+				require("sidekick.cli").toggle()
+			end,
+			mode = { "n", "i", "t" },
+			desc = "Sidekick Toggle",
+		},
+		{
 			"<leader>ao",
 			function()
 				require("sidekick.cli").toggle({ focus = true })
