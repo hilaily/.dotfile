@@ -2,20 +2,6 @@
 
 set -e
 
-# 引入切换脚本
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# 根据环境变量选择安装方式
-if [ "$CN_REGION" = "1" ]; then
-    echo "[INFO] 国内环境，使用阿里云镜像安装 Docker"
-    install_docker_cn
-else
-    echo "[INFO] 国外环境，使用官方源安装 Docker"
-    install_docker_intl
-fi
-
-echo "[INFO] Docker 安装完成，请重新登录或运行: source ~/.config/fish/config.fish"
-
 #################################################################
 # 国内安装（使用阿里云镜像）
 install_docker_cn() {
@@ -66,3 +52,13 @@ install_docker_intl() {
     sudo usermod -aG docker $USER
 }
 
+# 根据环境变量选择安装方式（须在函数定义之后调用）
+if [ "$CN_REGION" = "1" ]; then
+    echo "[INFO] 国内环境，使用阿里云镜像安装 Docker"
+    install_docker_cn
+else
+    echo "[INFO] 国外环境，使用官方源安装 Docker"
+    install_docker_intl
+fi
+
+echo "[INFO] Docker 安装完成，请重新登录或运行: source ~/.config/fish/config.fish"
