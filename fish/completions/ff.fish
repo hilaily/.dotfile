@@ -1,6 +1,6 @@
 # Completions for ff command
 complete -c ff -f
-set -l ff_subcommands reload edit fish dotfile pon poff pst make script s update help region
+set -l ff_subcommands reload edit fish dotfile pon poff pst make script s update help region region
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "reload" -d "Reload fish configuration"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "edit" -d "Edit custom fish configuration"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "fish" -d "Change to fish config directory"
@@ -12,7 +12,7 @@ complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "pst" -d 
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "script" -d "Run script from script directory"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "help" -d "Show this help message"
 
-complete -c ff -n "__fish_seen_subcommand_from region" -a toggle -d "Toggle CN_REGION (国内/国外)"
+complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "region" -d "Toggle or set CN_REGION (mirror/proxy region)"
 
 # # make 子命令的补全 - 直接使用脚本文件名
 # complete -c ff -n "__fish_seen_subcommand_from make" -a "help" -d "Show all make targets"
