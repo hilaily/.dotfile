@@ -8,3 +8,4 @@ log
 cn.sh
 __pycache__
 Makefile
+.claude/

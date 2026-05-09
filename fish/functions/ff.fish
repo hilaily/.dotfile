@@ -12,6 +12,7 @@ function ff
         "make|Run dotfile Makefile commands" \
         "script|Run script from script directory" \
         "update|Update dotfile" \
+        "region|Toggle or set CN_REGION (mirror/proxy region)" \
         "help|Show this help message"
 
     # 确保 execute-script 可用（在 fish 自动加载前手动引入一次）
@@ -82,6 +83,24 @@ function ff
             cd ~/.dotfile
             git pull origin main
             cd -
+        case region
+            set -l sub toggle
+            if test (count $argv) -ge 2
+                set sub $argv[2]
+            end
+            switch $sub
+                case toggle
+                    if test "$CN_REGION" = "1"
+                        set -gx CN_REGION 0
+                        echo "Switched to: 0 (国外)"
+                    else
+                        set -gx CN_REGION 1
+                        echo "Switched to: 1 (国内)"
+                    end
+                case '*'
+                    echo "Usage: ff region [toggle]"
+                    echo "Unknown subcommand: $sub"
+            end
         case '*'
             if test -z "$argv[1]"
                 echo "Error: No command specified"
