@@ -10,6 +10,7 @@ help:
 	@echo "Usage: make <script-name>"
 	@echo "  Example: make brew-install"
 	@echo "           make fish-init"
+	@echo "           make zsh-init"
 	@echo "           make docker-clean"
 	@echo ""
 	@echo "Available scripts:"

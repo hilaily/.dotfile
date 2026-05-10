@@ -52,4 +52,3 @@ vim.g.gitblame_enabled = 0
 -- local cc = 'lunar'
 -- vim.opt.background="dark"
 -- vim.cmd('colorscheme ' .. cc)
-vim.lsp.enable = true
