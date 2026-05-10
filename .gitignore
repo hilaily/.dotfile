@@ -9,3 +9,4 @@ cn.sh
 __pycache__
 Makefile
 .claude/
+script/clash.sh
