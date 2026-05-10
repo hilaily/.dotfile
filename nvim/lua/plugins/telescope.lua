@@ -1,6 +1,8 @@
 return {
 	{
 		"telescope.nvim",
+		-- 未启用 `editor.telescope` extra 时 Lazy 不会注册 `:Telescope`，自定义 `<cmd>Telescope …` 键会失效。
+		cmd = { "Telescope" },
 		dependencies = {
 			{
 				"nvim-telescope/telescope-fzf-native.nvim",

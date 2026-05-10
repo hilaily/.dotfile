@@ -5,7 +5,7 @@ return {
 		cli = {
 			mux = {
 				backend = vim.env.ZELLIJ and "zellij" or "tmux",
-				enabled = vim.fn.executable("zellij") == 1 or vim.fn.executable("tmux") == 1,
+				enabled = false,
 			},
 		},
 	},
