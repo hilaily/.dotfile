@@ -1,6 +1,11 @@
 #################################################################
 # option
 fish_vi_key_bindings
+# Vi 模式下：Ctrl+A / Ctrl+E 行首、行尾（readline 习惯）
+bind --mode insert \ca beginning-of-line
+bind --mode insert \ce end-of-line
+bind --mode default \ca beginning-of-line
+bind --mode default \ce end-of-line
 
 #################################################################
 # basic 

@@ -11,7 +11,7 @@ return {
 	},
 	keys = {
 		{
-			"<C-\\>",
+			"<M-\\>",
 			function()
 				require("sidekick.cli").toggle()
 			end,
