@@ -1,0 +1,37 @@
+# 主题推荐：Catppuccin, Tokyo Night, 或 Gruvbox
+theme = Atom One Dark
+
+# 字体设置 (建议安装带 Nerd Font 图标的字体)
+font-family = "FiraCode Nerd Font"
+font-size = 16
+font-feature = -calt  # 如果你不喜欢连字(Ligatures)可以禁用
+
+# 窗口样式：隐藏标题栏，让视觉更纯粹
+window-decoration = true
+macos-titlebar-style = transparent
+window-title-font-family = "FiraCode Nerd Font"
+
+# 背景透明度与模糊 (适合 2017 MBP 的精致感)
+background-opacity = 0.95
+background-blur-radius = 20
+
+
+# 将 Option 键映射为 Alt/Meta 键 (对 Neovim/Tmux 极其重要)
+macos-option-as-alt = true
+
+# 自动定位到当前 Shell 所在的目录
+working-directory = home
+
+# 选中文本时自动复制到剪贴板
+copy-on-select = true
+
+# 确认退出（防止误触 Command+Q 关掉正在运行的任务）
+confirm-close-surface = true
+
+# 光标样式：块状且闪烁
+cursor-style = block
+cursor-style-blink = true
+
+# 滚动条设置：通常建议隐藏，通过 Tmux 控制滚动
+mouse-scroll-multiplier = 1
+scrollback-limit = 10000
