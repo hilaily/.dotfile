@@ -285,4 +285,5 @@
     "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": 1,
   },
   "claudeCode.preferredLocation": "panel",
+  "window.autoDetectColorScheme": false,
 }
