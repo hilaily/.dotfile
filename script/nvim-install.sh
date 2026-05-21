@@ -35,9 +35,9 @@ case $os_arch in
     cd /tmp
     rm -rf nvim-linux64.tar.gz
     wget https://github.com/neovim/neovim/releases/download/$ver/nvim-linux-x86_64.tar.gz
-    tar zxf nvim-linux64.tar.gz
+    tar zxf nvim-linux-x86_64.tar.gz
     [ -e /usr/local/nvim ] && sudo mv -f /usr/local/nvim /usr/local/nvim-bak
-    sudo mv nvim-linux64 /usr/local/nvim
+    sudo mv nvim-linux-x86_64 /usr/local/nvim
     sudo ln -sf /usr/local/nvim/bin/nvim /usr/local/bin/vim
     sudo ln -sf /usr/local/nvim/bin/nvim /usr/local/bin/nvim
     echo ""
