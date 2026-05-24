@@ -7,10 +7,18 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-SRC="$HOME/.dotfile/ghostty/config"
-DEST="$HOME/.config/ghostty/config"
+SRC="$HOME/.dotfile/ghostty/config.ghostty"
+
+# 根据平台确定目标路径
+if [[ "$(uname)" == "Darwin" ]]; then
+    DEST="$HOME/Library/Application Support/com.mitchellh.ghostty/config.ghostty"
+else
+    CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+    DEST="$CONFIG_HOME/ghostty/config.ghostty"
+fi
 
 echo -e "${YELLOW}初始化 Ghostty 配置...${NC}"
+echo -e "${YELLOW}目标路径：$DEST${NC}"
 
 # 目标目录不存在则创建
 mkdir -p "$(dirname "$DEST")"

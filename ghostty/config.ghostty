@@ -35,3 +35,15 @@ cursor-style-blink = true
 # 滚动条设置：通常建议隐藏，通过 Tmux 控制滚动
 mouse-scroll-multiplier = 1
 scrollback-limit = 10000
+
+# Ghostty 配置
+desktop-notifications = true
+
+#term = xterm-256color
+
+scrollbar = system
+mouse-shift-capture = true
+
+shell-integration-features = ssh-env,ssh-terminfo
+# 开启所有 shell 集成特性，包含 ssh-terminfo 自动注入
+shell-integration = fish
