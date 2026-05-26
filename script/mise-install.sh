@@ -35,6 +35,27 @@ else
     mise --version
 fi
 
+# 链接 dotfile 中的 mise 配置
+MISE_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/mise"
+DOTFILE_MISE_CONFIG="$HOME/.dotfile/mise/config.toml"
+mkdir -p "$MISE_CONFIG_DIR"
+if [ -f "$DOTFILE_MISE_CONFIG" ]; then
+    if [ -f "$MISE_CONFIG_DIR/config.toml" ] && [ ! -L "$MISE_CONFIG_DIR/config.toml" ]; then
+        mv "$MISE_CONFIG_DIR/config.toml" "$MISE_CONFIG_DIR/config.toml.bak"
+        echo -e "${YELLOW}已备份原有配置到 config.toml.bak${NC}"
+    fi
+    ln -sf "$DOTFILE_MISE_CONFIG" "$MISE_CONFIG_DIR/config.toml"
+    echo -e "${GREEN}已链接 mise 配置: $MISE_CONFIG_DIR/config.toml${NC}"
+    mise trust "$DOTFILE_MISE_CONFIG" 2>/dev/null || true
+fi
+
+# 安装配置中的工具
+if command -v mise &> /dev/null && [ -f "$MISE_CONFIG_DIR/config.toml" ]; then
+    echo -e "${YELLOW}正在安装 mise 工具...${NC}"
+    mise install
+    echo -e "${GREEN}mise 工具安装完成${NC}"
+fi
+
 # 验证安装
 if command -v mise &> /dev/null
 then
