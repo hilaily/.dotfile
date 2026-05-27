@@ -3,6 +3,16 @@ return {
 	enabled = true,
 	opts = {
 		cli = {
+			win = {
+				layout = "right",
+				split = {
+					width = 0,
+					height = 20,
+				},
+				config = function(terminal)
+					terminal.opts.split.width = math.floor(vim.o.columns * 0.6)
+				end,
+			},
 			mux = {
 				backend = vim.env.ZELLIJ and "zellij" or "tmux",
 				enabled = true,

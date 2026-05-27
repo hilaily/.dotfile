@@ -1,8 +1,0 @@
-[tools]
-fzf = "latest"
-go = "1.25"
-neovim = "latest"
-opencode = "latest"
-python = "3.13"
-ripgrep = "latest"
-"github:hilaily/agent-notify" = { version = "latest", rename_exe = "agent-notify" }
