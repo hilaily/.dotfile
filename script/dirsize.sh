@@ -6,7 +6,7 @@ usage() {
     cat <<'EOF'
 用法: dirsize [选项] [目录]
 
-查询目录大小，默认扫描当前目录的直接子目录。
+查询目录大小，默认列出当前目录下的直接子目录和子文件。
 
 选项:
   -a, --all        递归显示所有子目录的大小
@@ -16,11 +16,11 @@ usage() {
   -h, --help       显示帮助信息
 
 示例:
-  dirsize                  当前目录的直接子目录大小
-  dirsize -n 10            当前目录的直接子目录，取前 10 名
+  dirsize                  当前目录的直接子项大小
+  dirsize -n 10            当前目录的直接子项，取前 10 名
   dirsize -a               递归显示所有子目录
   dirsize -d 2 -n 5        深度 2，取前 5 名
-  dirsize -n 5 /var/log    查看 /var/log 的子目录，取前 5 名
+  dirsize -n 5 /var/log    查看 /var/log 的子项，取前 5 名
 EOF
     exit 0
 }
@@ -77,18 +77,53 @@ if $REVERSE; then
     sort_flag="-h"
 fi
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    result=$(sudo du -h -d "$DEPTH" "$TARGET_DIR" 2>/dev/null | awk -v dir="$TARGET_DIR" '$2 != dir {print}' | sort $sort_flag)
-else
-    result=$(sudo du -h --max-depth="$DEPTH" "$TARGET_DIR" 2>/dev/null | awk -v dir="$TARGET_DIR" '$2 != dir {print}' | sort $sort_flag)
-fi
+list_dir_sizes() {
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sudo du -h -d "$DEPTH" "$TARGET_DIR" 2>/dev/null
+    else
+        sudo du -h --max-depth="$DEPTH" "$TARGET_DIR" 2>/dev/null
+    fi | awk -v dir="$TARGET_DIR" '$2 != dir {print}'
+}
+
+# 用 ls 读取直接子文件（一次 readdir），避免 find 递归
+list_direct_file_sizes() {
+    sudo ls -lA "$TARGET_DIR" 2>/dev/null | awk -v dir="$TARGET_DIR" '
+        function human(bytes,    units, i, size) {
+            split("B K M G T", units, " ")
+            i = 1
+            size = bytes
+            while (size >= 1024 && i < 5) {
+                size /= 1024
+                i++
+            }
+            if (i == 1) {
+                return sprintf("%dB", bytes)
+            }
+            return sprintf("%.1f%s", size, units[i])
+        }
+        /^-/ {
+            name = $9
+            for (i = 10; i <= NF; i++) {
+                name = name " " $i
+            }
+            printf "%s\t%s/%s\n", human($5), dir, name
+        }
+    '
+}
+
+result=$(
+    {
+        list_dir_sizes
+        list_direct_file_sizes
+    } | sort $sort_flag
+)
 
 if [[ "$TOP" -gt 0 ]]; then
     result=$(echo "$result" | head -n "$TOP")
 fi
 
 if [[ -z "$result" ]]; then
-    echo "目录为空或无子目录"
+    echo "目录为空"
     exit 0
 fi
 
