@@ -1,6 +1,6 @@
 # Completions for ff command
 complete -c ff -f
-set -l ff_subcommands reload edit fish dotfile pon poff pst make script s update help region ssh init copy help region
+set -l ff_subcommands reload edit fish dotfile pon poff pst make script s update help region ssh init copy dirsize help region
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "reload" -d "Reload fish configuration"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "edit" -d "Edit custom fish configuration"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "fish" -d "Change to fish config directory"
@@ -14,6 +14,14 @@ complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "help" -d
 
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "region" -d "Toggle or set CN_REGION (mirror/proxy region)"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "ssh" -d "SSH init (keys + config.d) or copy config to remote"
+complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "dirsize" -d "Show directory sizes"
+
+complete -c ff -n "__fish_seen_subcommand_from dirsize" -s a -l all -d "Recursively show all subdirectories"
+complete -c ff -n "__fish_seen_subcommand_from dirsize" -s d -l depth -d "Recursion depth (default 1)" -r
+complete -c ff -n "__fish_seen_subcommand_from dirsize" -s n -l top -d "Show top N only" -r
+complete -c ff -n "__fish_seen_subcommand_from dirsize" -s r -l reverse -d "Sort smallest first"
+complete -c ff -n "__fish_seen_subcommand_from dirsize" -s h -l help -d "Show help"
+complete -c ff -n "__fish_seen_subcommand_from dirsize" -a "(__fish_complete_directories)" -d "Directory"
 
 complete -c ff -n "__fish_seen_subcommand_from ssh; and not __fish_seen_subcommand_from init copy help" -a init -d "Ensure SSH key and config.d Include"
 complete -c ff -n "__fish_seen_subcommand_from ssh; and not __fish_seen_subcommand_from init copy help" -a copy -d "Copy specified SSH config file(s) to remote"

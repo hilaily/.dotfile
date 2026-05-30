@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -eu
 
 usage() {
     cat <<'EOF'
@@ -33,13 +33,31 @@ TARGET_DIR="."
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        -a|--all)    ALL=true; shift ;;
-        -d|--depth)  DEPTH="$2"; shift 2 ;;
-        -n|--top)    TOP="$2"; shift 2 ;;
-        -r|--reverse) REVERSE=true; shift ;;
-        -h|--help)   usage ;;
-        -*)          echo "未知选项: $1" >&2; usage ;;
-        *)           TARGET_DIR="$1"; shift ;;
+    -a | --all)
+        ALL=true
+        shift
+        ;;
+    -d | --depth)
+        DEPTH="$2"
+        shift 2
+        ;;
+    -n | --top)
+        TOP="$2"
+        shift 2
+        ;;
+    -r | --reverse)
+        REVERSE=true
+        shift
+        ;;
+    -h | --help) usage ;;
+    -*)
+        echo "未知选项: $1" >&2
+        usage
+        ;;
+    *)
+        TARGET_DIR="$1"
+        shift
+        ;;
     esac
 done
 
@@ -48,7 +66,7 @@ if [[ ! -d "$TARGET_DIR" ]]; then
     exit 1
 fi
 
-TARGET_DIR="${TARGET_DIR%/}"
+TARGET_DIR="$(cd "$TARGET_DIR" && pwd -P)"
 
 if $ALL; then
     DEPTH=999
@@ -60,9 +78,9 @@ if $REVERSE; then
 fi
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    result=$(du -h -d "$DEPTH" "$TARGET_DIR" 2>/dev/null | grep -v "^.*${TARGET_DIR}$" | sort $sort_flag)
+    result=$(sudo du -h -d "$DEPTH" "$TARGET_DIR" 2>/dev/null | awk -v dir="$TARGET_DIR" '$2 != dir {print}' | sort $sort_flag)
 else
-    result=$(du -h --max-depth="$DEPTH" "$TARGET_DIR" 2>/dev/null | grep -v "^.*${TARGET_DIR}$" | sort $sort_flag)
+    result=$(sudo du -h --max-depth="$DEPTH" "$TARGET_DIR" 2>/dev/null | awk -v dir="$TARGET_DIR" '$2 != dir {print}' | sort $sort_flag)
 fi
 
 if [[ "$TOP" -gt 0 ]]; then

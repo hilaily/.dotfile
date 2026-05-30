@@ -14,6 +14,7 @@ function ff
         "update|Update dotfile" \
         "region|Toggle or set CN_REGION (mirror/proxy region)" \
         "ssh|SSH init (keys + config.d) or copy config to remote" \
+        "dirsize|Show directory sizes (du wrapper)" \
         "help|Show this help message"
 
     # 确保 execute-script 可用（在 fish 自动加载前手动引入一次）
@@ -89,6 +90,14 @@ function ff
                 source ~/.dotfile/fish/functions/ff-ssh.fish
             end
             ff_ssh $argv[2..-1]
+        case dirsize
+            set -l script_path ~/.dotfile/script/dirsize.sh
+            if test -f $script_path
+                bash $script_path $argv[2..-1]
+            else
+                echo "Error: dirsize script not found at $script_path"
+                return 1
+            end
         case region
             set -l sub toggle
             if test (count $argv) -ge 2
