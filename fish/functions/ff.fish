@@ -13,6 +13,7 @@ function ff
         "script|Run script from script directory" \
         "update|Update dotfile" \
         "region|Toggle or set CN_REGION (mirror/proxy region)" \
+        "ssh|SSH init (keys + config.d) or copy config to remote" \
         "help|Show this help message"
 
     # 确保 execute-script 可用（在 fish 自动加载前手动引入一次）
@@ -83,6 +84,11 @@ function ff
             cd ~/.dotfile
             git pull origin main
             cd -
+        case ssh
+            if not functions -q ff_ssh
+                source ~/.dotfile/fish/functions/ff-ssh.fish
+            end
+            ff_ssh $argv[2..-1]
         case region
             set -l sub toggle
             if test (count $argv) -ge 2
