@@ -1,11 +1,38 @@
 #!/bin/bash
 
-echo 'Link fish config file'
-# 备份并链接 config.fish
-if [ -f "$HOME/.config/fish/config.fish" ] && [ ! -L "$HOME/.config/fish/config.fish" ]; then
-    mv $HOME/.config/fish/config.fish $HOME/.config/fish/config.fish.bak
+LOCAL_CONFIG="$HOME/.config/fish/config.fish"
+DEFAULT_PATH="$HOME/.dotfile/fish/default.fish"
+SOURCE_LINE="source $DEFAULT_PATH"
+
+mkdir -p "$HOME/.config/fish"
+
+echo 'Setup fish config.fish wrapper'
+
+# 旧版迁移：如果 config.fish 是指向 dotfile 的 symlink（老布局），移除
+if [ -L "$LOCAL_CONFIG" ]; then
+    link_target=$(readlink "$LOCAL_CONFIG")
+    case "$link_target" in
+        */dotfile/fish/config.fish|*/dotfile/fish/default.fish)
+            echo "  Removing legacy symlink: $LOCAL_CONFIG -> $link_target"
+            rm "$LOCAL_CONFIG"
+            ;;
+    esac
 fi
-ln -sf $HOME/.dotfile/fish/config.fish $HOME/.config/fish/config.fish
+
+# 不存在 -> 创建只含一行 source 的本地 wrapper
+# 存在但未 source default.fish -> 在文件顶部插入 source 行
+# 已 source -> 跳过
+if [ ! -f "$LOCAL_CONFIG" ]; then
+    echo "$SOURCE_LINE" > "$LOCAL_CONFIG"
+    echo "  Created $LOCAL_CONFIG (sources default.fish)"
+elif ! grep -qE '^[[:space:]]*source.*default\.fish' "$LOCAL_CONFIG"; then
+    tmp=$(mktemp)
+    { echo "$SOURCE_LINE"; echo; cat "$LOCAL_CONFIG"; } > "$tmp"
+    mv "$tmp" "$LOCAL_CONFIG"
+    echo "  Prepended source line to existing $LOCAL_CONFIG"
+else
+    echo "  $LOCAL_CONFIG already sources default.fish, skip"
+fi
 
 # 确保目标目录存在
 echo 'Link fish functions and completions'
