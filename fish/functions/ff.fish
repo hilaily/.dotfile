@@ -82,9 +82,22 @@ function ff
                 printf "  %-10s %s\n" $parts[1] $parts[2]
             end
         case update
-            cd ~/.dotfile
-            git pull origin main
-            cd -
+            set -l dotfile_dir ~/.dotfile
+            if not test -d $dotfile_dir
+                echo "Error: Dotfile directory not found at $dotfile_dir"
+                return 1
+            end
+            set -l prev_dir (pwd)
+            cd $dotfile_dir
+            if git pull origin main
+                cd $prev_dir
+                echo "Reloading fish configuration..."
+                ff reload
+            else
+                cd $prev_dir
+                echo "Error: git pull failed, skip reload"
+                return 1
+            end
         case ssh
             if not functions -q ff_ssh
                 source ~/.dotfile/fish/functions/ff-ssh.fish
