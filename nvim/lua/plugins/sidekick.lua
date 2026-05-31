@@ -12,6 +12,9 @@ return {
 				config = function(terminal)
 					terminal.opts.split.width = math.floor(vim.o.columns * 0.6)
 				end,
+				keys = {
+					buffers = false,
+				},
 			},
 			mux = {
 				backend = vim.env.ZELLIJ and "zellij" or "tmux",
