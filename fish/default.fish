@@ -103,7 +103,7 @@ end
 #################################################################
 # git
 # alias 
-alias gitb="git branch --show-current | tr -d '\n' | pbcopy"
+alias gitb="git branch --show-current | tr -d '\n' | clip-copy.sh"
 alias gci="golangci-lint run -c=~/.dotfile/golang/golangci.yml ./..."
 alias gmt="go mod tidy"
 alias gtc="go test -gcflags=all=-l -cover ./..."

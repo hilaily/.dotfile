@@ -2,13 +2,39 @@
 
 # 用法:
 #   ./scan-ip.sh                  # ICMP 扫描本网段在线 IP
+#   ./scan-ip.sh 10.0.0           # ICMP 扫描指定网段（10.0.0.1-254）
 #   ./scan-ip.sh 22               # 扫描本网段中 22 端口开放的 IP
 #   ./scan-ip.sh 80,443,8080      # 扫描本网段中任一指定端口开放的 IP
-#   ./scan-ip.sh 22 10.0.0        # 指定网段前缀（不写则使用本机所在网段）
+#   ./scan-ip.sh 22 10.0.0        # 指定网段前缀 + 端口（顺序不限）
+#   ./scan-ip.sh 10.0.0 22        # 同上
 
-PORT_SPEC="$1"
-PREFIX_ARG="$2"
 TIMEOUT=1
+
+is_port_spec() {
+    [[ "$1" =~ ^[0-9]+$ || "$1" =~ ^[0-9]+-[0-9]+$ || "$1" =~ ^[0-9,]+$ ]]
+}
+
+is_ip_prefix() {
+    [[ "$1" =~ ^[0-9]{1,3}(\.[0-9]{1,3}){1,3}$ ]]
+}
+
+PORT_SPEC=""
+PREFIX_ARG=""
+
+if [ -n "$1" ] && is_ip_prefix "$1"; then
+    PREFIX_ARG="$1"
+    [ -n "$2" ] && is_port_spec "$2" && PORT_SPEC="$2"
+elif [ -n "$1" ]; then
+    is_port_spec "$1" && PORT_SPEC="$1"
+    [ -n "$2" ] && is_ip_prefix "$2" && PREFIX_ARG="$2"
+fi
+
+if [ -n "$1" ] && [ -z "$PORT_SPEC" ] && [ -z "$PREFIX_ARG" ]; then
+    echo "错误: 无法识别参数: $1"
+    echo "端口支持: 单端口(22) / 列表(80,443) / 范围(8000-8100)"
+    echo "网段支持: 前缀(10.0.0 或 192.168.1.0)"
+    exit 1
+fi
 
 if command -v ip &>/dev/null; then
     LOCAL_IP=$(ip addr show | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | cut -d/ -f1 | head -n 1)
