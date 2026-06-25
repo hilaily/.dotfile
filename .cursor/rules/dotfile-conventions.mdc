@@ -1,0 +1,10 @@
+---
+description: dotfile 维护约定（详见 AGENTS.md）
+alwaysApply: true
+---
+
+# dotfile 项目
+
+修改本仓库前请先阅读并遵循根目录 **[AGENTS.md](../AGENTS.md)** 中的维护约定（目录结构、`*-install` / `*-init`、脚本 `-h`、`ff` 入口、软链 init 等）。
+
+AGENTS.md 为跨工具单一事实来源（Cursor、Claude Code、Codex 等均可使用）。
