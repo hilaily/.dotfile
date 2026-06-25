@@ -7,3 +7,5 @@ if [ -f $src ]; then
 fi
 ln -s $HOME/.dotfile/git/.gitconfig $src
 
+chmod +x "$HOME/.dotfile/git/git-credential-linux.sh"
+

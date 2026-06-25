@@ -122,3 +122,8 @@
 	smudge = git-lfs smudge -- %f
 [http]
 	sslVerify = false
+
+[includeIf "ondarwin"]
+	path = ~/.dotfile/git/.gitconfig.darwin
+[includeIf "onlinux"]
+	path = ~/.dotfile/git/.gitconfig.linux

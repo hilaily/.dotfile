@@ -1,0 +1,3 @@
+# 凭据：优先 libsecret（见 git-credential-linux.sh），未安装则 cache + 提示
+[credential]
+	helper = ~/.dotfile/git/git-credential-linux.sh
