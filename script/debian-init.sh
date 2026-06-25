@@ -1,7 +1,25 @@
 #!/bin/bash
 
-# Debian 国内镜像源更换脚本
+# Debian 国内镜像源更换脚本（交互式选择镜像）
 # 支持 Debian 9/10/11/12/13 (stretch/buster/bullseye/bookworm/trixie)
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC1091
+source "$SCRIPT_DIR/common/help.sh"
+
+usage() {
+    cat <<'EOF'
+用法: sudo debian-init
+
+交互式将 Debian apt 源更换为国内镜像（需 root）。
+自动检测版本代号，备份原 sources.list。
+
+选项:
+  -h, --help  显示此帮助
+EOF
+}
+
+dotfile_help_requested "${1:-}" && dotfile_show_help
 
 set -e
 

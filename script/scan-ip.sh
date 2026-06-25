@@ -1,12 +1,29 @@
 #!/bin/bash
+# ICMP/TCP 扫描本网段或指定网段的在线主机与开放端口
 
-# 用法:
-#   ./scan-ip.sh                  # ICMP 扫描本网段在线 IP
-#   ./scan-ip.sh 10.0.0           # ICMP 扫描指定网段（10.0.0.1-254）
-#   ./scan-ip.sh 22               # 扫描本网段中 22 端口开放的 IP
-#   ./scan-ip.sh 80,443,8080      # 扫描本网段中任一指定端口开放的 IP
-#   ./scan-ip.sh 22 10.0.0        # 指定网段前缀 + 端口（顺序不限）
-#   ./scan-ip.sh 10.0.0 22        # 同上
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC1091
+source "$SCRIPT_DIR/common/help.sh"
+
+usage() {
+    cat <<'EOF'
+用法: scan-ip [端口或网段参数...]
+
+扫描局域网主机:
+  无参数              ICMP 扫描本网段 .1-.254
+  10.0.0              扫描指定网段前缀
+  22                  扫描本网段 TCP 22 端口
+  80,443,8080         扫描多个端口（任一开放即显示）
+  22 10.0.0           指定网段 + 端口（顺序不限）
+
+选项:
+  -h, --help  显示此帮助
+
+依赖: ping；端口模式需要 nc (netcat)。
+EOF
+}
+
+dotfile_help_requested "${1:-}" && dotfile_show_help
 
 TIMEOUT=1
 
@@ -31,8 +48,7 @@ fi
 
 if [ -n "$1" ] && [ -z "$PORT_SPEC" ] && [ -z "$PREFIX_ARG" ]; then
     echo "错误: 无法识别参数: $1"
-    echo "端口支持: 单端口(22) / 列表(80,443) / 范围(8000-8100)"
-    echo "网段支持: 前缀(10.0.0 或 192.168.1.0)"
+    usage
     exit 1
 fi
 
@@ -52,7 +68,6 @@ else
     PREFIX="${LOCAL_IP%.*}"
 fi
 
-# 解析端口参数 -> PORTS 数组
 PORTS=()
 if [ -n "$PORT_SPEC" ]; then
     if [[ "$PORT_SPEC" =~ ^[0-9]+$ ]]; then
@@ -68,7 +83,6 @@ if [ -n "$PORT_SPEC" ]; then
         IFS=',' read -ra PORTS <<<"$PORT_SPEC"
     else
         echo "错误: 无效的端口格式: $PORT_SPEC"
-        echo "支持: 单端口(22) / 列表(80,443) / 范围(8000-8100)"
         exit 1
     fi
 fi
@@ -81,10 +95,7 @@ else
 fi
 echo "------------------------------------------------------"
 
-# ---------- 模式一：ICMP 在线扫描（无端口参数） ----------
 if [ ${#PORTS[@]} -eq 0 ]; then
-    # macOS: -W 单位毫秒，-S 绑定源 IP
-    # Linux: -W 单位秒，  -I 绑定源 IP
     if [ "$(uname -s)" = "Darwin" ]; then
         for i in $(seq 1 254); do
             ping -c 1 -W 1000 -S "$LOCAL_IP" "$PREFIX.$i" >/dev/null 2>&1 && echo "$PREFIX.$i 在线" &
@@ -100,15 +111,11 @@ if [ ${#PORTS[@]} -eq 0 ]; then
     exit 0
 fi
 
-# ---------- 模式二：TCP 端口扫描 ----------
 if ! command -v nc &>/dev/null; then
-    echo "错误: 找不到 nc (netcat)，请先安装："
-    echo "  macOS: brew install netcat"
-    echo "  Debian/Ubuntu: sudo apt-get install netcat-openbsd"
+    echo "错误: 找不到 nc (netcat)"
     exit 1
 fi
 
-# nc 在不同实现里 -z/-w 行为基本一致；用 -G 在 macOS 上控制连接超时更准
 NC_OPTS=(-z -w "$TIMEOUT")
 if [ "$(uname -s)" = "Darwin" ]; then
     NC_OPTS+=(-G "$TIMEOUT")

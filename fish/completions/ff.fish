@@ -65,22 +65,24 @@ complete -c ff -n "__fish_seen_subcommand_from ssh copy; and test (count (comman
 
 # script 子命令的补全 - 动态列出 script 目录下的脚本
 function __ff_list_scripts
-    set -l script_dir ~/.dotfile/script
-    if test -d $script_dir
-        # 列出 .sh 文件
-        for script in $script_dir/*.sh
-            if test -f $script
-                basename $script | string replace -r '\.sh$' ''
-            end
-        end
-        # 列出 .py 文件
-        for script in $script_dir/*.py
-            if test -f $script
-                basename $script | string replace -r '\.py$' ''
-            end
-        end
+    if not functions -q script-list-names
+        source ~/.dotfile/fish/functions/script-catalog.fish
+    end
+    script-list-names
+end
+
+function __ff_complete_scripts
+    if not functions -q script-extract-description
+        source ~/.dotfile/fish/functions/script-catalog.fish
+    end
+    for name in (script-list-names)
+        set -l path (script-resolve-path $name)
+        set -l desc (script-extract-description $path)
+        printf "%s\t%s\n" $name $desc
     end
 end
 
-complete -c ff -n "__fish_seen_subcommand_from script" -a '(__ff_list_scripts)' -d "Script name"
+complete -c ff -n "__fish_seen_subcommand_from script; and test (count (commandline -opc)) -eq 2" -s h -l help -d "List all scripts and descriptions"
+complete -c ff -n "__fish_seen_subcommand_from script; and test (count (commandline -opc)) -eq 2" -a help -d "List all scripts and descriptions"
+complete -c ff -n "__fish_seen_subcommand_from script; and not __fish_seen_subcommand_from help -h --help (__ff_list_scripts)" -a '(__ff_complete_scripts)' -d "Script name"
 

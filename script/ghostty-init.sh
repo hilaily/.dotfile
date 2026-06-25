@@ -1,4 +1,26 @@
 #!/bin/bash
+# 将 Ghostty 配置链接到 dotfile（macOS / Linux）
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC1091
+source "$SCRIPT_DIR/common/help.sh"
+
+usage() {
+    cat <<'EOF'
+用法: ghostty-init
+
+将 ~/.dotfile/ghostty/config.ghostty 软链接到 Ghostty 配置目录:
+  macOS: ~/Library/Application Support/com.mitchellh.ghostty/
+  Linux: $XDG_CONFIG_HOME/ghostty/
+
+已有配置会备份为 *.backup.<时间戳>。
+
+选项:
+  -h, --help  显示此帮助
+EOF
+}
+
+dotfile_help_requested "${1:-}" && dotfile_show_help
 
 set -e
 
@@ -9,7 +31,6 @@ NC='\033[0m'
 
 SRC="$HOME/.dotfile/ghostty/config.ghostty"
 
-# 根据平台确定目标路径
 if [[ "$(uname)" == "Darwin" ]]; then
     DEST="$HOME/Library/Application Support/com.mitchellh.ghostty/config.ghostty"
 else
@@ -20,22 +41,18 @@ fi
 echo -e "${YELLOW}初始化 Ghostty 配置...${NC}"
 echo -e "${YELLOW}目标路径：$DEST${NC}"
 
-# 目标目录不存在则创建
 mkdir -p "$(dirname "$DEST")"
 
-# 已经是指向正确位置的软链接，无需操作
 if [ -L "$DEST" ] && [ "$(readlink -f "$DEST")" = "$(readlink -f "$SRC")" ]; then
     echo -e "${GREEN}软链接已存在且指向正确位置，无需操作。${NC}"
     exit 0
 fi
 
-# 存在旧文件/目录则备份
 if [ -e "$DEST" ]; then
     BACKUP="${DEST}.backup.$(date +%Y%m%d%H%M%S)"
     mv "$DEST" "$BACKUP"
     echo -e "${YELLOW}已将现有配置备份到 $BACKUP${NC}"
 elif [ -L "$DEST" ]; then
-    # 损坏的旧软链接
     rm "$DEST"
 fi
 

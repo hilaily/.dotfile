@@ -1,4 +1,27 @@
 #!/bin/bash
+# 在 Debian/Ubuntu 上安装 Docker CE（支持国内/国外镜像源）
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC1091
+source "$SCRIPT_DIR/common/help.sh"
+
+usage() {
+    cat <<'EOF'
+用法: docker-install
+
+在 Debian 或 Ubuntu 上安装 Docker CE 及 compose/buildx 插件。
+根据环境变量 CN_REGION 选择镜像源:
+  CN_REGION=1  清华镜像
+  其他         Docker 官方源
+
+安装完成后将当前用户加入 docker 组。
+
+选项:
+  -h, --help  显示此帮助
+EOF
+}
+
+dotfile_help_requested "${1:-}" && dotfile_show_help
 
 set -e
 
@@ -38,8 +61,6 @@ install_prerequisites() {
     sudo apt-get install -y ca-certificates curl gnupg lsb-release
 }
 
-#################################################################
-# 国内安装（使用清华镜像）
 install_docker_cn() {
     local repo_base="https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/${DISTRO}"
     local keyring="/usr/share/keyrings/docker-archive-keyring.gpg"
@@ -56,8 +77,6 @@ install_docker_cn() {
     sudo usermod -aG docker "$USER"
 }
 
-#################################################################
-# 国外安装（使用官方源）
 install_docker_intl() {
     local repo_base="https://download.docker.com/linux/${DISTRO}"
     local keyring="/etc/apt/keyrings/docker.asc"
@@ -81,7 +100,6 @@ detect_distro
 remove_conflicting_packages
 install_prerequisites
 
-# 根据环境变量选择安装方式（须在函数定义之后调用）
 if [ "$CN_REGION" = "1" ]; then
     echo "[INFO] 国内环境，使用清华镜像安装 Docker (${DISTRO}/${CODENAME})"
     install_docker_cn

@@ -1,21 +1,40 @@
 #!/bin/bash
+# 执行命令并在失败时通过飞书 Webhook 发送通知
 
-# 检查参数数量
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC1091
+source "$SCRIPT_DIR/common/help.sh"
+
+usage() {
+    cat <<'EOF'
+用法: croncheck <command> [args...]
+
+执行给定命令；若退出码非 0，向配置的飞书 Webhook 发送失败通知。
+最终以原命令的退出码退出。
+
+选项:
+  -h, --help  显示此帮助
+
+示例:
+  croncheck /path/to/backup.sh
+  croncheck docker compose up -d
+EOF
+}
+
+dotfile_help_requested "${1:-}" && dotfile_show_help
+
 if [ "$#" -lt 1 ]; then
-    echo "Usage: $0 <command> [command_args...]"
+    echo "错误: 缺少要执行的命令" >&2
+    usage
     exit 1
 fi
 
-# 获取 webhook URL
 WEBHOOK_URL="https://open.feishu.cn/open-apis/bot/v2/hook/808eafd8-a79f-4af0-b730-8442cf15933b"
 
-# 执行命令并捕获输出
 OUTPUT=$("$@" 2>&1)
 EXIT_CODE=$?
 
-# 如果命令失败，发送 webhook 通知
 if [ $EXIT_CODE -ne 0 ]; then
-    # 准备 JSON 数据
     JSON_DATA=$(cat <<EOF
 {
     "msg_type": "text",
@@ -25,10 +44,7 @@ if [ $EXIT_CODE -ne 0 ]; then
 }
 EOF
 )
-    # 发送 webhook
     curl -s -X POST -H "Content-Type: application/json" -d "$JSON_DATA" "$WEBHOOK_URL"
 fi
 
-# 退出，使用原命令的退出码
 exit $EXIT_CODE
-

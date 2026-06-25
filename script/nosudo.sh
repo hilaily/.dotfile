@@ -1,7 +1,9 @@
 #!/bin/bash
 # 为指定用户配置某命令的免密 sudo（写入 /etc/sudoers.d/）
-# 用法: sudo nosudo <user> <command>
-# 示例: sudo nosudo xuser docker
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC1091
+source "$SCRIPT_DIR/common/help.sh"
 
 set -euo pipefail
 
@@ -21,12 +23,14 @@ usage() {
   - 仅允许免密执行解析到的那个可执行文件路径（含子命令参数仍受 sudo 规则约束）
   - 对 docker，更推荐: sudo docker-group <user>（无需 sudo 即可用 docker）
   - 删除规则: sudo rm /etc/sudoers.d/nosudo-<user>-<name>
+
+选项:
+  -h, --help  显示此帮助
 EOF
-    exit 1
 }
 
-[[ "${1:-}" == "-h" || "${1:-}" == "--help" ]] && usage
-[[ $# -eq 2 ]] || usage
+dotfile_help_requested "${1:-}" && dotfile_show_help
+[[ $# -eq 2 ]] || { usage; exit 1; }
 
 if [[ $EUID -ne 0 ]]; then
     echo "错误: 请使用 sudo 运行，例如: sudo $0 $*"

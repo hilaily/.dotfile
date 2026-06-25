@@ -1,4 +1,5 @@
 #!/bin/bash
+# 查询目录大小（du 封装，支持排序与 Top N）
 
 set -eu
 

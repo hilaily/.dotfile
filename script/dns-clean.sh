@@ -1,7 +1,26 @@
 #!/bin/bash
+# 清理 macOS / Linux 系统 DNS 缓存
 
-# 用法:
-#   ./dns-clean.sh    # 清理 macOS / Linux 系统 DNS 缓存
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC1091
+source "$SCRIPT_DIR/common/help.sh"
+
+usage() {
+    cat <<'EOF'
+用法: dns-clean
+
+按当前操作系统清理 DNS 缓存:
+  macOS: dscacheutil + mDNSResponder
+  Linux: systemd-resolved / nscd / dnsmasq / unbound（自动检测）
+
+选项:
+  -h, --help  显示此帮助
+
+说明: 非 root 时会自动使用 sudo。
+EOF
+}
+
+dotfile_help_requested "${1:-}" && dotfile_show_help
 
 set -e
 
@@ -68,7 +87,7 @@ flush_linux() {
 
 case "$(uname -s)" in
     Darwin) flush_macos ;;
-    Linux)  flush_linux ;;
+    Linux) flush_linux ;;
     *)
         echo "错误: 不支持的操作系统: $(uname -s)"
         exit 1

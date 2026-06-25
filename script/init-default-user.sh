@@ -1,9 +1,26 @@
 #!/bin/bash
 
-# 初始化默认用户脚本
-# 用于创建 ace 用户并给予 sudo 权限
+# 初始化默认用户脚本：创建 ace 用户并给予 sudo 权限
 
-set -e  # 遇到错误时立即退出
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC1091
+source "$SCRIPT_DIR/common/help.sh"
+
+usage() {
+    cat <<'EOF'
+用法: sudo init-default-user
+
+创建用户 ace（若不存在），设置密码，加入 sudo 组，
+并复制 ~/.dotfile 到该用户家目录。
+
+选项:
+  -h, --help  显示此帮助
+EOF
+}
+
+dotfile_help_requested "${1:-}" && dotfile_show_help
+
+set -e
 
 # 检查是否以 root 身份运行
 if [[ $EUID -ne 0 ]]; then

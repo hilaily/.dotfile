@@ -3,6 +3,24 @@
 # Debian 一键更换清华镜像源脚本 (DEB822 格式)
 # 支持 Debian 12 (bookworm)、13 (trixie)、14 (forky) 及后续版本
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC1091
+source "$SCRIPT_DIR/common/help.sh"
+
+usage() {
+    cat <<'EOF'
+用法: sudo debian-tuna
+
+将 Debian apt 源一键替换为清华 DEB822 格式源（需 root）。
+会处理 /etc/apt/sources.list.d/debian.sources 与旧版 sources.list。
+
+选项:
+  -h, --help  显示此帮助
+EOF
+}
+
+dotfile_help_requested "${1:-}" && dotfile_show_help
+
 set -e
 
 # 颜色定义

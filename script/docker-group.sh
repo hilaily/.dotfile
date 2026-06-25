@@ -1,7 +1,9 @@
 #!/bin/bash
 # 将用户加入 docker 组（免 sudo 使用 docker）
-# 用法: sudo docker-group <user>
-# 示例: sudo docker-group xuser
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC1091
+source "$SCRIPT_DIR/common/help.sh"
 
 set -euo pipefail
 
@@ -17,12 +19,14 @@ usage() {
 说明:
   - 用户需重新登录或 newgrp docker 后生效
   - 安装 Docker 时 docker-install.sh 只会把当时的 $USER 加入组
+
+选项:
+  -h, --help  显示此帮助
 EOF
-    exit 1
 }
 
-[[ "${1:-}" == "-h" || "${1:-}" == "--help" ]] && usage
-[[ $# -eq 1 ]] || usage
+dotfile_help_requested "${1:-}" && dotfile_show_help
+[[ $# -eq 1 ]] || { usage; exit 1; }
 
 if [[ $EUID -ne 0 ]]; then
     echo "错误: 请使用 sudo 运行，例如: sudo $0 $1"
