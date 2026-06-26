@@ -54,7 +54,8 @@
   enabled = true
   autoupdate = true
 [help]
-  autocorrect = prompt
+  # 旧版 Git 仅支持数字（0=仅提示不执行）。Git 2.36+ 见 .gitconfig.darwin / .gitconfig.linux 可改为 prompt
+  autocorrect = 0
 [branch]
   autoSetupMerge = always
   sort = -committerdate

@@ -1,2 +1,3 @@
-# macOS 专用 Git 配置（可选扩展；凭据见主配置 git-credential.sh）
-# 需要 Git 2.36+ 的 includeIf ondarwin 才会加载本文件
+# macOS 专用（需 Git 2.36+ includeIf ondarwin）
+[help]
+	autocorrect = prompt

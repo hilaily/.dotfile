@@ -65,6 +65,7 @@ ff reload                 # 重载 fish 配置
   - macOS：`osxkeychain` → 回退 `store`（`~/.git-credentials`）
   - Linux：`libsecret` → 回退 `store`
 - 平台扩展（可选）：`git/.gitconfig.darwin` / `.gitconfig.linux` 仅在高版本 Git 下通过 includeIf 加载
+- `help.autocorrect`：主配置为 `0`（兼容旧 Git）；Git ≥ 2.36 的平台文件里为 `prompt`
 
 ## 边界（不要做的事）
 
