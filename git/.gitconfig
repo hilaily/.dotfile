@@ -123,6 +123,12 @@
 [http]
 	sslVerify = false
 
+# 凭据：统一 wrapper，不依赖 includeIf ondarwin/onlinux（需 Git 2.36+）
+# 低版本 Git 也会加载本节；回退为 git-credential-store（~/.git-credentials）
+[credential]
+	helper = ~/.dotfile/git/git-credential.sh
+
+# 以下 includeIf 需 Git 2.36+；仅用于其它平台差异配置（若有）
 [includeIf "ondarwin"]
 	path = ~/.dotfile/git/.gitconfig.darwin
 [includeIf "onlinux"]

@@ -1,3 +1,2 @@
-# 凭据：优先 libsecret（见 git-credential-linux.sh），未安装则 cache + 提示
-[credential]
-	helper = ~/.dotfile/git/git-credential-linux.sh
+# Linux 专用 Git 配置（可选扩展；凭据见主配置 git-credential.sh）
+# 需要 Git 2.36+ 的 includeIf onlinux 才会加载本文件
