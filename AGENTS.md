@@ -61,7 +61,7 @@ ff reload                 # 重载 fish 配置
 ## Git 配置
 
 - 公共配置在 `git/.gitconfig`
-- **凭据**（所有 Git 版本）：`git/git-credential.sh` 写在主配置里，不依赖 `includeIf ondarwin/onlinux`（需 Git 2.36+）
+- **凭据**（所有 Git 版本）：`git/git-credential.sh` 写在主配置里，使用 `!$HOME/.dotfile/...`（Git 不展开 `~`）
   - macOS：`osxkeychain` → 回退 `store`（`~/.git-credentials`）
   - Linux：`libsecret` → 回退 `store`
 - 平台扩展（可选）：`git/.gitconfig.darwin` / `.gitconfig.linux` 仅在高版本 Git 下通过 includeIf 加载
