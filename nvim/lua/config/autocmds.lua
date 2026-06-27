@@ -1,3 +1,7 @@
+vim.api.nvim_create_user_command("W", function()
+	require("utils").sudo_write()
+end, { desc = "Write file with sudo (tee)" })
+
 -- Turn off paste mode when leaving insert
 vim.api.nvim_create_autocmd("InsertLeave", {
 	pattern = "*",
