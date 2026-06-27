@@ -8,7 +8,7 @@ function execute-script
     set -l script_dir $dotfile_dir/script
     set -l script_name $argv[1]
 
-    # ff script -h / --help / help
+    # ff script|s -h / --help / help
     if test -z "$script_name"; or contains -- $script_name -h --help help
         if test -z "$script_name"; or test (count $argv) -eq 1
             script-show-catalog

@@ -10,6 +10,7 @@ complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "poff" -d
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "pst" -d "Show proxy status"
 # complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "make" -d "Run dotfile Makefile commands"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "script" -d "Run script from script directory"
+complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "s" -d "Run script (alias for script)"
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "help" -d "Show this help message"
 
 complete -c ff -n "not __fish_seen_subcommand_from $ff_subcommands" -a "region" -d "Toggle or set CN_REGION (mirror/proxy region)"
@@ -82,7 +83,7 @@ function __ff_complete_scripts
     end
 end
 
-complete -c ff -n "__fish_seen_subcommand_from script; and test (count (commandline -opc)) -eq 2" -s h -l help -d "List all scripts and descriptions"
-complete -c ff -n "__fish_seen_subcommand_from script; and test (count (commandline -opc)) -eq 2" -a help -d "List all scripts and descriptions"
-complete -c ff -n "__fish_seen_subcommand_from script; and not __fish_seen_subcommand_from help -h --help (__ff_list_scripts)" -a '(__ff_complete_scripts)' -d "Script name"
+complete -c ff -n "__fish_seen_subcommand_from script s; and test (count (commandline -opc)) -eq 2" -s h -l help -d "List all scripts and descriptions"
+complete -c ff -n "__fish_seen_subcommand_from script s; and test (count (commandline -opc)) -eq 2" -a help -d "List all scripts and descriptions"
+complete -c ff -n "__fish_seen_subcommand_from script s; and not __fish_seen_subcommand_from help -h --help (__ff_list_scripts)" -a '(__ff_complete_scripts)' -d "Script name"
 

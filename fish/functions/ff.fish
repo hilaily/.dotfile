@@ -11,6 +11,7 @@ function ff
         "pst|Show proxy status" \
         "make|Run dotfile Makefile commands" \
         "script|Run script from script directory" \
+        "s|Alias for script" \
         "update|Update dotfile" \
         "region|Toggle or set CN_REGION (mirror/proxy region)" \
         "ssh|SSH init (keys + config.d) or copy config to remote" \
@@ -62,12 +63,7 @@ function ff
             else
                 echo "Error: Dotfile directory not found at $dotfile_dir"
             end
-        case script
-            if not functions -q execute-script
-                source ~/.dotfile/fish/functions/execute-script.fish
-            end
-            execute-script $argv[2..-1]
-        case s
+        case script s
             if not functions -q execute-script
                 source ~/.dotfile/fish/functions/execute-script.fish
             end

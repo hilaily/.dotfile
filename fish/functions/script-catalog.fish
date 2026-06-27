@@ -110,7 +110,7 @@ end
 
 function script-show-catalog
     set -l script_dir ~/.dotfile/script
-    echo "Usage: ff script <name> [args...]"
+    echo "Usage: ff script <name> [args...]  (alias: ff s)"
     echo ""
     echo "Scripts in $script_dir:"
     echo ""
@@ -122,5 +122,5 @@ function script-show-catalog
     end
 
     echo ""
-    echo "提示: ff script <name> -h  查看单个脚本内的详细帮助"
+    echo "提示: ff s <name> -h  查看单个脚本内的详细帮助"
 end
