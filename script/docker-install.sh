@@ -61,6 +61,31 @@ install_prerequisites() {
     sudo apt-get install -y ca-certificates curl gnupg lsb-release
 }
 
+add_user_to_docker_group() {
+    local target_user="${SUDO_USER:-$USER}"
+    if [ -z "$target_user" ] || [ "$target_user" = "root" ]; then
+        echo "[WARN] 无法确定目标用户，请手动执行: sudo docker-group <user>"
+        return 0
+    fi
+
+    if ! getent group docker >/dev/null 2>&1; then
+        echo "[WARN] docker 组不存在，跳过加组"
+        return 0
+    fi
+
+    if id -nG "$target_user" | tr ' ' '\n' | grep -qx docker; then
+        echo "[INFO] 用户 ${target_user} 已在 docker 组中"
+        return 0
+    fi
+
+    sudo usermod -aG docker "$target_user"
+    if id -nG "$target_user" | tr ' ' '\n' | grep -qx docker; then
+        echo "[INFO] 已将 ${target_user} 加入 docker 组（需重新登录或 newgrp 后当前 shell 才生效）"
+    else
+        echo "[WARN] usermod 已执行，但未检测到 ${target_user} 在 docker 组中，请检查: getent group docker"
+    fi
+}
+
 install_docker_cn() {
     local repo_base="https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/${DISTRO}"
     local keyring="/usr/share/keyrings/docker-archive-keyring.gpg"
@@ -74,7 +99,7 @@ install_docker_cn() {
     sudo apt-get update
     sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-    sudo usermod -aG docker "$USER"
+    add_user_to_docker_group
 }
 
 install_docker_intl() {
@@ -93,7 +118,7 @@ install_docker_intl() {
     sudo apt-get update
     sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-    sudo usermod -aG docker "$USER"
+    add_user_to_docker_group
 }
 
 detect_distro
@@ -108,4 +133,8 @@ else
     install_docker_intl
 fi
 
-echo "[INFO] Docker 安装完成，请重新登录或运行: source ~/.config/fish/config.fish"
+echo "[INFO] Docker 安装完成"
+echo "[INFO] 若 docker 报 permission denied，组变更需新开登录会话才生效，任选其一:"
+echo "       newgrp docker"
+echo "       或重新 SSH 登录 / 重开终端"
+echo "       验证: id -nG \$USER | tr ' ' '\\n' | grep -x docker"
