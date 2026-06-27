@@ -112,19 +112,16 @@ function ff
                 return 1
             end
         case region
+            if not functions -q region_toggle
+                source ~/.dotfile/fish/functions/region.fish
+            end
             set -l sub toggle
             if test (count $argv) -ge 2
                 set sub $argv[2]
             end
             switch $sub
                 case toggle
-                    if test "$CN_REGION" = "1"
-                        set -gx CN_REGION 0
-                        echo "Switched to: 0 (国外)"
-                    else
-                        set -gx CN_REGION 1
-                        echo "Switched to: 1 (国内)"
-                    end
+                    region_toggle
                 case '*'
                     echo "Usage: ff region [toggle]"
                     echo "Unknown subcommand: $sub"
