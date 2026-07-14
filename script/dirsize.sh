@@ -80,15 +80,15 @@ fi
 
 list_dir_sizes() {
     if [[ "$OSTYPE" == "darwin"* ]]; then
-        sudo du -h -d "$DEPTH" "$TARGET_DIR" 2>/dev/null
+        du -h -d "$DEPTH" "$TARGET_DIR" 2>/dev/null
     else
-        sudo du -h --max-depth="$DEPTH" "$TARGET_DIR" 2>/dev/null
+        du -h --max-depth="$DEPTH" "$TARGET_DIR" 2>/dev/null
     fi | awk -v dir="$TARGET_DIR" '$2 != dir {print}'
 }
 
 # 用 ls 读取直接子文件（一次 readdir），避免 find 递归
 list_direct_file_sizes() {
-    sudo ls -lA "$TARGET_DIR" 2>/dev/null | awk -v dir="$TARGET_DIR" '
+    ls -lA "$TARGET_DIR" 2>/dev/null | awk -v dir="$TARGET_DIR" '
         function human(bytes,    units, i, size) {
             split("B K M G T", units, " ")
             i = 1

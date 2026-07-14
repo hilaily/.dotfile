@@ -46,6 +46,6 @@ term = xterm-256color
 scrollbar = system
 mouse-shift-capture = true
 
-#shell-integration-features = ssh-env,ssh-terminfo
+shell-integration-features = ssh-env
 # 开启所有 shell 集成特性，包含 ssh-terminfo 自动注入
 shell-integration = fish
