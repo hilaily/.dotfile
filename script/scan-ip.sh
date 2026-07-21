@@ -1,5 +1,5 @@
 #!/bin/bash
-# ICMP/TCP 扫描本网段或指定网段的在线主机、主机名与开放端口
+# ICMP/TCP 扫描本网段或指定网段的在线主机，并显示主机名、MAC、厂商与开放端口
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck disable=SC1091
@@ -10,7 +10,7 @@ usage() {
 用法: scan-ip [端口或网段参数...]
 
 扫描局域网主机:
-  无参数              ICMP 扫描本网段 .1-.254，并尽力显示主机名
+  无参数              ICMP 扫描本网段 .1-.254，并尽力显示名称、MAC 和厂商
   10.0.0              扫描指定网段前缀
   22                  扫描本网段 TCP 22 端口
   80,443,8080         扫描多个端口（任一开放即显示）
@@ -20,13 +20,41 @@ usage() {
   -h, --help  显示此帮助
 
 依赖: ping；端口模式需要 nc (netcat)。
-      主机名: macOS 使用系统解析器；Linux 使用 NSS（getent），安装 avahi-utils 时也会查询 mDNS；均会回退反向 DNS。
+      名称: macOS 使用系统解析器；Linux 使用 NSS（getent），安装 avahi-utils 时也会查询 mDNS；均会回退反向 DNS。
+      MAC: 从同一二层网络的 ARP/邻居表读取；nmap 的 OUI 数据库存在时会离线显示厂商。
+
+提示: IP 和 hostname 都可能变化或根本不公开；MAC + 厂商通常更适合辨认设备。
+      要永久、准确地对应“这台设备是谁”，请在路由器 DHCP 客户端列表中为其设置备注和 DHCP 保留地址。
 EOF
 }
 
 dotfile_help_requested "${1:-}" && dotfile_show_help
 
 TIMEOUT=1
+
+find_mac_prefix_file() {
+    local nmap_bin prefix candidate
+    local candidates=(
+        /usr/local/share/nmap/nmap-mac-prefixes
+        /opt/homebrew/share/nmap/nmap-mac-prefixes
+        /usr/share/nmap/nmap-mac-prefixes
+        /usr/local/share/nmap-mac-prefixes
+    )
+
+    if nmap_bin=$(command -v nmap 2>/dev/null); then
+        prefix=$(cd "$(dirname "$nmap_bin")/.." 2>/dev/null && pwd)
+        candidates+=("$prefix/share/nmap/nmap-mac-prefixes")
+    fi
+
+    for candidate in "${candidates[@]}"; do
+        if [ -r "$candidate" ]; then
+            printf '%s' "$candidate"
+            return
+        fi
+    done
+}
+
+MAC_PREFIX_FILE=$(find_mac_prefix_file)
 
 is_port_spec() {
     [[ "$1" =~ ^[0-9]+$ || "$1" =~ ^[0-9]+-[0-9]+$ || "$1" =~ ^[0-9,]+$ ]]
@@ -134,15 +162,85 @@ hostname_for_ip() {
     printf '%s' "${hostname%.}"
 }
 
+normalize_mac() {
+    local mac="$1"
+    local octet
+    local octets=()
+    local normalized=()
+
+    IFS=':' read -r -a octets <<<"$mac"
+    [ "${#octets[@]}" -eq 6 ] || {
+        printf '%s' "$mac"
+        return
+    }
+
+    for octet in "${octets[@]}"; do
+        [[ "$octet" =~ ^[[:xdigit:]]{1,2}$ ]] || {
+            printf '%s' "$mac"
+            return
+        }
+        printf -v octet '%02x' "0x$octet"
+        normalized+=("$octet")
+    done
+    (IFS=':'; printf '%s' "${normalized[*]}")
+}
+
+mac_for_ip() {
+    local ip="$1"
+    local mac=""
+
+    # 一次 ICMP/TCP 探测后，位于同一二层网络的设备一般会出现在 ARP/邻居表中。
+    if [ "$(uname -s)" = "Darwin" ] && command -v arp &>/dev/null; then
+        mac=$(arp -n "$ip" 2>/dev/null \
+            | awk '/ at ([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}/ {for (i = 1; i <= NF; i++) if ($i == "at") {print $(i + 1); exit}}')
+    elif command -v ip &>/dev/null; then
+        mac=$(ip neigh show to "$ip" 2>/dev/null \
+            | awk '/lladdr/ {for (i = 1; i <= NF; i++) if ($i == "lladdr") {print $(i + 1); exit}}')
+    elif command -v arp &>/dev/null; then
+        mac=$(arp -n "$ip" 2>/dev/null \
+            | awk '/ at ([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}/ {for (i = 1; i <= NF; i++) if ($i == "at") {print $(i + 1); exit}}')
+    fi
+
+    normalize_mac "$mac"
+}
+
+mac_vendor_for_mac() {
+    local mac="$1"
+    local first_octet prefix vendor
+
+    [ -z "$mac" ] && return
+
+    first_octet=${mac%%:*}
+    # 本地管理位为 1 的 MAC 常见于 iOS/Android/Windows 的 Wi-Fi 随机地址，不能据此推断厂商。
+    if (( (16#$first_octet) & 2 )); then
+        printf '%s' '随机/本地管理 MAC'
+        return
+    fi
+
+    [ -z "$MAC_PREFIX_FILE" ] && return
+    prefix=${mac//:/}
+    prefix=${prefix:0:6}
+    prefix=$(printf '%s' "$prefix" | tr '[:lower:]' '[:upper:]')
+    vendor=$(awk -v prefix="$prefix" '$1 == prefix {$1 = ""; sub(/^ /, ""); print; exit}' "$MAC_PREFIX_FILE")
+    printf '%s' "$vendor"
+}
+
 format_host() {
     local ip="$1"
-    local hostname
+    local hostname mac vendor
     hostname=$(hostname_for_ip "$ip")
+    mac=$(mac_for_ip "$ip")
+    vendor=$(mac_vendor_for_mac "$mac")
 
+    printf '%s' "$ip"
     if [ -n "$hostname" ]; then
-        printf '%s (%s)' "$ip" "$hostname"
-    else
-        printf '%s' "$ip"
+        printf ' name=%s' "$hostname"
+    fi
+    if [ -n "$mac" ]; then
+        printf ' mac=%s' "$mac"
+    fi
+    if [ -n "$vendor" ]; then
+        printf ' vendor=%s' "$vendor"
     fi
 }
 

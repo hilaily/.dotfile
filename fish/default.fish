@@ -81,19 +81,6 @@ end
 
 add_to_path $PYENV_ROOT/bin
 
-#################################################################
-# node
-# add_to_path /usr/local/node/bin
-# add_to_path usr/local/nvim/bin /usr/local/osx-64/nvim/bin
-
-# fnm
-set FNM_PATH "$HOME/.local/share/fnm"
-if [ -d "$FNM_PATH" ]
-    set PATH "$FNM_PATH" $PATH
-    alias nvm="fnm"
-    fnm env --use-on-cd --shell fish | source
-end
-
 # pnpm
 set -gx PNPM_HOME $HOME/.pnpm
 if not string match -q -- $PNPM_HOME $PATH
