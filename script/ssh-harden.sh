@@ -145,17 +145,20 @@ sshd_already_uses_port() {
 
 ensure_ufw_port() {
     local status
-    command -v ufw >/dev/null 2>&1 || return
+    if ! command -v ufw >/dev/null 2>&1; then
+        echo "未安装 UFW，跳过防火墙规则修改。"
+        return 0
+    fi
 
     status=$(ufw status 2>&1)
     if ! printf '%s\n' "$status" | grep -qi '^Status: active'; then
         echo "UFW 未启用，跳过防火墙规则修改。"
-        return
+        return 0
     fi
 
     if printf '%s\n' "$status" | grep -Eq "^[[:space:]]*${SSH_PORT}(/tcp)?[[:space:]]"; then
         echo "UFW 已有 TCP $SSH_PORT 规则，跳过。"
-        return
+        return 0
     fi
 
     if ! ufw allow "$SSH_PORT/tcp"; then
@@ -164,6 +167,7 @@ ensure_ufw_port() {
     fi
     UFW_RULE_ADDED=1
     echo "已通过 UFW 放行 TCP $SSH_PORT。"
+    return 0
 }
 
 rollback_ufw_port() {
