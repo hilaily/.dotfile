@@ -24,11 +24,19 @@ dotfile_help_requested "${1:-}" && dotfile_show_help
 set -euo pipefail
 
 echo 'Init git config'
-src=$HOME/.gitconfig
-if [ -f "$src" ]; then
-    mv "$src" "$src.bak"
+src="$HOME/.gitconfig"
+target="$HOME/.dotfile/git/.gitconfig"
+if [ -L "$src" ] && [ "$(readlink "$src")" = "$target" ]; then
+    echo "  $src already links to dotfile config, skip"
+else
+    if [ -e "$src" ] || [ -L "$src" ]; then
+        backup="${src}.backup.$(date +%Y%m%d%H%M%S)"
+        mv "$src" "$backup"
+        echo "  Backed up existing config: $backup"
+    fi
+    ln -s "$target" "$src"
+    echo "  Linked: $src -> $target"
 fi
-ln -s "$HOME/.dotfile/git/.gitconfig" "$src"
 
 chmod +x "$HOME/.dotfile/git/git-credential.sh"
 # 兼容旧路径：若仍存在则保持可执行
