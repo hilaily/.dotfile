@@ -158,7 +158,7 @@ check_ssh() {
     if [[ -z "$ssh_ports" ]]; then
         warn "无法确定 SSH 生效监听端口"
     elif [[ ",$ssh_ports," == *,22,* ]]; then
-        info "SSH 生效监听端口: $ssh_ports（仍包含默认端口 22；请确认是否有意保留）"
+        warn "SSH 生效监听端口: $ssh_ports（仍包含默认端口 22；请确认是否有意保留）"
     else
         pass "SSH 生效监听端口: $ssh_ports"
     fi
