@@ -11,9 +11,9 @@ set -euo pipefail
 
 usage() {
     cat <<'EOF'
-用法: sudo ssh-key-only [--user <用户名>] [--yes]
+用法: sudo ssh-harden [--user <用户名>] [--skip-key-check] [--yes]
 
-在确认目标用户已有 SSH 公钥后，写入 /etc/ssh/sshd_config.d/99-dotfile-key-only.conf：
+默认在确认目标用户已有 SSH 公钥后，写入 /etc/ssh/sshd_config.d/99-dotfile-key-only.conf：
   PubkeyAuthentication yes
   PasswordAuthentication no
   KbdInteractiveAuthentication no
@@ -22,17 +22,21 @@ usage() {
   Port 55522
 
 选项:
-  -u, --user <用户名>  要确认公钥的用户；默认使用调用 sudo 前的用户
-  -y, --yes            跳过交互确认
-  -h, --help           显示此帮助
+  -u, --user <用户名>      要确认公钥的用户；默认使用调用 sudo 前的用户
+  -k, --skip-key-check     跳过本地 authorized_keys 与权限检查
+  -y, --yes                 跳过交互确认
+  -h, --help                显示此帮助
 
 示例:
-  sudo ssh-key-only
-  sudo ssh-key-only --user deploy
+  sudo ssh-harden
+  sudo ssh-harden --user deploy
+  sudo ssh-harden -k
 
 重要说明:
   - 仅支持使用 systemd 管理 SSH 服务的 Linux 服务器。
   - 脚本不会创建 SSH 密钥；目标用户的 ~/.ssh/authorized_keys 中必须已有有效公钥。
+  - 使用 -k/--skip-key-check 时，必须已有其他已验证的登录方式（例如 Tailscale SSH
+    或云控制台）；该选项仅跳过本地 authorized_keys 检查。
   - 写入前会校验 sshd 配置，且重载后会再次核对生效设置；失败会恢复原文件。
   - 若 UFW 已启用，脚本会自动放行 TCP 55522；云安全组和其他防火墙仍需自行放行。
   - 请保持当前 SSH 会话不要退出，另开一个终端验证密钥登录成功后再关闭。
@@ -43,6 +47,7 @@ TARGET_USER="${SUDO_USER:-}"
 ASSUME_YES=0
 SSH_PORT=55522
 UFW_RULE_ADDED=0
+SKIP_KEY_CHECK=0
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -56,6 +61,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         -y|--yes)
             ASSUME_YES=1
+            shift
+            ;;
+        -k|--skip-key-check)
+            SKIP_KEY_CHECK=1
             shift
             ;;
         *)
@@ -183,20 +192,22 @@ fi
 
 [[ "$(get_os)" == "linux" ]] || die "当前仅支持 systemd 管理 SSH 服务的 Linux 服务器"
 command -v systemctl >/dev/null 2>&1 || die "未找到 systemctl，无法安全重载 SSH 服务"
-[[ -n "$TARGET_USER" ]] || die "无法识别目标用户；请指定 --user <用户名>"
-id "$TARGET_USER" >/dev/null 2>&1 || die "用户不存在: $TARGET_USER"
+if [[ $SKIP_KEY_CHECK -eq 0 ]]; then
+    [[ -n "$TARGET_USER" ]] || die "无法识别目标用户；请指定 --user <用户名>"
+    id "$TARGET_USER" >/dev/null 2>&1 || die "用户不存在: $TARGET_USER"
 
-TARGET_HOME=$(user_home "$TARGET_USER")
-[[ -n "$TARGET_HOME" && -d "$TARGET_HOME" ]] || die "无法确定用户主目录: $TARGET_USER"
-AUTHORIZED_KEYS="$TARGET_HOME/.ssh/authorized_keys"
-[[ -r "$AUTHORIZED_KEYS" ]] || die "未找到可读取的公钥文件: $AUTHORIZED_KEYS"
-[[ -d "$TARGET_HOME/.ssh" ]] || die "未找到 SSH 配置目录: $TARGET_HOME/.ssh"
-check_ssh_path_permissions "$TARGET_HOME"
-check_ssh_path_permissions "$TARGET_HOME/.ssh"
-check_ssh_path_permissions "$AUTHORIZED_KEYS"
+    TARGET_HOME=$(user_home "$TARGET_USER")
+    [[ -n "$TARGET_HOME" && -d "$TARGET_HOME" ]] || die "无法确定用户主目录: $TARGET_USER"
+    AUTHORIZED_KEYS="$TARGET_HOME/.ssh/authorized_keys"
+    [[ -r "$AUTHORIZED_KEYS" ]] || die "未找到可读取的公钥文件: $AUTHORIZED_KEYS"
+    [[ -d "$TARGET_HOME/.ssh" ]] || die "未找到 SSH 配置目录: $TARGET_HOME/.ssh"
+    check_ssh_path_permissions "$TARGET_HOME"
+    check_ssh_path_permissions "$TARGET_HOME/.ssh"
+    check_ssh_path_permissions "$AUTHORIZED_KEYS"
 
-if ! grep -Eq '^[[:space:]]*(ssh-(rsa|ed25519|dss)|ecdsa-sha2-nistp(256|384|521)|sk-ssh-ed25519@openssh\.com|sk-ecdsa-sha2-nistp256@openssh\.com|[[:alnum:]_-]+-cert-v01@openssh\.com)[[:space:]]+' "$AUTHORIZED_KEYS"; then
-    die "$AUTHORIZED_KEYS 中未发现有效的 SSH 公钥，已取消以避免锁定访问"
+    if ! grep -Eq '^[[:space:]]*(ssh-(rsa|ed25519|dss)|ecdsa-sha2-nistp(256|384|521)|sk-ssh-ed25519@openssh\.com|sk-ecdsa-sha2-nistp256@openssh\.com|[[:alnum:]_-]+-cert-v01@openssh\.com)[[:space:]]+' "$AUTHORIZED_KEYS"; then
+        die "$AUTHORIZED_KEYS 中未发现有效的 SSH 公钥，已取消以避免锁定访问"
+    fi
 fi
 
 SSHD_BIN=$(find_sshd)
@@ -217,11 +228,20 @@ if ! sshd_already_uses_port && port_is_in_use; then
 fi
 
 echo "将为 SSH 启用公钥认证，关闭密码、交互式认证和 root 登录，并改用端口 $SSH_PORT。"
-echo "已确认 $TARGET_USER 的公钥文件: $AUTHORIZED_KEYS"
+if [[ $SKIP_KEY_CHECK -eq 1 ]]; then
+    echo "已选择跳过本地 authorized_keys 检查。"
+    echo "请确认仍可通过其他已验证方式登录。"
+else
+    echo "已确认 $TARGET_USER 的公钥文件: $AUTHORIZED_KEYS"
+fi
 echo "配置文件: $DROP_IN"
 echo "若 UFW 已启用，脚本会自动放行 TCP $SSH_PORT；请确认云安全组已放行。"
 if [[ $ASSUME_YES -ne 1 ]]; then
-    read -r -p "确认云安全组已放行 TCP $SSH_PORT 并继续？[y/N] " answer
+    if [[ $SKIP_KEY_CHECK -eq 1 ]]; then
+        read -r -p "确认仍有其他登录方式且云安全组已放行 TCP $SSH_PORT？[y/N] " answer
+    else
+        read -r -p "确认云安全组已放行 TCP $SSH_PORT 并继续？[y/N] " answer
+    fi
     [[ "$answer" =~ ^[Yy]$ ]] || { echo "已取消，未修改配置。"; exit 0; }
 fi
 
@@ -237,7 +257,7 @@ VALIDATION_ERROR=$(mktemp)
 trap 'rm -f "$TMP_FILE" "$VALIDATION_ERROR"' EXIT
 
 cat >"$TMP_FILE" <<'EOF'
-# Managed by ~/.dotfile/script/ssh-key-only.sh
+# Managed by ~/.dotfile/script/ssh-harden.sh
 PubkeyAuthentication yes
 PasswordAuthentication no
 KbdInteractiveAuthentication no
