@@ -220,6 +220,36 @@ check_firewall() {
     esac
 }
 
+add_sudoers_file() {
+    local file="$1" existing
+    [[ -r "$file" ]] || return
+
+    for existing in "${SUDOERS_FILES[@]}"; do
+        [[ "$existing" == "$file" ]] && return
+    done
+    SUDOERS_FILES+=("$file")
+}
+
+collect_sudoers_files() {
+    local file
+    SUDOERS_FILES=()
+
+    # visudo 会按照 sudo 实际的 #include / #includedir 关系解析配置，并逐个报告已检查的文件。
+    if command -v visudo >/dev/null 2>&1; then
+        while IFS= read -r file; do
+            add_sudoers_file "$file"
+        done < <(visudo -c 2>&1 | awk '/: parsed OK$/ {sub(/: parsed OK$/, ""); print}')
+    fi
+
+    # 若 visudo 不可用或配置本身有语法错误，仍尽力检查标准位置。
+    add_sudoers_file /etc/sudoers
+    if [[ -d /etc/sudoers.d ]]; then
+        for file in /etc/sudoers.d/*; do
+            add_sudoers_file "$file"
+        done
+    fi
+}
+
 check_privileged_accounts() {
     local uid_zero sudo_rules
 
@@ -236,9 +266,15 @@ check_privileged_accounts() {
         return
     fi
 
-    sudo_rules=$(grep -REh '^[[:space:]]*[^#].*NOPASSWD' /etc/sudoers /etc/sudoers.d 2>/dev/null || true)
+    collect_sudoers_files
+    if ((${#SUDOERS_FILES[@]} == 0)); then
+        warn "未找到可读取的 sudoers 配置文件"
+        return
+    fi
+
+    sudo_rules=$(grep -EH '^[[:space:]]*[^#].*NOPASSWD' "${SUDOERS_FILES[@]}" 2>/dev/null || true)
     if [[ -n "$sudo_rules" ]]; then
-        warn "发现免密 sudo 规则：$(printf '%s' "$sudo_rules" | tr '\n' ';')"
+        warn "发现免密 sudo 规则（含文件路径）：$(printf '%s' "$sudo_rules" | tr '\n' ';')"
     else
         pass "未发现 sudoers 中的 NOPASSWD 免密 sudo 规则"
     fi
