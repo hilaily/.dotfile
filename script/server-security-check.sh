@@ -12,7 +12,7 @@ usage() {
 用法: server-security-check [--no-sudo]
 
 快速、只读地检查以下服务器安全项：
-  - SSH 是否允许 root 或密码登录
+  - SSH 是否允许 root 或密码登录，以及生效监听端口
   - 当前监听端口，以及常见明文服务端口
   - 本机防火墙是否启用
   - UID 0 异常账号和 sudoers 中非 root 主体的免密 sudo 规则
@@ -109,7 +109,7 @@ check_sshd_setting() {
 }
 
 check_ssh() {
-    local sshd_bin root_login password_login
+    local sshd_bin root_login password_login ssh_ports
 
     section "SSH 登录"
     sshd_bin=$(find_sshd)
@@ -126,6 +126,7 @@ check_ssh() {
 
     root_login=$(check_sshd_setting permitrootlogin)
     password_login=$(check_sshd_setting passwordauthentication)
+    ssh_ports=$(printf '%s\n' "$SSHD_EFFECTIVE_CONFIG" | awk '$1 == "port" {print $2}' | sort -nu | paste -sd, -)
 
     case "$root_login" in
         no|forced-commands-only)
@@ -153,6 +154,14 @@ check_ssh() {
             warn "无法确定 PasswordAuthentication 的安全状态（当前: ${password_login:-未设置}）"
             ;;
     esac
+
+    if [[ -z "$ssh_ports" ]]; then
+        warn "无法确定 SSH 生效监听端口"
+    elif [[ ",$ssh_ports," == *,22,* ]]; then
+        info "SSH 生效监听端口: $ssh_ports（仍包含默认端口 22；请确认是否有意保留）"
+    else
+        pass "SSH 生效监听端口: $ssh_ports"
+    fi
 }
 
 check_listening_ports() {
