@@ -1,5 +1,5 @@
 #!/bin/bash
-# 验证已有公钥后关闭 SSH 密码登录，仅保留公钥认证
+# 验证已有公钥后关闭 SSH 密码和 root 登录，并改用 55522 端口
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck disable=SC1091
@@ -18,6 +18,8 @@ usage() {
   PasswordAuthentication no
   KbdInteractiveAuthentication no
   ChallengeResponseAuthentication no
+  PermitRootLogin no
+  Port 55522
 
 选项:
   -u, --user <用户名>  要确认公钥的用户；默认使用调用 sudo 前的用户
@@ -32,12 +34,15 @@ usage() {
   - 仅支持使用 systemd 管理 SSH 服务的 Linux 服务器。
   - 脚本不会创建 SSH 密钥；目标用户的 ~/.ssh/authorized_keys 中必须已有有效公钥。
   - 写入前会校验 sshd 配置，且重载后会再次核对生效设置；失败会恢复原文件。
+  - 若 UFW 已启用，脚本会自动放行 TCP 55522；云安全组和其他防火墙仍需自行放行。
   - 请保持当前 SSH 会话不要退出，另开一个终端验证密钥登录成功后再关闭。
 EOF
 }
 
 TARGET_USER="${SUDO_USER:-}"
 ASSUME_YES=0
+SSH_PORT=55522
+UFW_RULE_ADDED=0
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -100,11 +105,66 @@ check_ssh_path_permissions() {
     (( (8#$mode & 022) == 0 )) || die "$path 对组或其他用户可写（权限: $mode），sshd 可能会忽略其中的公钥"
 }
 
-config_is_key_only() {
+config_is_hardened() {
+    local ports
     EFFECTIVE_CONFIG=$("$SSHD_BIN" -T -f "$SSHD_CONFIG" 2>/dev/null || true)
     [[ "$(setting_value pubkeyauthentication)" == "yes" ]] || return 1
     [[ "$(setting_value passwordauthentication)" == "no" ]] || return 1
     [[ "$(setting_value kbdinteractiveauthentication)" == "no" ]] || return 1
+    [[ "$(setting_value permitrootlogin)" == "no" ]] || return 1
+    ports=$(printf '%s\n' "$EFFECTIVE_CONFIG" | awk '$1 == "port" {print $2}')
+    [[ "$ports" == "$SSH_PORT" ]] || return 1
+}
+
+port_is_in_use() {
+    if command -v ss >/dev/null 2>&1; then
+        ss -H -ltn "sport = :$SSH_PORT" 2>/dev/null | grep -q .
+        return
+    fi
+    if command -v netstat >/dev/null 2>&1; then
+        netstat -ltn 2>/dev/null | grep -Eq "[.:]${SSH_PORT}[[:space:]]"
+        return
+    fi
+    return 1
+}
+
+sshd_already_uses_port() {
+    local current_config
+    current_config=$("$SSHD_BIN" -T -f "$SSHD_CONFIG" 2>/dev/null || true)
+    printf '%s\n' "$current_config" | awk -v port="$SSH_PORT" '$1 == "port" && $2 == port {found = 1} END {exit !found}'
+}
+
+ensure_ufw_port() {
+    local status
+    command -v ufw >/dev/null 2>&1 || return
+
+    status=$(ufw status 2>&1)
+    if ! printf '%s\n' "$status" | grep -qi '^Status: active'; then
+        echo "UFW 未启用，跳过防火墙规则修改。"
+        return
+    fi
+
+    if printf '%s\n' "$status" | grep -Eq "^[[:space:]]*${SSH_PORT}(/tcp)?[[:space:]]"; then
+        echo "UFW 已有 TCP $SSH_PORT 规则，跳过。"
+        return
+    fi
+
+    if ! ufw allow "$SSH_PORT/tcp"; then
+        echo "无法通过 UFW 放行 TCP $SSH_PORT。" >&2
+        return 1
+    fi
+    UFW_RULE_ADDED=1
+    echo "已通过 UFW 放行 TCP $SSH_PORT。"
+}
+
+rollback_ufw_port() {
+    if [[ $UFW_RULE_ADDED -eq 1 ]]; then
+        if ufw --force delete allow "$SSH_PORT/tcp" >/dev/null 2>&1; then
+            echo "已删除本次新增的 UFW TCP $SSH_PORT 规则。" >&2
+        else
+            echo "警告: 未能自动删除本次新增的 UFW TCP $SSH_PORT 规则，请手动检查。" >&2
+        fi
+    fi
 }
 
 reload_sshd() {
@@ -152,11 +212,16 @@ DROP_IN_DIR=/etc/ssh/sshd_config.d
 DROP_IN="$DROP_IN_DIR/99-dotfile-key-only.conf"
 mkdir -p "$DROP_IN_DIR"
 
-echo "将为 SSH 启用公钥认证，并关闭密码与交互式认证。"
+if ! sshd_already_uses_port && port_is_in_use; then
+    die "TCP $SSH_PORT 已被其他服务监听；请选择空闲端口后再修改脚本"
+fi
+
+echo "将为 SSH 启用公钥认证，关闭密码、交互式认证和 root 登录，并改用端口 $SSH_PORT。"
 echo "已确认 $TARGET_USER 的公钥文件: $AUTHORIZED_KEYS"
 echo "配置文件: $DROP_IN"
+echo "若 UFW 已启用，脚本会自动放行 TCP $SSH_PORT；请确认云安全组已放行。"
 if [[ $ASSUME_YES -ne 1 ]]; then
-    read -r -p "确认继续？[y/N] " answer
+    read -r -p "确认云安全组已放行 TCP $SSH_PORT 并继续？[y/N] " answer
     [[ "$answer" =~ ^[Yy]$ ]] || { echo "已取消，未修改配置。"; exit 0; }
 fi
 
@@ -177,6 +242,8 @@ PubkeyAuthentication yes
 PasswordAuthentication no
 KbdInteractiveAuthentication no
 ChallengeResponseAuthentication no
+PermitRootLogin no
+Port 55522
 EOF
 install -m 0600 -o root -g root "$TMP_FILE" "$DROP_IN"
 
@@ -188,29 +255,38 @@ restore_drop_in() {
     fi
 }
 
+if ! ensure_ufw_port; then
+    restore_drop_in
+    die "UFW 规则添加失败，已恢复原 SSH 配置"
+fi
+
 if ! "$SSHD_BIN" -t -f "$SSHD_CONFIG" 2>"$VALIDATION_ERROR"; then
     restore_drop_in
+    rollback_ufw_port
     echo "sshd 配置校验输出：" >&2
     cat "$VALIDATION_ERROR" >&2
     die "新配置未通过校验，已恢复原文件"
 fi
 
-if ! config_is_key_only; then
+if ! config_is_hardened; then
     restore_drop_in
+    rollback_ufw_port
     die "新配置未成为 sshd 的生效设置（可能被更早的配置覆盖），已恢复原文件"
 fi
 
 if ! reload_sshd; then
     restore_drop_in
+    rollback_ufw_port
     die "无法重载 ssh/sshd 服务，已恢复原文件；请检查 systemctl 状态"
 fi
 
-if ! config_is_key_only; then
+if ! config_is_hardened; then
     restore_drop_in
     reload_sshd || true
+    rollback_ufw_port
     die "重载后设置未生效，已恢复原文件并尝试重载旧配置"
 fi
 
-echo "已启用仅公钥 SSH 登录。"
+echo "已启用仅公钥 SSH 登录，已禁止 root 登录，SSH 端口已改为 $SSH_PORT。"
 [[ -n "$BACKUP" ]] && echo "原配置已备份到: $BACKUP"
-echo "请保持当前会话，另开终端确认可通过密钥登录后再退出。"
+echo "请保持当前会话，另开终端确认可通过密钥连接到端口 $SSH_PORT 后再退出。"
