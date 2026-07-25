@@ -9,7 +9,7 @@ source "$SCRIPT_DIR/common/os-arch.sh"
 
 usage() {
     cat <<'EOF'
-用法: server-security-check
+用法: server-security-check [--no-sudo]
 
 快速、只读地检查以下服务器安全项：
   - SSH 是否允许 root 或密码登录
@@ -19,21 +19,43 @@ usage() {
   - 最近 24 小时 SSH 失败登录摘要和最近成功登录来源
 
 选项:
+  -n, --no-sudo  不请求 sudo；以当前权限执行受限的只读检查
   -h, --help  显示此帮助
 
 说明:
   不扫描网络、不查询漏洞库、不修改配置，通常可在数秒内完成。
-  建议使用 sudo 运行，以读取 sudoers 和系统认证日志：
-    sudo server-security-check
+  默认会请求 sudo，以读取 sudoers 和系统认证日志；可直接通过 ff s 运行：
+    ff s server-security-check
+  若只想执行无需 sudo 的检查：
+    ff s server-security-check --no-sudo
 EOF
 }
 
-dotfile_help_requested "${1:-}" && dotfile_show_help
+NO_SUDO=0
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            dotfile_show_help
+            ;;
+        -n|--no-sudo)
+            NO_SUDO=1
+            shift
+            ;;
+        *)
+            echo "错误: 不支持参数: $1" >&2
+            usage >&2
+            exit 1
+            ;;
+    esac
+done
 
-if [[ $# -ne 0 ]]; then
-    echo "错误: 不支持参数: $*" >&2
-    usage >&2
-    exit 1
+if [[ $NO_SUDO -eq 0 && $EUID -ne 0 ]]; then
+    command -v sudo >/dev/null 2>&1 || {
+        echo "错误: 未找到 sudo；请使用 root 运行，或添加 --no-sudo 执行受限检查" >&2
+        exit 1
+    }
+    echo "需要 sudo 权限以执行完整检查；请输入当前用户的密码。"
+    exec sudo -- "$0"
 fi
 
 PASS_COUNT=0
@@ -262,7 +284,7 @@ check_privileged_accounts() {
     fi
 
     if [[ $EUID -ne 0 ]]; then
-        info "未以 root 运行，跳过完整 sudoers 免密规则检查；可用 sudo 重跑"
+        info "未以 root 运行，跳过完整 sudoers 免密规则检查；省略 --no-sudo 可自动请求 sudo 后重跑"
         return
     fi
 
@@ -321,7 +343,7 @@ check_recent_logins() {
             high "最近 24 小时发现 ${failed_count} 条 SSH 失败登录记录，可能存在暴力破解"
         fi
     else
-        info "无法读取最近 24 小时 SSH 日志；可用 sudo 重跑，或确认日志服务正常"
+        info "无法读取最近 24 小时 SSH 日志；省略 --no-sudo 可自动请求 sudo 后重跑，或确认日志服务正常"
     fi
 
     if command -v last >/dev/null 2>&1; then
@@ -337,7 +359,11 @@ check_recent_logins() {
 OS_NAME=$(get_os)
 
 echo "服务器快速安全检查（系统: ${OS_NAME}/$(get_arch)）"
-echo "只读检查；建议使用 sudo 获取完整结果。"
+if [[ $EUID -eq 0 ]]; then
+    echo "只读检查；已使用 sudo 权限执行完整检查。"
+else
+    echo "只读检查；已按 --no-sudo 以当前权限执行受限检查。"
+fi
 
 check_ssh
 check_listening_ports

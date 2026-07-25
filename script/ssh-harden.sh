@@ -11,7 +11,7 @@ set -euo pipefail
 
 usage() {
     cat <<'EOF'
-用法: sudo ssh-harden [--user <用户名>] [--skip-key-check] [--yes]
+用法: ssh-harden [--user <用户名>] [--skip-key-check] [--yes]
 
 默认在确认目标用户已有 SSH 公钥后，直接更新 /etc/ssh/sshd_config 的全局配置：
   PubkeyAuthentication yes
@@ -24,12 +24,13 @@ usage() {
   -u, --user <用户名>      要确认公钥的用户；默认使用调用 sudo 前的用户
   -k, --skip-key-check     跳过本地 authorized_keys 与权限检查
   -y, --yes                 跳过交互确认
+  -n, --no-sudo             不自动请求 sudo（本脚本必须使用 root，因而会直接退出）
   -h, --help                显示此帮助
 
 示例:
-  sudo ssh-harden
-  sudo ssh-harden --user deploy
-  sudo ssh-harden -k
+  ff s ssh-harden
+  ff s ssh-harden --user deploy
+  ff s ssh-harden -k
 
 重要说明:
   - 仅支持使用 systemd 管理 SSH 服务的 Linux 服务器。
@@ -42,11 +43,13 @@ usage() {
 EOF
 }
 
+ORIGINAL_ARGS=("$@")
 TARGET_USER="${SUDO_USER:-}"
 ASSUME_YES=0
 SSH_PORT=55522
 UFW_RULE_ADDED=0
 SKIP_KEY_CHECK=0
+NO_SUDO=0
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -64,6 +67,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         -k|--skip-key-check)
             SKIP_KEY_CHECK=1
+            shift
+            ;;
+        -n|--no-sudo)
+            NO_SUDO=1
             shift
             ;;
         *)
@@ -239,7 +246,12 @@ write_hardened_config() {
 }
 
 if [[ $EUID -ne 0 ]]; then
-    die "请使用 sudo 运行，例如: sudo $0${TARGET_USER:+ --user "$TARGET_USER"}"
+    if [[ $NO_SUDO -eq 1 ]]; then
+        die "ssh-harden 必须使用 root；请移除 --no-sudo 后重试"
+    fi
+    command -v sudo >/dev/null 2>&1 || die "未找到 sudo；请使用 root 运行"
+    echo "需要 sudo 权限以修改 SSH 配置；请输入当前用户的密码。"
+    exec sudo -- "$0" "${ORIGINAL_ARGS[@]}"
 fi
 
 [[ "$(get_os)" == "linux" ]] || die "当前仅支持 systemd 管理 SSH 服务的 Linux 服务器"
