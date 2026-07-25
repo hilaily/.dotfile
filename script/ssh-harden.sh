@@ -13,11 +13,10 @@ usage() {
     cat <<'EOF'
 用法: sudo ssh-harden [--user <用户名>] [--skip-key-check] [--yes]
 
-默认在确认目标用户已有 SSH 公钥后，写入 /etc/ssh/sshd_config.d/99-dotfile-key-only.conf：
+默认在确认目标用户已有 SSH 公钥后，直接更新 /etc/ssh/sshd_config 的全局配置：
   PubkeyAuthentication yes
   PasswordAuthentication no
   KbdInteractiveAuthentication no
-  ChallengeResponseAuthentication no
   PermitRootLogin no
   Port 55522
 
@@ -37,7 +36,7 @@ usage() {
   - 脚本不会创建 SSH 密钥；目标用户的 ~/.ssh/authorized_keys 中必须已有有效公钥。
   - 使用 -k/--skip-key-check 时，必须已有其他已验证的登录方式（例如 Tailscale SSH
     或云控制台）；该选项仅跳过本地 authorized_keys 检查。
-  - 写入前会校验 sshd 配置，且重载后会再次核对生效设置；失败会恢复原文件。
+  - 写入前会备份并校验 sshd_config，且重载后会再次核对生效设置；失败会恢复原文件。
   - 若 UFW 已启用，脚本会自动放行 TCP 55522；云安全组和其他防火墙仍需自行放行。
   - 请保持当前 SSH 会话不要退出，另开一个终端验证密钥登录成功后再关闭。
 EOF
@@ -190,6 +189,55 @@ reload_sshd() {
     return 1
 }
 
+write_hardened_config() {
+    awk -v port="$SSH_PORT" '
+        function emit_missing() {
+            if (!seen["pubkeyauthentication"]) print "PubkeyAuthentication yes"
+            if (!seen["passwordauthentication"]) print "PasswordAuthentication no"
+            if (!seen["kbdinteractiveauthentication"]) print "KbdInteractiveAuthentication no"
+            if (!seen["permitrootlogin"]) print "PermitRootLogin no"
+            if (!seen["port"]) print "Port " port
+        }
+
+        BEGIN { in_global = 1 }
+
+        {
+            lower = tolower($0)
+            if (in_global && lower ~ /^[[:space:]]*match([[:space:]]|$)/) {
+                emit_missing()
+                in_global = 0
+            }
+
+            if (in_global && lower ~ /^[[:space:]]*pubkeyauthentication[[:space:]]+/) {
+                if (!seen["pubkeyauthentication"]++) print "PubkeyAuthentication yes"
+                next
+            }
+            if (in_global && lower ~ /^[[:space:]]*passwordauthentication[[:space:]]+/) {
+                if (!seen["passwordauthentication"]++) print "PasswordAuthentication no"
+                next
+            }
+            if (in_global && lower ~ /^[[:space:]]*kbdinteractiveauthentication[[:space:]]+/) {
+                if (!seen["kbdinteractiveauthentication"]++) print "KbdInteractiveAuthentication no"
+                next
+            }
+            if (in_global && lower ~ /^[[:space:]]*permitrootlogin[[:space:]]+/) {
+                if (!seen["permitrootlogin"]++) print "PermitRootLogin no"
+                next
+            }
+            if (in_global && lower ~ /^[[:space:]]*port[[:space:]]+/) {
+                if (!seen["port"]++) print "Port " port
+                next
+            }
+
+            print
+        }
+
+        END {
+            if (in_global) emit_missing()
+        }
+    ' "$SSHD_CONFIG" >"$TMP_FILE"
+}
+
 if [[ $EUID -ne 0 ]]; then
     die "请使用 sudo 运行，例如: sudo $0${TARGET_USER:+ --user "$TARGET_USER"}"
 fi
@@ -219,13 +267,8 @@ SSHD_BIN=$(find_sshd)
 SSHD_CONFIG=/etc/ssh/sshd_config
 [[ -r "$SSHD_CONFIG" ]] || die "无法读取 $SSHD_CONFIG"
 
-if ! grep -Eq '^[[:space:]]*Include[[:space:]].*sshd_config\.d' "$SSHD_CONFIG"; then
-    die "$SSHD_CONFIG 未包含 sshd_config.d；为避免覆盖现有规则，未作修改"
-fi
-
 DROP_IN_DIR=/etc/ssh/sshd_config.d
 DROP_IN="$DROP_IN_DIR/99-dotfile-key-only.conf"
-mkdir -p "$DROP_IN_DIR"
 
 if ! sshd_already_uses_port && port_is_in_use; then
     die "TCP $SSH_PORT 已被其他服务监听；请选择空闲端口后再修改脚本"
@@ -238,7 +281,7 @@ if [[ $SKIP_KEY_CHECK -eq 1 ]]; then
 else
     echo "已确认 $TARGET_USER 的公钥文件: $AUTHORIZED_KEYS"
 fi
-echo "配置文件: $DROP_IN"
+echo "配置文件: $SSHD_CONFIG"
 echo "若 UFW 已启用，脚本会自动放行 TCP $SSH_PORT；请确认云安全组已放行。"
 if [[ $ASSUME_YES -ne 1 ]]; then
     if [[ $SKIP_KEY_CHECK -eq 1 ]]; then
@@ -250,42 +293,40 @@ if [[ $ASSUME_YES -ne 1 ]]; then
 fi
 
 STAMP=$(date +%Y%m%d%H%M%S)
-BACKUP=""
+CONFIG_BACKUP="${SSHD_CONFIG}.bak.${STAMP}"
+DROP_IN_BACKUP=""
+cp -p "$SSHD_CONFIG" "$CONFIG_BACKUP"
+
 if [[ -f "$DROP_IN" ]]; then
-    BACKUP="${DROP_IN}.bak.${STAMP}"
-    cp -p "$DROP_IN" "$BACKUP"
+    DROP_IN_BACKUP="/etc/ssh/sshd_config.bak.${STAMP}.dotfile-key-only.conf"
+    cp -p "$DROP_IN" "$DROP_IN_BACKUP"
+    rm -f "$DROP_IN"
 fi
 
-TMP_FILE=$(mktemp "${DROP_IN}.tmp.XXXXXX")
+TMP_FILE=$(mktemp "${SSHD_CONFIG}.tmp.XXXXXX")
 VALIDATION_ERROR=$(mktemp)
 trap 'rm -f "$TMP_FILE" "$VALIDATION_ERROR"' EXIT
 
-cat >"$TMP_FILE" <<'EOF'
-# Managed by ~/.dotfile/script/ssh-harden.sh
-PubkeyAuthentication yes
-PasswordAuthentication no
-KbdInteractiveAuthentication no
-ChallengeResponseAuthentication no
-PermitRootLogin no
-Port 55522
-EOF
-install -m 0600 -o root -g root "$TMP_FILE" "$DROP_IN"
+write_hardened_config
+install -m "$(stat -c '%a' "$SSHD_CONFIG")" -o "$(stat -c '%u' "$SSHD_CONFIG")" -g "$(stat -c '%g' "$SSHD_CONFIG")" "$TMP_FILE" "$SSHD_CONFIG"
 
-restore_drop_in() {
-    if [[ -n "$BACKUP" ]]; then
-        cp -p "$BACKUP" "$DROP_IN"
+restore_config() {
+    cp -p "$CONFIG_BACKUP" "$SSHD_CONFIG"
+    if [[ -n "$DROP_IN_BACKUP" ]]; then
+        mkdir -p "$DROP_IN_DIR"
+        cp -p "$DROP_IN_BACKUP" "$DROP_IN"
     else
         rm -f "$DROP_IN"
     fi
 }
 
 if ! ensure_ufw_port; then
-    restore_drop_in
+    restore_config
     die "UFW 规则添加失败，已恢复原 SSH 配置"
 fi
 
 if ! "$SSHD_BIN" -t -f "$SSHD_CONFIG" 2>"$VALIDATION_ERROR"; then
-    restore_drop_in
+    restore_config
     rollback_ufw_port
     echo "sshd 配置校验输出：" >&2
     cat "$VALIDATION_ERROR" >&2
@@ -293,24 +334,25 @@ if ! "$SSHD_BIN" -t -f "$SSHD_CONFIG" 2>"$VALIDATION_ERROR"; then
 fi
 
 if ! config_is_hardened; then
-    restore_drop_in
+    restore_config
     rollback_ufw_port
     die "新配置未成为 sshd 的生效设置（可能被更早的配置覆盖），已恢复原文件"
 fi
 
 if ! reload_sshd; then
-    restore_drop_in
+    restore_config
     rollback_ufw_port
     die "无法重载 ssh/sshd 服务，已恢复原文件；请检查 systemctl 状态"
 fi
 
 if ! config_is_hardened; then
-    restore_drop_in
+    restore_config
     reload_sshd || true
     rollback_ufw_port
     die "重载后设置未生效，已恢复原文件并尝试重载旧配置"
 fi
 
 echo "已启用仅公钥 SSH 登录，已禁止 root 登录，SSH 端口已改为 $SSH_PORT。"
-[[ -n "$BACKUP" ]] && echo "原配置已备份到: $BACKUP"
+echo "原 SSH 配置已备份到: $CONFIG_BACKUP"
+[[ -n "$DROP_IN_BACKUP" ]] && echo "旧的 dotfile SSH drop-in 已备份到: $DROP_IN_BACKUP"
 echo "请保持当前会话，另开终端确认可通过密钥连接到端口 $SSH_PORT 后再退出。"
