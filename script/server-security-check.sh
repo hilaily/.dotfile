@@ -15,7 +15,7 @@ usage() {
   - SSH 是否允许 root 或密码登录
   - 当前监听端口，以及常见明文服务端口
   - 本机防火墙是否启用
-  - UID 0 异常账号和 sudoers 中的免密 sudo 规则
+  - UID 0 异常账号和 sudoers 中非 root 主体的免密 sudo 规则
   - 最近 24 小时 SSH 失败登录摘要和最近成功登录来源
 
 选项:
@@ -272,11 +272,22 @@ check_privileged_accounts() {
         return
     fi
 
-    sudo_rules=$(grep -EH '^[[:space:]]*[^#].*NOPASSWD' "${SUDOERS_FILES[@]}" 2>/dev/null || true)
+    sudo_rules=$(awk '
+        /^[[:space:]]*[^#].*NOPASSWD/ {
+            rule = $0
+            sub(/^[[:space:]]*/, "", rule)
+
+            # root 已拥有完整权限；仅 root 作为规则主体时不构成额外提权路径。
+            # 含其他用户、组、别名或 ALL 的规则仍保留告警。
+            if (rule ~ /^root[[:space:]]+/) next
+
+            print FILENAME ":" $0
+        }
+    ' "${SUDOERS_FILES[@]}" 2>/dev/null || true)
     if [[ -n "$sudo_rules" ]]; then
-        warn "发现免密 sudo 规则（含文件路径）：$(printf '%s' "$sudo_rules" | tr '\n' ';')"
+        warn "发现非 root 主体的免密 sudo 规则（含文件路径）：$(printf '%s' "$sudo_rules" | tr '\n' ';')"
     else
-        pass "未发现 sudoers 中的 NOPASSWD 免密 sudo 规则"
+        pass "未发现非 root 主体的 NOPASSWD 免密 sudo 规则"
     fi
 }
 
