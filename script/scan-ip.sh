@@ -11,6 +11,7 @@ usage() {
 
 扫描局域网主机:
   无参数              ICMP 扫描本网段 .1-.254，并尽力显示名称、MAC 和厂商
+  --identify          额外通过 mDNS 识别设备（macOS，约增加 3 秒）
   10.0.0              扫描指定网段前缀
   22                  扫描本网段 TCP 22 端口
   80,443,8080         扫描多个端口（任一开放即显示）
@@ -28,9 +29,19 @@ usage() {
 EOF
 }
 
-dotfile_help_requested "${1:-}" && dotfile_show_help
-
 TIMEOUT=1
+IDENTIFY=0
+ARGS=()
+
+for arg in "$@"; do
+    case "$arg" in
+        --identify) IDENTIFY=1 ;;
+        *) ARGS+=("$arg") ;;
+    esac
+done
+set -- "${ARGS[@]}"
+
+dotfile_help_requested "${1:-}" && dotfile_show_help
 
 find_mac_prefix_file() {
     local nmap_bin prefix candidate
@@ -213,7 +224,6 @@ mac_vendor_for_mac() {
     first_octet=${mac%%:*}
     # 本地管理位为 1 的 MAC 常见于 iOS/Android/Windows 的 Wi-Fi 随机地址，不能据此推断厂商。
     if (( (16#$first_octet) & 2 )); then
-        printf '%s' '随机/本地管理 MAC'
         return
     fi
 
@@ -233,6 +243,9 @@ format_host() {
     vendor=$(mac_vendor_for_mac "$mac")
 
     printf '%s' "$ip"
+    if [ "$ip" = "$LOCAL_IP" ]; then
+        printf ' (本机)'
+    fi
     if [ -n "$hostname" ]; then
         printf ' name=%s' "$hostname"
     fi
@@ -244,26 +257,158 @@ format_host() {
     fi
 }
 
+RESULT_DIR=$(mktemp -d "${TMPDIR:-/tmp}/scan-ip.XXXXXX")
+MDNS_RESULT_DIR="$RESULT_DIR/mdns"
+mkdir -p "$MDNS_RESULT_DIR"
+trap 'rm -rf "$RESULT_DIR"' EXIT
+
+show_total() {
+    local i total=0
+    for i in $(seq 1 254); do
+        [ -f "$RESULT_DIR/$i" ] && total=$((total + 1))
+    done
+    echo "共发现 $total 个 IP"
+}
+
+show_results() {
+    local i file line mdns labels
+    for i in $(seq 1 254); do
+        [ -f "$RESULT_DIR/$i" ] || continue
+        labels=()
+        for file in "$MDNS_RESULT_DIR/$i."*; do
+            [ -f "$file" ] && labels+=("${file##*.}")
+        done
+        if [ "${#labels[@]}" -gt 0 ]; then
+            mdns=$(IFS=,; printf '%s' "${labels[*]}")
+            line=$(cat "$RESULT_DIR/$i")
+            if [[ "$line" == *" 在线" ]]; then
+                printf '%s mdns=%s 在线\n' "${line% 在线}" "$mdns"
+            else
+                printf '%s mdns=%s\n' "$line" "$mdns"
+            fi
+        else
+            cat "$RESULT_DIR/$i"
+        fi
+    done
+}
+
+capture_dns_sd() {
+    local output="$1"
+    shift
+    local pid
+
+    # dns-sd 持续监听且重定向时会缓冲；script 提供伪终端并立即刷新输出。
+    script -qF "$output" dns-sd "$@" >/dev/null 2>&1 &
+    pid=$!
+    sleep 2
+    pkill -TERM -P "$pid" 2>/dev/null || true
+    kill "$pid" 2>/dev/null || true
+    wait "$pid" 2>/dev/null || true
+}
+
+resolve_mdns_instance() {
+    local type="$1"
+    local label="$2"
+    local instance="$3"
+    local index="$4"
+    local output="$RESULT_DIR/mdns-resolve-$index"
+    local pid host ip suffix model
+
+    script -qF "$output" dns-sd -L "$instance" "$type" local. >/dev/null 2>&1 &
+    pid=$!
+    sleep 1
+    pkill -TERM -P "$pid" 2>/dev/null || true
+    kill "$pid" 2>/dev/null || true
+    wait "$pid" 2>/dev/null || true
+
+    host=$(tr -d '\r\b' <"$output" \
+        | awk '/can be reached at/ {for (i = 1; i <= NF; i++) if ($i == "at") {print $(i + 1); exit}}')
+    host=${host%:*}
+    host=${host%.}
+    [ -n "$host" ] || return
+
+    model=$(tr -d '\r\b' <"$output" \
+        | awk '{for (i = 1; i <= NF; i++) if ($i ~ /^model=/) {sub(/^model=/, "", $i); print $i; exit}}')
+    if [ -n "$model" ]; then
+        model=${model//\//_}
+        label="$label($model)"
+    fi
+
+    ip=$(dscacheutil -q host -a name "$host" 2>/dev/null \
+        | awk -F': ' '/^ip_address: / && $2 ~ /^[0-9.]+$/ {print $2; exit}')
+    case "$ip" in
+        "$PREFIX".*)
+            suffix=${ip##*.}
+            : >"$MDNS_RESULT_DIR/$suffix.$label"
+            ;;
+    esac
+}
+
+identify_mdns() {
+    local type label browse_file instance index=0
+    local types=(_airplay._tcp _device-info._tcp _workstation._tcp)
+
+    [ "$IDENTIFY" -eq 1 ] || return
+    if [ "$(uname -s)" != "Darwin" ] || ! command -v dns-sd &>/dev/null \
+        || ! command -v script &>/dev/null; then
+        echo "提示: 当前系统缺少受支持的 mDNS 查询工具，跳过设备识别" >&2
+        return
+    fi
+
+    echo "正在通过 mDNS 识别设备..."
+    for type in "${types[@]}"; do
+        capture_dns_sd "$RESULT_DIR/mdns-${type//_tcp/}" -B "$type" local. &
+    done
+    wait
+
+    for type in "${types[@]}"; do
+        case "$type" in
+            _airplay._tcp)
+                label=airplay
+                ;;
+            _device-info._tcp)
+                label=device-info
+                ;;
+            *)
+                label=workstation
+                ;;
+        esac
+        browse_file="$RESULT_DIR/mdns-${type//_tcp/}"
+        while IFS= read -r instance; do
+            [ -n "$instance" ] || continue
+            index=$((index + 1))
+            resolve_mdns_instance "$type" "$label" "$instance" "$index" &
+        done < <(tr -d '\r\b' <"$browse_file" \
+            | awk '$2 == "Add" {for (i = 7; i <= NF; i++) printf "%s%s", (i == 7 ? "" : " "), $i; print ""}')
+    done
+    wait
+}
+
 if [ ${#PORTS[@]} -eq 0 ]; then
     if [ "$(uname -s)" = "Darwin" ]; then
         for i in $(seq 1 254); do
             (
                 ip="$PREFIX.$i"
-                ping -c 1 -W 1000 -S "$LOCAL_IP" "$ip" >/dev/null 2>&1 \
-                    && echo "$(format_host "$ip") 在线"
+                if ping -c 1 -W 1000 -S "$LOCAL_IP" "$ip" >/dev/null 2>&1; then
+                    printf '%s 在线\n' "$(format_host "$ip")" >"$RESULT_DIR/$i"
+                fi
             ) &
         done
     else
         for i in $(seq 1 254); do
             (
                 ip="$PREFIX.$i"
-                ping -c 1 -W 1 -I "$LOCAL_IP" "$ip" >/dev/null 2>&1 \
-                    && echo "$(format_host "$ip") 在线"
+                if ping -c 1 -W 1 -I "$LOCAL_IP" "$ip" >/dev/null 2>&1; then
+                    printf '%s 在线\n' "$(format_host "$ip")" >"$RESULT_DIR/$i"
+                fi
             ) &
         done
     fi
     wait
+    identify_mdns
+    show_results
     echo "------------------------------------------------------"
+    show_total
     echo "扫描完成"
     exit 0
 fi
@@ -287,7 +432,7 @@ check_host() {
         fi
     done
     if [ ${#hit[@]} -gt 0 ]; then
-        echo "$(format_host "$ip") 开放: ${hit[*]}"
+        printf '%s 开放: %s\n' "$(format_host "$ip")" "${hit[*]}" >"$RESULT_DIR/${ip##*.}"
     fi
 }
 
@@ -296,5 +441,8 @@ for i in $(seq 1 254); do
 done
 wait
 
+identify_mdns
+show_results
 echo "------------------------------------------------------"
+show_total
 echo "扫描完成"
